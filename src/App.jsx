@@ -1,12 +1,14 @@
-import './App.css'
+import "./App.css";
+import AppRouter from "./router/AppRouter";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-
   return (
-    <>
-     <h1>Hello world</h1>
-    </>
-  )
+    <div className="min-h-screen h-auto bg-slate-100">
+      <AppRouter />
+      <Toaster />
+    </div>
+  );
 }
 
-export default App
+export default App;
