@@ -31,7 +31,7 @@ const CreateInventario = () => {
   }, [body.inventaryType, body.brandType]);
 
   return (
-    <div className="grid grid-cols-12 w-full h-full gap-4 justify-center items-start p-5 bg-white rounded-lg">
+    <div className="grid grid-cols-12 w-full h-full gap-2 justify-center items-start p-2 md:p-5 bg-white rounded-lg">
       <div className="col-span-12">
         <h2 className="text-xl font-bold text-gap-primary">Nuevo inventario</h2>
         <p className=" text-gray-500">
