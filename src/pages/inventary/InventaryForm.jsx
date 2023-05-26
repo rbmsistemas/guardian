@@ -37,7 +37,7 @@ const InventaryForm = () => {
           Cancelar
         </Link>
       </div>
-      <div className="flex flex-col p-2 md:p-5 pt-0">
+      <div className="flex flex-col">
         <h2 className="text-xl font-bold"></h2>
         <form className="flex flex-col gap-5 mt-5">
           {id ? <EditarInventario data={data} /> : <CreateInventario />}
