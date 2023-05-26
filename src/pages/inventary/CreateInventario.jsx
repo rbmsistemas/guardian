@@ -1,7 +1,15 @@
-import { Label, Select, TextInput, Textarea } from "flowbite-react";
+import {
+  Button,
+  Label,
+  Modal,
+  Select,
+  TextInput,
+  Textarea,
+} from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { MdOutlineCategory } from "react-icons/md";
 import { BrandType, InventaryType } from "../../utils/Types";
+import CameraComponent from "../../utils/CameraComponent";
 
 const CreateInventario = () => {
   const [body, setBody] = useState({
@@ -15,13 +23,13 @@ const CreateInventario = () => {
     comment: "",
     status: "",
   });
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (body.inventaryType !== "otro") setBody({ ...body, otherInventary: "" });
     if (body.brandType !== "otro") setBody({ ...body, otherBrand: "" });
   }, [body.inventaryType, body.brandType]);
 
-  console.log(body);
   return (
     <div className="grid grid-cols-12 w-full h-full gap-4 justify-center items-start p-5 bg-white rounded-lg">
       <div className="col-span-12">
@@ -168,7 +176,7 @@ const CreateInventario = () => {
           <option value="2">Baja</option>
         </Select>
       </div>
-      <div className="col-span-12 md:col-span-6" id="textarea">
+      <div className="col-span-12" id="textarea">
         <div className="mb-2 ">
           <Label htmlFor="comment" value="Comentarios" />
         </div>
@@ -178,6 +186,9 @@ const CreateInventario = () => {
           required={true}
           rows={4}
         />
+      </div>
+      <div className="col-span-12">
+        <CameraComponent capturedImage={images} setCapturedImage={setImages} />
       </div>
     </div>
   );
