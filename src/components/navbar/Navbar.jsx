@@ -4,7 +4,7 @@ import Logo from ".././../assets/img/images.jfif";
 
 const Nav = () => {
   return (
-    <Navbar className="shadow-md fixed w-full" fluid={true} rounded={true}>
+    <Navbar className="shadow-md fixed w-full z-50" fluid={true} rounded={true}>
       <Navbar.Brand to="/">
         <img src={Logo} className="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
       </Navbar.Brand>

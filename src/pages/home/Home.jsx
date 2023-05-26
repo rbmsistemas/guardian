@@ -2,7 +2,7 @@ import React from "react";
 import Mercancia from "../../assets/img/mercancia.png";
 const Home = () => {
   return (
-    <div className="flex justify-center min-h-full">
+    <div className="flex justify-center min-h-full pt-20">
       <div className="flex flex-col justify-center items-center p-5">
         <h1 className="text-4xl font-bold text-center">
           Bienvenido a gapStock

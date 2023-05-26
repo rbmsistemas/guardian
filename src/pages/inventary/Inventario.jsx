@@ -4,6 +4,7 @@ import { Breadcrumb } from "flowbite-react";
 import { FaHome } from "react-icons/fa";
 import { AiFillFileAdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { InventaryType, BrandType } from "../../utils/Types";
 
 const Inventario = () => {
   return (
@@ -28,7 +29,54 @@ const Inventario = () => {
           Nuevo inventario
         </Link>
       </div>
-      <div className="overflow-scroll">
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-4 gap-2 md:gap-5">
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
+            <label className="font-bold" htmlFor="type">
+              Tipo
+            </label>
+            <select
+              name="type"
+              id="type"
+              className="border border-gray-300 rounded-md p-2"
+            >
+              <option value="all">Todos</option>
+              {InventaryType.map((item) => (
+                <option key={item.clave} value={item.name}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
+            <label className="font-bold" htmlFor="brand">
+              Marca
+            </label>
+            <select
+              name="brand"
+              id="brand"
+              className="border border-gray-300 rounded-md p-2"
+            >
+              <option value="all">Todos</option>
+              {BrandType.map((item) => (
+                <option key={item.clave} value={item.name}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-span-4 md:col-span-2 flex flex-col gap-2">
+            <label className="font-bold" htmlFor="search">
+              Buscar
+            </label>
+            <input
+              type="text"
+              name="search"
+              id="search"
+              className="border border-gray-300 rounded-md p-2"
+            />
+          </div>
+        </div>
         <CustomeTable data={data} />
       </div>
     </div>
@@ -89,6 +137,42 @@ const data = [
     brand: "CISCO",
     model: "CP-7821-K9",
     sn: "FCH2132A1JH",
+    active: "PVRT-M23",
+    date: "21-05-2023",
+  },
+  {
+    id: "007",
+    type: "Teléfono",
+    brand: "CISCO",
+    model: "CP-7821-K9",
+    sn: "FCH2132A1JH",
+    active: "PVRT-M23",
+    date: "21-05-2023",
+  },
+  {
+    id: "008",
+    type: "Teléfono",
+    brand: "CISCO",
+    model: "CP-7821-K9",
+    sn: "FCH2132A1JH",
+    active: "PVRT-M23",
+    date: "21-05-2023",
+  },
+  {
+    id: "009",
+    type: "Teléfono",
+    brand: "CISCO",
+    model: "CP-7821-K9",
+    sn: "FCH2132A1JH",
+    active: "PVRT-M23",
+    date: "21-05-2023",
+  },
+  {
+    id: "010",
+    type: "Teléfono",
+    brand: "CISCO",
+    model: "CP-7821-K9",
+    sn: "FCH2132A2JH",
     active: "PVRT-M23",
     date: "21-05-2023",
   },

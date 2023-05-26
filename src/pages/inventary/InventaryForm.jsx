@@ -24,7 +24,7 @@ const InventaryForm = () => {
           <Breadcrumb.Item href="/" icon={FaHome}>
             Home
           </Breadcrumb.Item>
-          <Breadcrumb.Item href="inventario">Inventario</Breadcrumb.Item>
+          <Breadcrumb.Item href="/inventario">Inventario</Breadcrumb.Item>
           <Breadcrumb.Item href="#">Nuevo inventario</Breadcrumb.Item>
         </Breadcrumb>
         <Link
