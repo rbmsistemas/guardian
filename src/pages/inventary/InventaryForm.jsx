@@ -15,7 +15,7 @@ const InventaryForm = () => {
   }, [id]);
 
   return (
-    <div className="min-h-full h-auto w-full p-2 md:p-5 pt-20">
+    <div className="min-h-full h-auto w-full p-5 pt-20">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center pb-2">
         <Breadcrumb
           aria-label="Solid background breadcrumb example"
