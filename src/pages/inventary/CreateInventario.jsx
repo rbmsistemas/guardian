@@ -188,6 +188,9 @@ const CreateInventario = () => {
         />
       </div>
       <div className="col-span-12">
+        <div className="mb-2 ">
+          <Label htmlFor="comment" value="Agregar imagenes" />
+        </div>
         <CameraComponent capturedImage={images} setCapturedImage={setImages} />
       </div>
     </div>
