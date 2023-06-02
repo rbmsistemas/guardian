@@ -38,7 +38,7 @@ const Inventario = () => {
       </div>
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-4 gap-2 md:gap-5">
-          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
             <div className="w-full">
               <Label
                 htmlFor="inventaryType"
@@ -66,7 +66,7 @@ const Inventario = () => {
               <option value="otro">Otro</option>
             </Select>
           </div>
-          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
             <div className="w-full">
               <Label
                 htmlFor="brandType"
