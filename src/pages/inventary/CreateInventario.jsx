@@ -1,15 +1,11 @@
-import {
-  Button,
-  Label,
-  Modal,
-  Select,
-  TextInput,
-  Textarea,
-} from "flowbite-react";
+import { Label, Select, TextInput, Textarea } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { MdOutlineCategory } from "react-icons/md";
 import { BrandType, InventaryType } from "../../utils/Types";
 import CameraComponent from "../../utils/CameraComponent";
+import { BiDevices, BiRegistered } from "react-icons/bi";
+import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
+import { Tb3DCubeSphere } from "react-icons/tb";
 
 const CreateInventario = () => {
   const [body, setBody] = useState({
@@ -31,7 +27,7 @@ const CreateInventario = () => {
   }, [body.inventaryType, body.brandType]);
 
   return (
-    <div className="grid grid-cols-12 w-full h-full gap-2 justify-center items-start p-5 bg-white rounded-lg">
+    <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
       <div className="col-span-12">
         <h2 className="text-xl font-bold text-gap-primary">Nuevo inventario</h2>
         <p className=" text-gray-500">
@@ -40,15 +36,13 @@ const CreateInventario = () => {
         </p>
       </div>
       <div className="col-span-12 md:col-span-6">
-        <div className="mb-2 w-full">
-          <Label
-            htmlFor="inventaryType"
-            value="Selecciona el tipo de inventario"
-          />
+        <div className="w-full flex gap-1">
+          <span className="text-red-500">*</span>
+          <Label htmlFor="inventaryType" value="Selecciona el tipo de equipo" />
         </div>
         <Select
           id="inventaryType"
-          icon={MdOutlineCategory}
+          icon={BiDevices}
           required={true}
           value={body.inventaryType}
           onChange={(e) => setBody({ ...body, inventaryType: e.target.value })}
@@ -67,14 +61,15 @@ const CreateInventario = () => {
       <div className="col-span-12 md:col-span-6">
         {body.inventaryType == "otro" && (
           <div>
-            <div className="mb-2 w-full">
-              <Label htmlFor="otherBrand" value="Especifique el tipo" />
+            <div className="w-full flex gap-1">
+              <span className="text-red-500">*</span>
+              <Label htmlFor="otherType" value="Otro tipo" />
             </div>
             <TextInput
-              id="otherBrand"
+              id="otherType"
               type="text"
-              icon={MdOutlineCategory}
-              placeholder="Marca"
+              icon={BiDevices}
+              placeholder="Especifique el tipo de equipo"
               required={true}
               value={body.otherInventary}
               onChange={(e) =>
@@ -85,12 +80,13 @@ const CreateInventario = () => {
         )}
       </div>
       <div className="col-span-12 md:col-span-6">
-        <div className="mb-2 w-full">
-          <Label htmlFor="brandType" value="Selecciona la marca" />
+        <div className="w-full flex gap-1">
+          <span className="text-red-500">*</span>
+          <Label htmlFor="brandType" value="Selecciona la marca del equipo" />
         </div>
         <Select
           id="brandType"
-          icon={MdOutlineCategory}
+          icon={BiRegistered}
           required={true}
           value={body.brandType}
           onChange={(e) => setBody({ ...body, brandType: e.target.value })}
@@ -109,14 +105,15 @@ const CreateInventario = () => {
       <div className="col-span-12 md:col-span-6">
         {body.brandType == "otro" && (
           <div>
-            <div className="mb-2 w-full">
-              <Label htmlFor="otherBrand" value="Marca" />
+            <div className="w-full flex gap-1">
+              <span className="text-red-500">*</span>
+              <Label htmlFor="otherBrand" value="Marca del equipo" />
             </div>
             <TextInput
               id="otherBrand"
               type="text"
-              icon={MdOutlineCategory}
-              placeholder="Marca"
+              icon={BiRegistered}
+              placeholder="Especifique la marca"
               required={true}
               value={body.otherBrand}
               onChange={(e) => setBody({ ...body, otherBrand: e.target.value })}
@@ -125,13 +122,14 @@ const CreateInventario = () => {
         )}
       </div>
       <div className="col-span-12 md:col-span-6">
-        <div className="mb-2 w-full">
+        <div className="w-full flex gap-1">
+          <span className="text-red-500">*</span>
           <Label htmlFor="model" value="Modelo" />
         </div>
         <TextInput
           id="model"
           type="text"
-          icon={MdOutlineCategory}
+          icon={Tb3DCubeSphere}
           placeholder="Modelo"
           required={true}
           value={body.model}
@@ -139,13 +137,14 @@ const CreateInventario = () => {
         />
       </div>
       <div className="col-span-12 md:col-span-6">
-        <div className="mb-2 w-full">
+        <div className="w-full flex gap-1">
+          <span className="text-red-500">*</span>
           <Label htmlFor="SN" value="Número de Serie" />
         </div>
         <TextInput
           id="SN"
           type="text"
-          icon={MdOutlineCategory}
+          icon={AiOutlineFieldNumber}
           placeholder="SN"
           required={true}
           value={body.sn}
@@ -153,22 +152,24 @@ const CreateInventario = () => {
         />
       </div>
       <div className="col-span-12 md:col-span-6">
-        <div className="mb-2 w-full">
-          <Label htmlFor="activo" value="# Activo" />
+        <div className="mb-1 w-full flex gap-1">
+          <span className="text-red-500 pr-2"></span>
+          <Label htmlFor="activo" value="Número de activo" />
         </div>
         <TextInput
           id="activo"
           type="text"
-          icon={MdOutlineCategory}
-          placeholder="# Activo"
+          icon={AiOutlineNumber}
+          placeholder="Activo"
           required={true}
           value={body.activo}
           onChange={(e) => setBody({ ...body, activo: e.target.value })}
         />
       </div>
       <div className="col-span-12 md:col-span-6">
-        <div className="mb-2 w-full">
-          <Label htmlFor="status" value="Selecciona el Status" />
+        <div className="w-full flex gap-1">
+          <span className="text-red-500">*</span>
+          <Label htmlFor="status" value="Selecciona el estado del equipo" />
         </div>
         <Select id="status" icon={MdOutlineCategory} required={true}>
           <option value="">-- Selecciona una opción --</option>
@@ -177,7 +178,8 @@ const CreateInventario = () => {
         </Select>
       </div>
       <div className="col-span-12" id="textarea">
-        <div className="mb-2 ">
+        <div className="mb-1 w-full flex gap-1">
+          <span className="text-red-500 pr-2"> </span>
           <Label htmlFor="comment" value="Comentarios" />
         </div>
         <Textarea
@@ -189,7 +191,7 @@ const CreateInventario = () => {
       </div>
       <div className="col-span-12">
         <div className="mb-2 ">
-          <Label htmlFor="comment" value="Agregar imagenes" />
+          <Label value="Agregar imagenes" />
         </div>
         <CameraComponent capturedImage={images} setCapturedImage={setImages} />
       </div>
