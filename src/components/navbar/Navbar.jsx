@@ -6,7 +6,7 @@ import { CgMenu } from "react-icons/cg";
 import { Link } from "react-router-dom";
 
 const Nav = ({ children }) => {
-  const [showMenu, setShowMenu] = useState(true);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const showMenuStorage = JSON.parse(localStorage.getItem("showMenu"));
