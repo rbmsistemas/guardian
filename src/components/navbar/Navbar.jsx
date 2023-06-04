@@ -15,17 +15,17 @@ const Nav = ({ children }) => {
     } else {
       setShowMenu(showMenuStorage);
     }
-    // const handleResize = () => {
-    //   if (window.innerWidth < 768) {
-    //     setShowMenu(false);
-    //   } else {
-    //     setShowMenu(true);
-    //   }
-    // };
-    // window.addEventListener("resize", handleResize);
-    // return () => {
-    //   window.removeEventListener("resize", handleResize);
-    // };
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setShowMenu(false);
+      } else {
+        setShowMenu(true);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const handleShowMenu = () => {
@@ -43,7 +43,7 @@ const Nav = ({ children }) => {
             <img src={LogoGuardian} className={`h-14`} alt="Logo GAP" />
           </Link>
         </div>
-        <img src={Logo} className={`h-12`} alt="Logo GAP" />
+        <img src={Logo} className={`h-12 hidden md:block`} alt="Logo GAP" />
       </div>
       <div className={`flex min-h-full h-full text-gray-500 pb-0 gap-3`}>
         <div
