@@ -8,15 +8,15 @@ import { Link } from "react-router-dom";
 const Nav = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const handleShowMenu = () => {
-    setShowMenu(!showMenu);
-  };
   return (
     <div className="min-h-full h-full w-full max-h-screen overflow-hidden">
       <div className="bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5">
         <div className="flex justify-start items-center gap-3">
           <span className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-gap-primary hover:text-white rounded-full p-2 transition delay-75 ease-in-out">
-            <CgMenu onClick={handleShowMenu} className="h-6 w-6" />
+            <CgMenu
+              onClick={() => setShowMenu(!showMenu)}
+              className="h-6 w-6"
+            />
           </span>
           <Link to="/">
             <img src={LogoGuardian} className={`h-14`} alt="Logo GAP" />
