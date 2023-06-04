@@ -15,7 +15,7 @@ const Inventario = () => {
     brandType: "",
   });
   return (
-    <div className="min-h-full w-full p-5 pt-20">
+    <div className="min-h-full w-full p-5">
       <div className="flex flex-col md:flex-row justify-between items-center pb-2">
         <Breadcrumb
           aria-label="Solid background breadcrumb example"
@@ -37,12 +37,12 @@ const Inventario = () => {
         </Link>
       </div>
       <div className="flex flex-col gap-2">
-        <div className="grid grid-cols-4 gap-2 md:gap-5">
+        <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
           <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
             <div className="w-full">
               <Label
                 htmlFor="inventaryType"
-                value="Selecciona el tipo de inventario"
+                value="Tipo de inventario"
                 className="font-bold"
               />
             </div>

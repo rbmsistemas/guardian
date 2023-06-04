@@ -1,22 +1,63 @@
-import { Navbar } from "flowbite-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Side from "../sidebar/Sidebar";
 import Logo from ".././../assets/img/images.jfif";
+import LogoGuardian from ".././../assets/img/guardian_logo.png";
+import { CgMenu } from "react-icons/cg";
+import { Link } from "react-router-dom";
 
-const Nav = () => {
+const Nav = ({ children }) => {
+  const [showMenu, setShowMenu] = useState(true);
+
+  useEffect(() => {
+    const showMenuStorage = JSON.parse(localStorage.getItem("showMenu"));
+    if (showMenuStorage === null) {
+      localStorage.setItem("showMenu", JSON.stringify(true));
+    } else {
+      setShowMenu(showMenuStorage);
+    }
+    // const handleResize = () => {
+    //   if (window.innerWidth < 768) {
+    //     setShowMenu(false);
+    //   } else {
+    //     setShowMenu(true);
+    //   }
+    // };
+    // window.addEventListener("resize", handleResize);
+    // return () => {
+    //   window.removeEventListener("resize", handleResize);
+    // };
+  }, []);
+
+  const handleShowMenu = () => {
+    setShowMenu(!showMenu);
+    localStorage.setItem("showMenu", JSON.stringify(!showMenu));
+  };
   return (
-    <Navbar className="shadow-md fixed w-full z-50" fluid={true} rounded={true}>
-      <Navbar.Brand to="/">
-        <img src={Logo} className="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
-      </Navbar.Brand>
-      <Navbar.Toggle />
-      <Navbar.Collapse>
-        <Navbar.Link href="/" active={true}>
-          Inicio
-        </Navbar.Link>
-        <Navbar.Link href="/inventario">Inventario</Navbar.Link>
-        <Navbar.Link href="/login">Iniciar Sesión</Navbar.Link>
-      </Navbar.Collapse>
-    </Navbar>
+    <div className="min-h-full h-full w-full max-h-screen overflow-hidden">
+      <div className="bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5">
+        <div className="flex justify-start items-center gap-3">
+          <span className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-gap-primary hover:text-white rounded-full p-2 transition delay-75 ease-in-out">
+            <CgMenu onClick={handleShowMenu} className="h-6 w-6" />
+          </span>
+          <Link to="/">
+            <img src={LogoGuardian} className={`h-14`} alt="Logo GAP" />
+          </Link>
+        </div>
+        <img src={Logo} className={`h-12`} alt="Logo GAP" />
+      </div>
+      <div className={`flex min-h-full h-full text-gray-500 pb-0 gap-3`}>
+        <div
+          className={`${
+            showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static "
+          } origin-top-left transition delay-50 ease-in-out z-50 h-full min-h-screen`}
+        >
+          <Side />
+        </div>
+        <div className="min-h-full max-h-screen h-full w-full overflow-auto">
+          {children}
+        </div>
+      </div>
+    </div>
   );
 };
 

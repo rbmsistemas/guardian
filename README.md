@@ -1,2 +1,3 @@
-# gapstock
-GAPStock es un sistema para control de inventarios.
+# Guardian
+
+Guardian es un sistema para control de inventarios.
