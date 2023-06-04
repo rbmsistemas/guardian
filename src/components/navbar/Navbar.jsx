@@ -32,7 +32,7 @@ const Nav = ({ children }) => {
         >
           <Side />
         </div>
-        <div className="min-h-full max-h-screen h-full w-full overflow-auto">
+        <div className="min-h-full max-h-screen h-full w-full overflow-auto pb-40 md:pb-0">
           {children}
         </div>
       </div>
