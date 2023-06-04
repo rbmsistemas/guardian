@@ -6,11 +6,11 @@ import { CgMenu } from "react-icons/cg";
 import { Link } from "react-router-dom";
 
 const Nav = ({ children }) => {
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
 
   return (
     <div className="min-h-full h-full w-full max-h-screen overflow-hidden">
-      <div className="bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5">
+      <div className="bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5 border-b border-gray-300">
         <div className="flex justify-start items-center gap-3">
           <span className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-gap-primary hover:text-white rounded-full p-2 transition delay-75 ease-in-out">
             <CgMenu
