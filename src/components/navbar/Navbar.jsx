@@ -8,20 +8,6 @@ import { Link } from "react-router-dom";
 const Nav = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setShowMenu(false);
-      } else {
-        setShowMenu(true);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   const handleShowMenu = () => {
     setShowMenu(!showMenu);
   };
