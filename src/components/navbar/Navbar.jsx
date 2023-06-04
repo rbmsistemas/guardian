@@ -9,12 +9,6 @@ const Nav = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
-    const showMenuStorage = JSON.parse(localStorage.getItem("showMenu"));
-    if (showMenuStorage === null) {
-      localStorage.setItem("showMenu", JSON.stringify(true));
-    } else {
-      setShowMenu(showMenuStorage);
-    }
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setShowMenu(false);
@@ -30,7 +24,6 @@ const Nav = ({ children }) => {
 
   const handleShowMenu = () => {
     setShowMenu(!showMenu);
-    localStorage.setItem("showMenu", JSON.stringify(!showMenu));
   };
   return (
     <div className="min-h-full h-full w-full max-h-screen overflow-hidden">
