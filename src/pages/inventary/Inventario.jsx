@@ -5,8 +5,7 @@ import { FaHome, FaSearch } from "react-icons/fa";
 import { AiFillFileAdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { InventaryType, BrandType } from "../../utils/Types";
-import { MdOutlineCategory } from "react-icons/md";
-import { BiRegistered } from "react-icons/bi";
+import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 
 const Inventario = () => {
   const [filters, setFilters] = useState({
@@ -74,7 +73,7 @@ const Inventario = () => {
             </div>
             <Select
               id="brandType"
-              icon={BiRegistered}
+              icon={MdNewReleases}
               required={true}
               value={filters.brandType}
               onChange={(e) =>

@@ -1,11 +1,13 @@
 import { Sidebar } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { BiHelpCircle } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import {
   MdAccountCircle,
   MdDashboard,
+  MdGavel,
+  MdLan,
   MdOutlineInventory2,
+  MdSupport,
 } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
 
@@ -35,6 +37,22 @@ const Side = () => {
               <p>Reportes</p>
             </Sidebar.Item>
             <Sidebar.Item
+              href="/actividades"
+              icon={MdGavel}
+              label=""
+              labelColor="dark"
+            >
+              <p>Actividades</p>
+            </Sidebar.Item>
+            <Sidebar.Item
+              href="/inventario"
+              icon={MdLan}
+              label=""
+              labelColor="dark"
+            >
+              <p>Proveedores</p>
+            </Sidebar.Item>
+            <Sidebar.Item
               href="/inventario"
               icon={FaUsers}
               label=""
@@ -47,7 +65,7 @@ const Side = () => {
             </Sidebar.Item>
           </Sidebar.ItemGroup>
           <Sidebar.ItemGroup>
-            <Sidebar.Item href="/login" icon={BiHelpCircle}>
+            <Sidebar.Item href="/login" icon={MdSupport}>
               <p>Ayuda</p>
             </Sidebar.Item>
           </Sidebar.ItemGroup>

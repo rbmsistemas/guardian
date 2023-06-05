@@ -21,43 +21,43 @@ const Home = () => {
           Bienvenido a GUARDIAN
         </h1>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
         <Link
           to={"/inventario"}
-          className="bg-white rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
+          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
         >
           <img
             src={Bodega}
-            className="w-full h-auto rounded-lg"
+            className="w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
-          <h2 className="text-sm sm:text-lg lg:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
+          <h2 className="text-sm sm:text-lg xl:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
             Control de Inventario
           </h2>
         </Link>
         <Link
           to={"/inventario"}
-          className="bg-white rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
+          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
         >
           <img
             src={Reports}
-            className="w-full h-auto rounded-lg"
+            className="w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
-          <h2 className="text-sm sm:text-lg lg:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
+          <h2 className="text-sm sm:text-lg xl:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
             Generar Reportes
           </h2>
         </Link>
         <Link
           to={"/inventario"}
-          className="bg-white rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
+          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
         >
           <img
             src={Users}
-            className="w-full h-auto rounded-lg"
+            className="w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
-          <h2 className="text-sm sm:text-lg lg:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
+          <h2 className="text-sm sm:text-lg xl:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
             Gestión de usuarios
           </h2>
         </Link>

@@ -1,14 +1,10 @@
 import { Label, Select, TextInput, Textarea } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { MdOutlineCategory } from "react-icons/md";
+import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 import { BrandType, InventaryType } from "../../utils/Types";
 import CameraComponent from "../../utils/CameraComponent";
-import { BiDevices, BiRegistered } from "react-icons/bi";
-import {
-  AiOutlineCamera,
-  AiOutlineFieldNumber,
-  AiOutlineNumber,
-} from "react-icons/ai";
+import { BiDevices } from "react-icons/bi";
+import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import { Tb3DCubeSphere } from "react-icons/tb";
 
 const CreateInventario = () => {
@@ -90,7 +86,7 @@ const CreateInventario = () => {
         </div>
         <Select
           id="brandType"
-          icon={BiRegistered}
+          icon={MdNewReleases}
           required={true}
           value={body.brandType}
           onChange={(e) => setBody({ ...body, brandType: e.target.value })}
@@ -116,7 +112,7 @@ const CreateInventario = () => {
             <TextInput
               id="otherBrand"
               type="text"
-              icon={BiRegistered}
+              icon={MdNewReleases}
               placeholder="Especifique la marca"
               required={true}
               value={body.otherBrand}
