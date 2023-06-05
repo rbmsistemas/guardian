@@ -25,10 +25,10 @@ const Nav = ({ children }) => {
             />
           </span>
           <Link to="/">
-            <img src={LogoGuardian} className={`h-14`} alt="Logo GAP" />
+            <img src={Logo} className={`h-12 hidden md:block`} alt="Logo GAP" />
           </Link>
         </div>
-        <img src={Logo} className={`h-12 hidden md:block`} alt="Logo GAP" />
+        <img src={LogoGuardian} className={`h-14`} alt="Logo GAP" />
       </div>
       <div className={`flex min-h-full h-full text-gray-500 pb-0 gap-3`}>
         <div
