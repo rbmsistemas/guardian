@@ -174,7 +174,7 @@ const CreateInventario = () => {
         <Select id="status" icon={MdOutlineCategory} required={true}>
           <option value="">-- Selecciona una opción --</option>
           <option value="1">Alta</option>
-          <option value="2">Baja</option>
+          <option value="0">Baja</option>
         </Select>
       </div>
       <div className="col-span-12" id="textarea">

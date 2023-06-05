@@ -111,7 +111,7 @@ const Inventario = () => {
             />
           </div>
         </div>
-        <CustomeTable data={data} />
+        <CustomeTable data={FakeData} />
       </div>
     </div>
   );
@@ -119,7 +119,7 @@ const Inventario = () => {
 
 export default Inventario;
 
-const data = [
+export const FakeData = [
   {
     id: "001",
     type: "Teléfono",
@@ -128,6 +128,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "002",
@@ -137,6 +139,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "003",
@@ -146,6 +150,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "004",
@@ -155,6 +161,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "005",
@@ -164,6 +172,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "006",
@@ -173,6 +183,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "007",
@@ -182,6 +194,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "008",
@@ -191,6 +205,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "009",
@@ -200,6 +216,8 @@ const data = [
     sn: "FCH2132A1JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
   {
     id: "010",
@@ -209,5 +227,7 @@ const data = [
     sn: "FCH2132A2JH",
     active: "PVRT-M23",
     date: "21-05-2023",
+    comment: "Comments",
+    images: [],
   },
 ];

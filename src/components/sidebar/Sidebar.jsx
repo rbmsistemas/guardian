@@ -1,5 +1,6 @@
 import { Sidebar } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { BiHelpCircle } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import {
   MdAccountCircle,
@@ -43,6 +44,11 @@ const Side = () => {
             </Sidebar.Item>
             <Sidebar.Item href="/login" icon={MdAccountCircle}>
               <p>Iniciar sesión</p>
+            </Sidebar.Item>
+          </Sidebar.ItemGroup>
+          <Sidebar.ItemGroup>
+            <Sidebar.Item href="/login" icon={BiHelpCircle}>
+              <p>Ayuda</p>
             </Sidebar.Item>
           </Sidebar.ItemGroup>
         </Sidebar.Items>
