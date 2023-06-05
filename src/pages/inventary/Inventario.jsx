@@ -21,9 +21,7 @@ const Inventario = () => {
           aria-label="Solid background breadcrumb example"
           className=" py-3 px-5 dark:bg-gray-900"
         >
-          <Breadcrumb.Item href="/" icon={FaHome}>
-            Home
-          </Breadcrumb.Item>
+          <Breadcrumb.Item icon={FaHome}>Home</Breadcrumb.Item>
           <Breadcrumb.Item href="inventario">Inventario</Breadcrumb.Item>
         </Breadcrumb>
         <Link

@@ -8,11 +8,17 @@ import { Link } from "react-router-dom";
 const Nav = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
 
+  useEffect(() => {
+    if (window.innerWidth > 768) {
+      setShowMenu(true);
+    } else setShowMenu(false);
+  }, []);
+
   return (
     <div className="min-h-full h-full w-full max-h-screen overflow-hidden">
       <div className="bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5 border-b border-gray-300">
         <div className="flex justify-start items-center gap-3">
-          <span className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-gap-primary hover:text-white rounded-full p-2 transition delay-75 ease-in-out">
+          <span className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-gap-primary hover:text-white rounded-full p-2 transition duration-150 ease-in-out">
             <CgMenu
               onClick={() => setShowMenu(!showMenu)}
               className="h-6 w-6"
@@ -27,8 +33,8 @@ const Nav = ({ children }) => {
       <div className={`flex min-h-full h-full text-gray-500 pb-0 gap-3`}>
         <div
           className={`${
-            showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static "
-          } origin-top-left transition delay-50 ease-in-out z-50 h-full min-h-screen`}
+            !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static "
+          } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen`}
         >
           <Side />
         </div>

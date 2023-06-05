@@ -4,7 +4,11 @@ import { MdOutlineCategory } from "react-icons/md";
 import { BrandType, InventaryType } from "../../utils/Types";
 import CameraComponent from "../../utils/CameraComponent";
 import { BiDevices, BiRegistered } from "react-icons/bi";
-import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
+import {
+  AiOutlineCamera,
+  AiOutlineFieldNumber,
+  AiOutlineNumber,
+} from "react-icons/ai";
 import { Tb3DCubeSphere } from "react-icons/tb";
 
 const CreateInventario = () => {
@@ -189,6 +193,7 @@ const CreateInventario = () => {
           rows={4}
         />
       </div>
+
       <div className="col-span-12">
         <div className="mb-2 ">
           <Label value="Agregar imagenes" />
