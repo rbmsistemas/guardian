@@ -41,7 +41,7 @@ const Login = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 purple-filter bg-cover bg-center filter bg-no-repeat bg-blue-600/40"
+      className="min-h-full h-full flex items-center p-5 justify-center purple-filter bg-cover bg-center filter bg-no-repeat bg-blue-600/40"
       style={{
         backgroundImage: `url(${BG})`,
       }}

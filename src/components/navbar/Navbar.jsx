@@ -19,26 +19,30 @@ const Nav = ({ children }) => {
   }, []);
 
   return (
-    <div className="min-h-full h-full w-full max-h-screen overflow-hidden">
-      <div className="bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5 border-b border-gray-300">
+    <div className="min-h-screen h-screen w-full max-h-screen overflow-hidden flex flex-col">
+      <div
+        id="navbar"
+        className="sticky top-0 bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5 border-b border-gray-300"
+      >
         <div className="flex justify-start items-center gap-3">
-          <span className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-gap-primary hover:text-white rounded-full p-2 transition duration-150 ease-in-out">
-            <CgMenu
-              onClick={() => setShowMenu(!showMenu)}
-              className="h-6 w-6"
-            />
+          <span
+            onClick={() => setShowMenu(!showMenu)}
+            className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-gap-primary hover:text-white rounded-full p-2 transition duration-150 ease-in-out"
+          >
+            <CgMenu className="h-6 w-6" />
           </span>
           <Link to="/">
-            <img src={Logo} className={`h-12 hidden md:block`} alt="Logo GAP" />
+            <img src={Logo} className="h-12 hidden md:block" alt="Logo GAP" />
           </Link>
         </div>
-        <img src={LogoGuardian} className={`h-14`} alt="Logo Guardian" />
+        <img src={LogoGuardian} className="h-14" alt="Logo Guardian" />
       </div>
-      <div className={`flex min-h-full h-full text-gray-500 pb-0`}>
+      <div className="flex flex-1 min-h-0">
         <div
+          id="sidebar"
           className={`${
-            !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static "
-          } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen`}
+            !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static"
+          } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen overflow-y-auto md:overflow-y-visible`}
         >
           {user?.user && (
             <div className="flex justify-start items-center h-20 px-3 text-gap-primary gap-3 bg-white border-b border-gray-300">
@@ -55,7 +59,7 @@ const Nav = ({ children }) => {
           )}
           <Side user={user?.user} />
         </div>
-        <div className="min-h-full h-screen w-full overflow-y-scroll pb-44">
+        <div id="contenido" className="flex-1 min-h-0 w-full overflow-y-auto">
           {children}
         </div>
       </div>
