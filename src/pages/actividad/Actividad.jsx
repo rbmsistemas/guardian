@@ -50,10 +50,35 @@ const Actividad = () => {
             />
           </div>
         </div>
-        <CustomeTable />
+        <CustomeTable data={Actividades}  />
       </div>
     </div>
   );
 };
 
 export default Actividad;
+
+const Actividades = [
+  {
+    id: 1,
+    encargado: "Juan Perez",
+    lugar: "MDF",
+    fecha: "2021-09-01",
+    hora: "10:00",
+    asunto: "Revisión de equipos",
+  },
+]
+
+// {
+//   id: 1,
+//   asunto: "Revisión de equipos",
+//   fecha: "2021-09-01",
+//   hora: "10:00",
+//   lugar: "MDF",
+//   descripcion: "Revisión de equipos de la bodega",
+//   estado: "Pendiente",
+//   personal: "Juan Perez, Pedro Perez, Maria Perez",
+//   herramientas: "Herramienta 1, Herramienta 2, Herramienta 3",
+//   equipos: "Material 1, Material 2, Material 3",
+//   imagenes: [],
+// },

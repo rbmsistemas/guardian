@@ -31,7 +31,7 @@ const Home = () => {
             className="w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
-          <h2 className="text-sm sm:text-lg xl:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
+          <h2 className="text-sm sm:text-lg xl:text-xl text-gap-orange text-right p-3 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
             Control de Inventario
           </h2>
         </Link>
@@ -44,7 +44,7 @@ const Home = () => {
             className="w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
-          <h2 className="text-sm sm:text-lg xl:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
+          <h2 className="text-sm sm:text-lg xl:text-xl text-gap-orange text-right p-3 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
             Generar Reportes
           </h2>
         </Link>
@@ -57,7 +57,7 @@ const Home = () => {
             className="w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
-          <h2 className="text-sm sm:text-lg xl:text-2xl text-gap-orange text-right p-4 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
+          <h2 className="text-sm sm:text-lg xl:text-xl text-gap-orange text-right p-3 font-bold absolute bottom-0 right-0 bg-black/60 w-full rounded-b-lg">
             Gestión de usuarios
           </h2>
         </Link>

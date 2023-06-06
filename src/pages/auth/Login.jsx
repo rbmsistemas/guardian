@@ -1,9 +1,43 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import GapLogo from "../../assets/img/images.jfif";
 import BG from "../../assets/img/aeropuerto-infraestructura.jpg";
 import { FaLock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import Context from "../../context/Context";
+import { toast } from "react-hot-toast";
+import Loading from "../../utils/Loading";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { handleLogin } = useContext(Context);
+  const [user, setUser] = useState({
+    user: "",
+    password: "",
+  });
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const notifyError = (text) => toast.error(text);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      if (!user.user || !user.password) {
+        notifyError(t("job.form.err_required"));
+        setIsLoading(false);
+        return;
+      }
+      const res = await handleLogin(user);
+      if (res?.error) {
+        setIsLoading(false);
+        return notifyError(t(`errors.${res.error}`));
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 purple-filter bg-cover bg-center filter bg-no-repeat bg-blue-600/40"
@@ -21,21 +55,28 @@ const Login = () => {
             Ingresa tus credenciales para acceder a la plataforma.
           </p>
         </div>
-        <form className="mt-8 space-y-6" action="#" method="POST">
+        <form
+          onSubmit={onSubmit}
+          className="mt-8 space-y-6"
+          action="#"
+          method="POST"
+        >
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email-address" className="sr-only">
+              <label htmlFor="user" className="sr-only">
                 Correo electrónico
               </label>
               <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
+                id="user"
+                name="user"
+                type="text"
+                autoComplete="user"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Correo electrónico"
+                placeholder="Usuario o Correo electrónico"
+                value={user.user}
+                onChange={(e) => setUser({ ...user, user: e.target.value })}
               />
             </div>
             <div>
@@ -50,6 +91,8 @@ const Login = () => {
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Contraseña"
+                value={user.password}
+                onChange={(e) => setUser({ ...user, password: e.target.value })}
               />
             </div>
           </div>
@@ -90,6 +133,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      {isLoading && <Loading />}
     </div>
   );
 };

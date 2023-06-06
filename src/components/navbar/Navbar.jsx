@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Side from "../sidebar/Sidebar";
 import Logo from ".././../assets/img/images.jfif";
 import LogoGuardian from ".././../assets/img/guardian_logo.png";
 import { CgMenu } from "react-icons/cg";
 import { Link } from "react-router-dom";
+import Context from "../../context/Context";
 
 const Nav = ({ children }) => {
+  const { user } = useContext(Context);
+
   const [showMenu, setShowMenu] = useState(true);
 
   useEffect(() => {
@@ -36,7 +39,12 @@ const Nav = ({ children }) => {
             !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static "
           } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen`}
         >
-          <Side />
+          {user?.user && (
+            <div className="flex justify-center items-center h-20 px-3 gap-5 border-b border-gray-300">
+              {user.user.name}
+            </div>
+          )}
+          <Side user={user?.user} />
         </div>
         <div className="min-h-full h-screen w-full overflow-y-scroll pb-44 ">
           {children}
