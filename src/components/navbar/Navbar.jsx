@@ -5,6 +5,7 @@ import LogoGuardian from ".././../assets/img/guardian_logo.png";
 import { CgMenu } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import Context from "../../context/Context";
+import { MdAccountCircle } from "react-icons/md";
 
 const Nav = ({ children }) => {
   const { user } = useContext(Context);
@@ -31,22 +32,30 @@ const Nav = ({ children }) => {
             <img src={Logo} className={`h-12 hidden md:block`} alt="Logo GAP" />
           </Link>
         </div>
-        <img src={LogoGuardian} className={`h-14`} alt="Logo GAP" />
+        <img src={LogoGuardian} className={`h-14`} alt="Logo Guardian" />
       </div>
-      <div className={`flex min-h-full h-full text-gray-500 pb-0 gap-3`}>
+      <div className={`flex min-h-full h-full text-gray-500 pb-0`}>
         <div
           className={`${
             !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static "
           } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen`}
         >
           {user?.user && (
-            <div className="flex justify-center items-center h-20 px-3 gap-5 border-b border-gray-300">
-              {user.user.name}
+            <div className="flex justify-start items-center h-20 px-3 text-gap-primary gap-3 bg-white border-b border-gray-300">
+              <span>
+                <MdAccountCircle className="h-10 w-10 text-gap-primary" />
+              </span>
+              <div className="flex flex-col justify-center items-start">
+                <p className="text-base">
+                  {user.user.firstName + " " + user.user.lastName}
+                </p>
+                <p className="text-xs text-gray-400">{user.user.userName}</p>
+              </div>
             </div>
           )}
           <Side user={user?.user} />
         </div>
-        <div className="min-h-full h-screen w-full overflow-y-scroll pb-44 ">
+        <div className="min-h-full h-screen w-full overflow-y-scroll pb-44">
           {children}
         </div>
       </div>

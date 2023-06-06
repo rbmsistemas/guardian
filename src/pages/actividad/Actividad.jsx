@@ -4,7 +4,7 @@ import { Label, TextInput } from "flowbite-react";
 import { FaHome, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AiFillFileAdd } from "react-icons/ai";
-
+import { FiChevronRight } from "react-icons/fi";
 const Actividad = () => {
   const [filters, setFilters] = useState({
     searchs: "",
@@ -16,7 +16,9 @@ const Actividad = () => {
           <Link to="/" className="text-gray-500 hover:text-gray-700">
             <FaHome className="text-xl" />
           </Link>
-          <span className="text-gray-500">/</span>
+          <span className="text-gray-500 text-xl">
+            <FiChevronRight />
+          </span>
           <Link to="/actividad" className="text-gray-500 hover:text-gray-700">
             Actividad
           </Link>
@@ -50,7 +52,7 @@ const Actividad = () => {
             />
           </div>
         </div>
-        <CustomeTable data={Actividades}  />
+        <CustomeTable data={Actividades} />
       </div>
     </div>
   );
@@ -67,7 +69,7 @@ const Actividades = [
     hora: "10:00",
     asunto: "Revisión de equipos",
   },
-]
+];
 
 // {
 //   id: 1,

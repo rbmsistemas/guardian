@@ -6,6 +6,7 @@ import { AiFillFileAdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { InventaryType, BrandType } from "../../utils/Types";
 import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
+import { FiChevronRight } from "react-icons/fi";
 
 const Inventario = () => {
   const [filters, setFilters] = useState({
@@ -16,13 +17,17 @@ const Inventario = () => {
   return (
     <div className="min-h-full w-full p-5">
       <div className="flex flex-col md:flex-row justify-between items-center pb-2">
-        <Breadcrumb
-          aria-label="Solid background breadcrumb example"
-          className=" py-3 px-5 dark:bg-gray-900"
-        >
-          <Breadcrumb.Item icon={FaHome}>Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="inventario">Inventario</Breadcrumb.Item>
-        </Breadcrumb>
+        <div className="flex gap-2 items-center">
+          <Link to="/" className="text-gray-500 hover:text-gray-700">
+            <FaHome className="text-xl" />
+          </Link>
+          <span className="text-gray-500 text-xl">
+            <FiChevronRight />
+          </span>
+          <Link to="/Inventario" className="text-gray-500 hover:text-gray-700">
+            Inventario
+          </Link>
+        </div>
         <Link
           to="/inventario/crear"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"

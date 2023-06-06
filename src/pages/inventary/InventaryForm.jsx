@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import CreateInventario from "./CreateInventario";
 import EditarInventario from "./EditarInventario";
+import { FiChevronRight } from "react-icons/fi";
 
 const InventaryForm = () => {
   const { id } = useParams();
@@ -16,17 +17,24 @@ const InventaryForm = () => {
 
   return (
     <div className="min-h-full h-auto w-full p-5">
-      <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center pb-2">
-        <Breadcrumb
-          aria-label="Solid background breadcrumb example"
-          className=" py-3 px-5 dark:bg-gray-900"
-        >
-          <Breadcrumb.Item href="/" icon={FaHome}>
-            Home
-          </Breadcrumb.Item>
-          <Breadcrumb.Item href="/inventario">Inventario</Breadcrumb.Item>
-          <Breadcrumb.Item href="#">Nuevo inventario</Breadcrumb.Item>
-        </Breadcrumb>
+      <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
+        <div className="flex gap-2 items-center">
+          <Link to="/" className="text-gray-500 hover:text-gray-700">
+            <FaHome className="text-xl" />
+          </Link>
+          <span className="text-gray-500 text-xl">
+            <FiChevronRight />
+          </span>
+          <Link to="/Inventario" className="text-gray-500 hover:text-gray-700">
+            Inventario
+          </Link>
+          <span className="text-gray-500 text-xl">
+            <FiChevronRight />
+          </span>
+          <Link to="#" className="text-gray-500 hover:text-gray-700">
+            Nuevo inventario
+          </Link>
+        </div>
         <Link
           to="/inventario"
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"

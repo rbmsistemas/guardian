@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import GapLogo from "../../assets/img/images.jfif";
 import BG from "../../assets/img/aeropuerto-infraestructura.jpg";
-import { FaLock } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Context from "../../context/Context";
 import { toast } from "react-hot-toast";
@@ -14,7 +14,7 @@ const Login = () => {
     user: "",
     password: "",
   });
-  const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const notifyError = (text) => toast.error(text);
 
@@ -23,15 +23,16 @@ const Login = () => {
     try {
       setIsLoading(true);
       if (!user.user || !user.password) {
-        notifyError(t("job.form.err_required"));
+        notifyError("Todos los campos son obligatorios.");
         setIsLoading(false);
         return;
       }
       const res = await handleLogin(user);
-      if (res?.error) {
+      if (res?.data) {
         setIsLoading(false);
-        return notifyError(t(`errors.${res.error}`));
+        return notifyError(res.data.message);
       }
+      navigate("/");
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -83,17 +84,34 @@ const Login = () => {
               <label htmlFor="password" className="sr-only">
                 Contraseña
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Contraseña"
-                value={user.password}
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Contraseña"
+                  value={user.password}
+                  onChange={(e) =>
+                    setUser({ ...user, password: e.target.value })
+                  }
+                />
+                <span className="absolute z-10 inset-y-0 right-0 flex items-center pr-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="focus:outline-none text-gray-400 hover:text-gray-500"
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash className="h-5 w-5" />
+                    ) : (
+                      <FaEye className="h-5 w-5" />
+                    )}
+                  </button>
+                </span>
+              </div>
             </div>
           </div>
           <div className="flex items-center justify-between">

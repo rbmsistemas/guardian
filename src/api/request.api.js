@@ -18,6 +18,16 @@ export const getLogin = async (data) => {
   }
 };
 
+export const getProfile = async (token) => {
+  config.headers["x-access-token"] = token;
+  try {
+    const response = await axios.get(`${urlEnv}/api/auth/profile`, config);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 export const handleRegister = async (data) => {
   try {
     const response = await axios.post(

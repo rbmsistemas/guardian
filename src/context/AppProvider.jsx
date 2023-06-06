@@ -5,6 +5,7 @@ import {
   handleRegister,
   handleSignout,
   urlEnv,
+  getProfile,
 } from "../api/request.api";
 import Context from "./Context";
 import Reducer from "./Reducer";
@@ -25,11 +26,39 @@ const AppProvider = (props) => {
   const handleLogin = async (data) => {
     try {
       const response = await getLogin(data);
+      if (response?.status !== 200) {
+        return response;
+      }
       dispatch({
         type: POST_SIGNIN,
         payload: response.data,
       });
-      return response.data;
+      localStorage.setItem("user", JSON.stringify(response.data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      hanldeProfile(user.token);
+    }
+  }, []);
+
+  const hanldeProfile = async (token) => {
+    try {
+      const response = await getProfile(token);
+      if (response?.status <= 299) {
+        const profile = {
+          user: response.data,
+          token,
+        };
+        dispatch({
+          type: POST_SIGNIN,
+          payload: profile,
+        });
+      }
     } catch (error) {
       console.log(error);
     }

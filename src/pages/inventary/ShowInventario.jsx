@@ -3,7 +3,6 @@ import { FakeData } from "./Inventario";
 import { useParams } from "react-router-dom";
 
 const ShowInventario = () => {
-  // get id from url
   const [inventary, setInventary] = useState({
     inventaryType: "",
     otherInventary: "",
@@ -16,8 +15,6 @@ const ShowInventario = () => {
     status: "",
     images: [],
   });
-  const [loading, setLoading] = useState(true);
-  // get id from the params
   const { id } = useParams();
 
   useEffect(() => {
@@ -26,9 +23,19 @@ const ShowInventario = () => {
       if (item.id == id) setInventary(item);
     });
   }, []);
-  // show the inventaryType, otherInventary, brandType, otherBrand, model, sn, activo, comment, status, images
   return (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
+      <div className="flex gap-2 items-center">
+        <Link to="/" className="text-gray-500 hover:text-gray-700">
+          <FaHome className="text-xl" />
+        </Link>
+        <span className="text-gray-500 text-xl">
+          <FiChevronRight />
+        </span>
+        <Link to="/Inventario" className="text-gray-500 hover:text-gray-700">
+          Inventario
+        </Link>
+      </div>
       <div className="col-span-12">
         <h2 className="text-xl font-bold text-gap-primary">
           Inventario - <p className="text-md text-slate-500"></p>{" "}
