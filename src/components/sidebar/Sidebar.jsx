@@ -73,7 +73,7 @@ const Side = ({
                 <p>Actividades</p>
               </Link>
               <Link
-                to="/"
+                to="/proveedores"
                 className="p-3 py-2 hover:bg-gray-100 text-gray-500 hover:text-gap-primary transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">

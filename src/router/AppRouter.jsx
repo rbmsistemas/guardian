@@ -5,6 +5,10 @@ import Login from "../pages/auth/Login";
 import NotFound from "../pages/notFound/NotFound";
 
 import Context from "../context/Context";
+const ProveedoresForm = lazy(() =>
+  import("../pages/proveedores/ProveedoresForm")
+);
+const Proveedores = lazy(() => import("../pages/proveedores/Proveedores"));
 const Home = lazy(() => import("../pages/home/Home"));
 const Inventario = lazy(() => import("../pages/inventary/Inventario"));
 const Actividad = lazy(() => import("../pages/actividad/Actividad"));
@@ -42,6 +46,13 @@ const AuthRouter = () => {
             <Route path="/actividades/crear" element={<InventaryForm />} />
             <Route path="/actividades/editar/:id" element={<InventaryForm />} />
             <Route path="/actividades/ver/:id" element={<ShowInventario />} />
+            <Route path="/proveedores" element={<Proveedores />} />
+            <Route path="/proveedores/crear" element={<ProveedoresForm />} />
+            <Route
+              path="/proveedores/editar/:id"
+              element={<ProveedoresForm />}
+            />
+            <Route path="/proveedores/ver/:id" element={<Proveedores />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Nav>
@@ -52,6 +63,7 @@ const AuthRouter = () => {
 
 const AppRouter = () => {
   const { user } = useContext(Context);
+  console.log(user);
   return Object.keys(user).length > 0 ? <AuthRouter /> : <LoginRouter />;
 };
 

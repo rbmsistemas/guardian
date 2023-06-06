@@ -45,12 +45,12 @@ const Nav = ({ children }) => {
           } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen overflow-y-auto md:overflow-y-visible`}
         >
           {user?.user && (
-            <div className="flex justify-start items-center h-20 px-3 text-gap-primary gap-3 bg-white border-b border-gray-300">
+            <div className="flex justify-start items-center h-20 px-3 text-gap-primary gap-2 bg-white border-b border-gray-300">
               <span>
                 <MdAccountCircle className="h-10 w-10 text-gap-primary" />
               </span>
               <div className="flex flex-col justify-center items-start">
-                <p className="text-base">
+                <p className="text-sm">
                   {user.user.firstName + " " + user.user.lastName}
                 </p>
                 <p className="text-xs text-gray-400">{user.user.userName}</p>

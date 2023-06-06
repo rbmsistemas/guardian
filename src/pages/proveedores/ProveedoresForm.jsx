@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
-import CreateInventario from "./CreateInventario";
-import EditarInventario from "./EditarInventario";
 import { FiChevronRight } from "react-icons/fi";
+import EditarProveedores from "./EditarProveedores";
+import CrearProveedores from "./CrearProveedores";
 
-const InventaryForm = () => {
+const ProveedoresForm = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
 
@@ -24,18 +24,18 @@ const InventaryForm = () => {
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="/Inventario" className="text-gray-500 hover:text-gray-700">
-            Inventario
+          <Link to="/proveedores" className="text-gray-500 hover:text-gray-700">
+            Proveedores
           </Link>
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
           <Link to="#" className="text-gray-500 hover:text-gray-700">
-            Nuevo inventario
+            Nuevo proveedor
           </Link>
         </div>
         <Link
-          to="/inventario"
+          to="/proveedores"
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
         >
           <span>
@@ -46,12 +46,12 @@ const InventaryForm = () => {
       </div>
       <div className="flex flex-col">
         <h2 className="text-xl font-bold"></h2>
-        <form className="flex flex-col gap-5 mt-5">
-          {id ? <EditarInventario data={data} /> : <CreateInventario />}
+        <form className="flex flex-col gap-5 mt-5 bg-white p-3 rounded-lg">
+          {id ? <EditarProveedores data={data} /> : <CrearProveedores />}
         </form>
       </div>
     </div>
   );
 };
 
-export default InventaryForm;
+export default ProveedoresForm;
