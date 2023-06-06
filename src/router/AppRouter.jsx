@@ -2,6 +2,7 @@ import { Suspense, lazy, useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "../utils/Loading";
 import Login from "../pages/auth/Login";
+import NotFound from "../pages/NotFound/NotFound";
 
 import Context from "../context/Context";
 const Home = lazy(() => import("../pages/home/Home"));
@@ -9,7 +10,6 @@ const Inventario = lazy(() => import("../pages/inventary/Inventario"));
 const Actividad = lazy(() => import("../pages/actividad/Actividad"));
 const InventaryForm = lazy(() => import("../pages/inventary/InventaryForm"));
 const ShowInventario = lazy(() => import("../pages/inventary/ShowInventario"));
-const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
 const Nav = lazy(() => import("../components/navbar/Navbar"));
 
 const LoginRouter = () => {
