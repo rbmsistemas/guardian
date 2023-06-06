@@ -2,7 +2,7 @@ import { Suspense, lazy, useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "../utils/Loading";
 import Login from "../pages/auth/Login";
-import NotFound from "../pages/NotFound/NotFound";
+import NotFound from "../pages/notFound/NotFound";
 
 import Context from "../context/Context";
 const Home = lazy(() => import("../pages/home/Home"));
