@@ -67,3 +67,94 @@ export const handleGetActivity = async (id) => {
     return error.response;
   }
 };
+
+// proveedores
+
+export const handleGetProviders = async (token) => {
+  config.headers["x-access-token"] = token;
+  try {
+    const response = await axios.get(`${urlEnv}/api/proveedores`, config);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleGetProvider = async (id, token) => {
+  config.headers["x-access-token"] = token;
+  try {
+    const response = await axios.get(`${urlEnv}/api/proveedores/${id}`, config);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleCreateProvider = async (data, token) => {
+  config.headers["x-access-token"] = token;
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/proveedores`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleUpdateProvider = async (id, data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.patch(
+      `${urlEnv}/api/proveedores/${id}`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleDeleteProvider = async (id, token) => {
+  config.headers["x-access-token"] = token;
+  try {
+    const response = await axios.delete(
+      `${urlEnv}/api/proveedores/${id}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleGetProvidersByStatus = async (status, token) => {
+  try {
+    const response = await axios.get(
+      `${urlEnv}/api/proveedores/status/${status}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const uploadImageProviders = async (data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "multipart/form-data";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/uploads/provider`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
