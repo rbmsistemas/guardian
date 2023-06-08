@@ -13,8 +13,14 @@ import { uploadImageProviders } from "../../api/request.api";
 const ProveedoresForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { createProvider, user, updateProvider, provider, getProvider } =
-    useContext(Context);
+  const {
+    createProvider,
+    user,
+    updateProvider,
+    provider,
+    getProvider,
+    clearProvider,
+  } = useContext(Context);
   const [proveedor, setProveedor] = useState({
     proveedor: "",
     encargado: "",
@@ -35,6 +41,8 @@ const ProveedoresForm = () => {
   useEffect(() => {
     if (id) {
       getProvider(id);
+    } else {
+      clearProvider();
     }
   }, [id]);
 
@@ -59,19 +67,20 @@ const ProveedoresForm = () => {
 
     if (id) {
       try {
-        const newImage = await handleUploadFile();
+        let newImage = null;
+        if (image) {
+          newImage = await handleUploadFile();
+        }
         const newProvider = {
           ...proveedor,
-          logo: newImage,
+          logo: newImage ?? provider.logo,
         };
 
-        console.log(newProvider);
         const res = await updateProvider(id, newProvider, user.token);
         if (res?.status > 299) {
           notificationError("Error al actualizar al proveedor");
           return console.log(res);
         }
-        console.log("res:", res);
         successNotification("Proveedor actualizado correctamente");
         setTimeout(() => {
           navigate(`/proveedores/editar/${id}`);
@@ -82,7 +91,17 @@ const ProveedoresForm = () => {
         notificationError("Error al actualizar la imagen");
       }
     } else {
-      const res = await createProvider(proveedor);
+      let newImage = null;
+      if (image) {
+        newImage = await handleUploadFile();
+      }
+      const newProvider = {
+        ...proveedor,
+        logo: newImage ?? provider.logo,
+      };
+
+      console.log(newProvider);
+      const res = await createProvider(newProvider);
 
       if (res?.status > 299) {
         notificationError("Error al crear al proveedor");

@@ -173,11 +173,7 @@ const CrearProveedores = ({
         </div>
         {image || proveedor.logo ? (
           <img
-            src={
-              proveedor.logo.length > 0
-                ? proveedor.logo
-                : URL.createObjectURL(image)
-            }
+            src={!image ? proveedor.logo : URL.createObjectURL(image)}
             className="w-full h-auto"
             alt="logo"
           />

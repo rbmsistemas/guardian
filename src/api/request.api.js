@@ -92,6 +92,7 @@ export const handleGetProvider = async (id, token) => {
 
 export const handleCreateProvider = async (data, token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
       `${urlEnv}/api/proveedores`,

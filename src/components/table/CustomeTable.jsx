@@ -40,7 +40,7 @@ const CustomeTable = ({
                   <Table.Cell className="flex gap-2 justify-center">
                     {onShow && (
                       <div
-                        className="border border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                        className="cursor-pointer border border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
                         onClick={() => onShow(item.id)}
                       >
                         <FaEye className="text-xl" />
@@ -48,7 +48,7 @@ const CustomeTable = ({
                     )}
                     {onEdit && (
                       <div
-                        className="border border-gap-primary text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                        className="cursor-pointer border border-gap-primary text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
                         onClick={() => onEdit(item.id)}
                       >
                         <FaRegEdit className="text-xl" />
@@ -56,7 +56,7 @@ const CustomeTable = ({
                     )}
                     {onDelete && (
                       <div
-                        className="border border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                        className="cursor-pointer border border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
                         onClick={() => onDelete(item.id)}
                       >
                         <FaRegTrashAlt className="text-xl" />

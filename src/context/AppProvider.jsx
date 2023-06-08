@@ -216,6 +216,13 @@ const AppProvider = (props) => {
     }
   };
 
+  const clearProvider = () => {
+    dispatch({
+      type: GET_PROVIDER,
+      payload: {},
+    });
+  };
+
   useEffect(() => {
     if (state.user.token) {
       getProviders(state.user.token);
@@ -238,6 +245,7 @@ const AppProvider = (props) => {
         updateProvider,
         deleteProvider,
         getProvidersByStatus,
+        clearProvider,
       }}
     >
       {props.children}

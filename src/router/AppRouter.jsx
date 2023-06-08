@@ -63,7 +63,7 @@ const AuthRouter = () => {
 
 const AppRouter = () => {
   const { user } = useContext(Context);
-  return Object.keys(user).length > 0 ? <AuthRouter /> : <LoginRouter />;
+  return user.token ? <AuthRouter /> : <LoginRouter />;
 };
 
 export default AppRouter;
