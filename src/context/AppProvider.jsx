@@ -10,8 +10,7 @@ import {
   handleCreateProvider,
   handleUpdateProvider,
   handleDeleteProvider,
-  handleGetProvidersByStatus,
-  uploadImageProviders,
+  handleGetProvidersByParams,
 } from "../api/request.api";
 import Context from "./Context";
 import Reducer from "./Reducer";
@@ -25,7 +24,7 @@ import {
   POST_PROVIDER,
   PATCH_PROVIDER,
   DELETE_PROVIDER,
-  GET_PROVIDERS_BY_STATUS,
+  GET_PROVIDERS_BY_SEARCH,
 } from "./Types";
 
 const AppProvider = (props) => {
@@ -133,7 +132,7 @@ const AppProvider = (props) => {
       });
     } catch (error) {
       console.log(error);
-      return error;
+      return false;
     }
   };
 
@@ -151,7 +150,7 @@ const AppProvider = (props) => {
       return proveedor;
     } catch (error) {
       console.log(error);
-      return error;
+      return false;
     }
   };
 
@@ -159,7 +158,7 @@ const AppProvider = (props) => {
     try {
       const response = await handleCreateProvider(data, state.user.token);
       if (response?.status >= 299) {
-        return response;
+        throw new Error("Error en la respuesta del servidor");
       }
       const { proveedor } = await response.data;
       dispatch({
@@ -169,13 +168,16 @@ const AppProvider = (props) => {
       return proveedor;
     } catch (error) {
       console.log(error);
-      return error;
+      return false;
     }
   };
 
   const updateProvider = async (id, data, token) => {
     try {
       const response = await handleUpdateProvider(id, data, token);
+      if (response?.status >= 299) {
+        throw new Error("Error en la respuesta del servidor");
+      }
       const { provider } = await response.data;
       dispatch({
         type: PATCH_PROVIDER,
@@ -184,35 +186,44 @@ const AppProvider = (props) => {
       return provider;
     } catch (error) {
       console.log(error);
-      return error;
+      return false;
     }
   };
 
-  const deleteProvider = async (id, token) => {
+  const deleteProvider = async (id) => {
     try {
-      const response = await handleDeleteProvider(id, token);
-      const dataResponse = await response.json();
+      const response = await handleDeleteProvider(id, state.user.token);
+      console.log(response);
+      if (response?.status >= 299) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { proveedores } = await response.data;
       dispatch({
         type: DELETE_PROVIDER,
-        payload: dataResponse,
+        payload: proveedores,
       });
+      return response;
     } catch (error) {
       console.log(error);
-      return error;
+      return false;
     }
   };
 
-  const getProvidersByStatus = async (status, token) => {
+  const getProvidersBySearch = async (body) => {
     try {
-      const response = await handleGetProvidersByStatus(status, token);
-      const dataResponse = await response.json();
+      const response = await handleGetProvidersByParams(body, state.user.token);
+      if (response?.status >= 299) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { proveedores } = await response.data;
       dispatch({
-        type: GET_PROVIDERS_BY_STATUS,
-        payload: dataResponse,
+        type: GET_PROVIDERS_BY_SEARCH,
+        payload: proveedores,
       });
+      return response.data;
     } catch (error) {
       console.log(error);
-      return error;
+      return false;
     }
   };
 
@@ -227,7 +238,7 @@ const AppProvider = (props) => {
     if (state.user.token) {
       getProviders(state.user.token);
     }
-  }, [state.user.token]);
+  }, [state.user.token, state.provider]);
 
   return (
     <Context.Provider
@@ -240,11 +251,12 @@ const AppProvider = (props) => {
         postSignout,
         providers: state.providers,
         provider: state.provider,
+        getProviders,
         getProvider,
         createProvider,
         updateProvider,
         deleteProvider,
-        getProvidersByStatus,
+        getProvidersBySearch,
         clearProvider,
       }}
     >

@@ -8,7 +8,7 @@ import {
   POST_PROVIDER,
   PATCH_PROVIDER,
   DELETE_PROVIDER,
-  GET_PROVIDERS_BY_STATUS,
+  GET_PROVIDERS_BY_SEARCH,
 } from "./Types";
 
 export default (state, action) => {
@@ -58,9 +58,9 @@ export default (state, action) => {
     case DELETE_PROVIDER:
       return {
         ...state,
-        provider: payload,
+        providers: payload,
       };
-    case GET_PROVIDERS_BY_STATUS:
+    case GET_PROVIDERS_BY_SEARCH:
       return {
         ...state,
         providers: payload,

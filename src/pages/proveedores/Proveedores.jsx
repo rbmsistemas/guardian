@@ -1,31 +1,88 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaHome, FaSearch } from "react-icons/fa";
+import { FaCheck, FaHome, FaSearch, FaStore, FaTimes } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
-import { AiFillFileAdd, AiOutlinePoweroff } from "react-icons/ai";
+import {
+  AiFillFileAdd,
+  AiOutlineClear,
+  AiOutlinePoweroff,
+} from "react-icons/ai";
 import CustomeTable from "../../components/table/CustomeTable";
-import { Label, Select, TextInput } from "flowbite-react";
+import { Label, Modal, Select, TextInput } from "flowbite-react";
 import Context from "../../context/Context";
+import { toast } from "react-hot-toast";
 
 const Proveedores = () => {
-  const { providers } = useContext(Context);
+  const { providers, getProvidersBySearch, deleteProvider } =
+    useContext(Context);
   const navigate = useNavigate();
 
   const [filters, setFilters] = useState({
-    searchs: "",
+    search: "",
     status: "",
+    page: 1,
+    quantityResults: 5,
   });
+  const [totals, setTotals] = useState({ totalEntries: 0, totalPages: 0 });
+  const [modal, setModal] = useState(false);
+  const [providerToDelete, setProviderToDelete] = useState({});
+
+  const errorNotify = (message) => toast.error(message);
+  const successNotify = (message) => toast.success(message);
 
   const Proveedores = providers?.map((provider) => {
     return {
+      imagen: provider.logo,
       id: provider.id,
       proveedor: provider.proveedor,
       encargado: provider.encargado,
-      teléfono: provider.phone,
       "correo electronico": provider.email,
-      dirección: provider.address,
+      teléfono: provider.phone,
+      dirección:
+        provider.address.length > 50
+          ? provider.address.slice(0, 50) + "..."
+          : provider.address,
+      estado: provider.status ? "Activo" : "Inactivo",
     };
   });
+
+  useEffect(() => {
+    const res = async () => {
+      const data = await getProvidersBySearch(filters);
+      if (data) {
+        setTotals({
+          totalEntries: data.totalEntries,
+          totalPages: data.totalPages,
+        });
+      }
+    };
+    res();
+  }, [filters]);
+
+  const handleDelete = async (id) => {
+    setModal(true);
+    setProviderToDelete(providers.find((provider) => provider.id === id));
+  };
+
+  const onDelete = async () => {
+    const data = await deleteProvider(providerToDelete.id);
+    if (!data) {
+      errorNotify("Error al eliminar el proveedor");
+      setModal(false);
+      return;
+    }
+    if (data) {
+      const res = await getProvidersBySearch(filters);
+      if (res) {
+        setTotals({
+          totalEntries: res.totalEntries,
+          totalPages: res.totalPages,
+        });
+        successNotify("Proveedor eliminado correctamente");
+      }
+      setModal(false);
+    }
+  };
 
   return (
     <div className="min-h-full w-full p-5">
@@ -55,6 +112,22 @@ const Proveedores = () => {
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
           <div className="col-span-4 md:col-span-2 flex flex-col gap-2">
             <div className="w-full">
+              <Label htmlFor="search" value="Buscar" />
+            </div>
+            <TextInput
+              id="search"
+              type="text"
+              icon={FaSearch}
+              placeholder="Proveedor, Nombre, teléfono,"
+              required={true}
+              value={filters.search}
+              onChange={(e) =>
+                setFilters({ ...filters, search: e.target.value })
+              }
+            />
+          </div>
+          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
+            <div className="w-full">
               <Label htmlFor="status" value="Estado" />
             </div>
             <Select
@@ -66,35 +139,118 @@ const Proveedores = () => {
               }
             >
               <option value="">Todos</option>
-              <option value="activo">Activo</option>
-              <option value="inactivo">Inactivo</option>
+              <option value={1}>Activo</option>
+              <option value={0}>Inactivo</option>
             </Select>
           </div>
-          <div className="col-span-4 md:col-span-2 flex flex-col gap-2">
-            <div className="w-full">
-              <Label htmlFor="search" value="Buscar" />
+
+          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
+            <div className="w-full hidden md:block">
+              <Label htmlFor="status" value="&nbsp;" />
             </div>
-            <TextInput
-              id="search"
-              type="text"
-              icon={FaSearch}
-              placeholder="Proveedor, Nombre, teléfono,"
-              required={true}
-              value={filters.searchs}
-              onChange={(e) =>
-                setFilters({ ...filters, searchs: e.target.value })
+            <button
+              onClick={() =>
+                setFilters({
+                  search: "",
+                  status: "",
+                  page: 1,
+                  quantityResults: 5,
+                })
               }
-            />
+              className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            >
+              <span>
+                <AiOutlineClear className="text-white text-lg" />
+              </span>
+              Limpiar filtros
+            </button>
           </div>
         </div>
-        <CustomeTable
-          showId={false}
-          data={Proveedores}
-          onShow={(id) => console.log(id)}
-          onEdit={(id) => navigate(`/proveedores/editar/${id}`)}
-          onDelete={(id) => console.log(id)}
-        />
+        {totals.totalEntries == 0 ? (
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h1 className="text-2xl font-semibold">No hay resultados</h1>
+            <p className="text-gray-500">
+              No se encontraron resultados para la búsqueda{" "}
+              <span className="font-semibold">{filters.search}</span>
+              <span className="font-semibold">
+                {
+                  {
+                    1: " en estado activo",
+                    0: " en estado inactivo",
+                  }[filters.status]
+                }
+              </span>
+            </p>
+          </div>
+        ) : (
+          <CustomeTable
+            showId={false}
+            showImagen={true}
+            data={Proveedores}
+            onShow={(id) => navigate(`/proveedores/ver/${id}`)}
+            onEdit={(id) => navigate(`/proveedores/editar/${id}`)}
+            onDelete={(id) => handleDelete(id)}
+            quantityResults={filters.quantityResults}
+            setQuantityResults={(quantityResults) =>
+              setFilters({ ...filters, quantityResults })
+            }
+            page={filters.page}
+            setPage={(page) => setFilters({ ...filters, page })}
+            totalEntries={totals.totalEntries}
+            totalPages={totals.totalPages}
+          />
+        )}
       </div>
+      {modal && (
+        <Modal
+          title="Eliminar proveedor"
+          onClose={() => {
+            setModal(false);
+          }}
+          show={modal}
+        >
+          <Modal.Header>
+            <p className="text-xl font-bold">Eliminar proveedor</p>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="flex flex-col gap-2">
+              <p className="text-gray-500 flex items-center gap-4">
+                <span>
+                  <FaStore className="text-gray-500 text-xl" />
+                </span>
+                ¿Está seguro que desea eliminar el proveedor{" "}
+                <span className="font-bold">{providerToDelete.proveedor}</span>?
+              </p>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex justify-end gap-2 w-full">
+              <button
+                onClick={() => {
+                  onDelete();
+                }}
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+              >
+                <span>
+                  <FaCheck className="text-white text-lg" />
+                </span>
+                Aceptar
+              </button>
+              <button
+                onClick={() => {
+                  setModal(false);
+                }}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+              >
+                <span>
+                  <FaTimes className="text-white text-lg" />
+                </span>
+                Cancelar
+              </button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 };

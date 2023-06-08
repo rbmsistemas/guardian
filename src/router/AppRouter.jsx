@@ -8,6 +8,9 @@ import Context from "../context/Context";
 const ProveedoresForm = lazy(() =>
   import("../pages/proveedores/ProveedoresForm")
 );
+const VerProovedores = lazy(() =>
+  import("../pages/proveedores/VerProovedores")
+);
 const Proveedores = lazy(() => import("../pages/proveedores/Proveedores"));
 const Home = lazy(() => import("../pages/home/Home"));
 const Inventario = lazy(() => import("../pages/inventary/Inventario"));
@@ -52,7 +55,7 @@ const AuthRouter = () => {
               path="/proveedores/editar/:id"
               element={<ProveedoresForm />}
             />
-            <Route path="/proveedores/ver/:id" element={<Proveedores />} />
+            <Route path="/proveedores/ver/:id" element={<VerProovedores />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Nav>

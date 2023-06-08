@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Label, Select, TextInput } from "flowbite-react";
 import { AiOutlinePoweroff } from "react-icons/ai";
 import {
@@ -9,6 +9,8 @@ import {
   FaStore,
 } from "react-icons/fa";
 import { MdSaveAlt } from "react-icons/md";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const CrearProveedores = ({
   proveedor = {
@@ -24,6 +26,8 @@ const CrearProveedores = ({
   setProveedor,
   image,
   setImage,
+  setComments,
+  comments,
 }) => {
   const handleLogoChange = (event) => {
     const file = event.target.files[0];
@@ -154,27 +158,17 @@ const CrearProveedores = ({
             value="Comentarios"
           />
         </div>
-        <textarea
-          id="comments"
-          type="text"
-          placeholder="Comentarios"
-          value={proveedor.comments}
-          onChange={(e) =>
-            setProveedor({ ...proveedor, comments: e.target.value })
-          }
-          className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-gap-primary focus:border-transparent"
-          rows="5"
-        />
+        <ReactQuill theme="snow" value={comments} onChange={setComments} />
       </div>
 
-      <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
+      <div className="col-span-2 md:col-span-1 flex flex-col gap-2 pt-20 md:pt-10">
         <div className="w-full">
           <Label className="font-semibold" htmlFor="logo" value="Logo" />
         </div>
         {image || proveedor.logo ? (
           <img
             src={!image ? proveedor.logo : URL.createObjectURL(image)}
-            className="w-full h-auto"
+            className="w-full max-w-sm h-auto rounded-lg"
             alt="logo"
           />
         ) : null}

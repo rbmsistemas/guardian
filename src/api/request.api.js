@@ -122,6 +122,8 @@ export const handleUpdateProvider = async (id, data, token) => {
 
 export const handleDeleteProvider = async (id, token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
+
   try {
     const response = await axios.delete(
       `${urlEnv}/api/proveedores/${id}`,
@@ -133,10 +135,13 @@ export const handleDeleteProvider = async (id, token) => {
   }
 };
 
-export const handleGetProvidersByStatus = async (status, token) => {
+export const handleGetProvidersByParams = async (body, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
   try {
-    const response = await axios.get(
-      `${urlEnv}/api/proveedores/status/${status}`,
+    const response = await axios.post(
+      `${urlEnv}/api/proveedores/search`,
+      body,
       config
     );
     return response;

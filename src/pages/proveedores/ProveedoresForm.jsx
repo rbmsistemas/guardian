@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FaHome } from "react-icons/fa";
+import { FaEye, FaHome } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { FiChevronRight } from "react-icons/fi";
-import EditarProveedores from "./EditarProveedores";
 import CrearProveedores from "./CrearProveedores";
 import Loading from "../../utils/Loading";
 import { toast } from "react-hot-toast";
@@ -33,7 +32,7 @@ const ProveedoresForm = () => {
   });
 
   const [image, setImage] = useState("");
-
+  const [comments, setComments] = useState(proveedor.comments);
   const [loading, setLoading] = useState(false);
   const notificationError = (message) => toast.error(message);
   const successNotification = (message) => toast.success(message);
@@ -58,6 +57,7 @@ const ProveedoresForm = () => {
         status: provider.status || true,
         comments: provider.comments || "",
       });
+      setComments(provider.comments);
     }
   }, [provider]);
 
@@ -74,6 +74,7 @@ const ProveedoresForm = () => {
         const newProvider = {
           ...proveedor,
           logo: newImage ?? provider.logo,
+          comments,
         };
 
         const res = await updateProvider(id, newProvider, user.token);
@@ -98,6 +99,7 @@ const ProveedoresForm = () => {
       const newProvider = {
         ...proveedor,
         logo: newImage ?? provider.logo,
+        comments,
       };
 
       console.log(newProvider);
@@ -153,27 +155,42 @@ const ProveedoresForm = () => {
             Nuevo proveedor
           </Link>
         </div>
-        <Link
-          to="/proveedores"
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
-        >
-          <span>
-            <IoArrowBack className="text-white text-lg" />
-          </span>
-          Cancelar
-        </Link>
+        <div className="flex gap-2 items-center">
+          <Link
+            to="/proveedores"
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+          >
+            <span>
+              <IoArrowBack className="text-white text-lg" />
+            </span>
+            Cancelar
+          </Link>
+          {id && (
+            <Link
+              to={`/proveedores/ver/${id}`}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            >
+              <span>
+                <FaEye className="text-white text-lg" />
+              </span>
+              Ver proveedor
+            </Link>
+          )}
+        </div>
       </div>
       <div className="flex flex-col">
         <h2 className="text-xl font-bold"></h2>
         <form
           onSubmit={onSubmit}
-          className="flex flex-col gap-5 mt-5 bg-white p-3 rounded-lg"
+          className="flex flex-col gap-5 mt-5 bg-white p-5 rounded-lg"
         >
           <CrearProveedores
             proveedor={proveedor}
             setProveedor={setProveedor}
             image={image}
             setImage={setImage}
+            comments={comments}
+            setComments={setComments}
           />
         </form>
       </div>
