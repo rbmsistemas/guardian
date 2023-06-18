@@ -158,7 +158,25 @@ const CrearProveedores = ({
             value="Comentarios"
           />
         </div>
-        <ReactQuill theme="snow" value={comments} onChange={setComments} />
+        <ReactQuill
+          modules={{
+            toolbar: [
+              [{ header: [1, 2, false] }],
+              ["bold", "italic", "underline", "strike", "blockquote"],
+              [
+                { list: "ordered" },
+                { list: "bullet" },
+                { indent: "-1" },
+                { indent: "+1" },
+              ],
+              ["link", "image"],
+              ["clean"],
+            ],
+          }}
+          theme="snow"
+          value={comments}
+          onChange={setComments}
+        />
       </div>
 
       <div className="col-span-2 md:col-span-1 flex flex-col gap-2 pt-20 md:pt-10">

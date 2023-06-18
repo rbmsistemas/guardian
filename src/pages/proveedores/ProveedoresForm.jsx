@@ -30,6 +30,7 @@ const ProveedoresForm = () => {
     status: true,
     comments: "",
   });
+  const [voler, setVoler] = useState(false);
 
   const [image, setImage] = useState("");
   const [comments, setComments] = useState(proveedor.comments);
@@ -60,6 +61,26 @@ const ProveedoresForm = () => {
       setComments(provider.comments);
     }
   }, [provider]);
+
+  //  check if the proveedor has changes
+  useEffect(() => {
+    if (id) {
+      if (
+        proveedor.proveedor !== provider.proveedor ||
+        proveedor.encargado !== provider.encargado ||
+        proveedor.email !== provider.email ||
+        proveedor.phone !== provider.phone ||
+        proveedor.address !== provider.address ||
+        proveedor.logo !== provider.logo ||
+        proveedor.status !== provider.status ||
+        proveedor.comments !== provider.comments
+      ) {
+        setVoler(true);
+      } else {
+        setVoler(false);
+      }
+    }
+  }, [proveedor]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -163,7 +184,7 @@ const ProveedoresForm = () => {
             <span>
               <IoArrowBack className="text-white text-lg" />
             </span>
-            Cancelar
+            {voler ? "Cancelar" : "Volver"}
           </Link>
           {id && (
             <Link

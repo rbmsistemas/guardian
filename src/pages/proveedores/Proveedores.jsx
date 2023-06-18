@@ -204,24 +204,27 @@ const Proveedores = () => {
       {modal && (
         <Modal
           title="Eliminar proveedor"
+          dismissible={true}
           onClose={() => {
             setModal(false);
           }}
           show={modal}
         >
           <Modal.Header>
-            <p className="text-xl font-bold">Eliminar proveedor</p>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="flex flex-col gap-2">
-              <p className="text-gray-500 flex items-center gap-4">
-                <span>
-                  <FaStore className="text-gray-500 text-xl" />
-                </span>
-                ¿Está seguro que desea eliminar el proveedor{" "}
-                <span className="font-bold">{providerToDelete.proveedor}</span>?
+            <div className="flex gap-2 items-center">
+              <span className="bg-red-500 rounded-full p-2">
+                <FaStore className="text-white text-xl" />
+              </span>
+              <p className="text-xl font-bold text-red-500">
+                Eliminar proveedor
               </p>
             </div>
+          </Modal.Header>
+          <Modal.Body>
+            <p className="text-gray-500">
+              ¿Está seguro que desea eliminar el proveedor{" "}
+              <span className="font-bold">{providerToDelete.proveedor}</span>?
+            </p>
           </Modal.Body>
           <Modal.Footer>
             <div className="flex justify-end gap-2 w-full">

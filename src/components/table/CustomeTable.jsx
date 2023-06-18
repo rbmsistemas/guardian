@@ -76,14 +76,15 @@ const CustomeTable = ({
                           <FaRegEdit className="text-xl" />
                         </div>
                       )}
-                      {onDelete && (
-                        <div
-                          className="cursor-pointer border border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
-                          onClick={() => onDelete(item.id)}
-                        >
-                          <FaRegTrashAlt className="text-xl" />
-                        </div>
-                      )}
+                      {onDelete &&
+                        item?.id !== "00000000-0000-0000-0000-000000000000" && (
+                          <div
+                            className="cursor-pointer border border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                            onClick={() => onDelete(item.id)}
+                          >
+                            <FaRegTrashAlt className="text-xl" />
+                          </div>
+                        )}
                     </Table.Cell>
                   ) : null}
                 </Table.Row>

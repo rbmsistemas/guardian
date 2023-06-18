@@ -19,6 +19,7 @@ import { FiChevronRight } from "react-icons/fi";
 import { AiOutlinePoweroff } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import Loading from "../../utils/Loading";
+import "../../utils/Wyswyg.css";
 
 const VerProovedores = () => {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ const VerProovedores = () => {
 
           <Link
             to={`/proveedores/editar/${id}`}
-            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            className="bg-yellow-300 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
           >
             <span>
               <FaRegEdit className="text-white text-lg" />
@@ -233,24 +234,27 @@ const VerProovedores = () => {
       {modal && (
         <Modal
           title="Eliminar proveedor"
+          dismissible={true}
           onClose={() => {
             setModal(false);
           }}
           show={modal}
         >
           <Modal.Header>
-            <p className="text-xl font-bold">Eliminar proveedor</p>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="flex flex-col gap-2">
-              <p className="text-gray-500 flex items-center gap-4">
-                <span>
-                  <FaStore className="text-gray-500 text-xl" />
-                </span>
-                ¿Está seguro que desea eliminar el proveedor{" "}
-                <span className="font-bold">{proveedor.proveedor}</span>?
+            <div className="flex items-center gap-2">
+              <span className="p-2 bg-red-500 rounded-full">
+                <FaStore className="text-white text-xl" />
+              </span>
+              <p className="text-xl font-bold text-red-500">
+                Eliminar proveedor
               </p>
             </div>
+          </Modal.Header>
+          <Modal.Body>
+            <p className="text-gray-500">
+              ¿Está seguro que desea eliminar el proveedor{" "}
+              <span className="font-bold">{proveedor.proveedor}</span>?
+            </p>
           </Modal.Body>
           <Modal.Footer>
             <div className="flex justify-end gap-2 w-full">

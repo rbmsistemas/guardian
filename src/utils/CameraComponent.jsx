@@ -100,7 +100,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             );
           })}
       </div>
-      <Modal show={showModal} dismissible onClose={onClose} size="3xl">
+      <Modal dismissible={true} show={showModal} onClose={onClose} size="3xl">
         <Modal.Header>Imagenes</Modal.Header>
         <Modal.Body>
           {image && (
