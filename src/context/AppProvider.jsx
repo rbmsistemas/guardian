@@ -1,6 +1,5 @@
 import React, { useReducer, useEffect } from "react";
 import {
-  handleGetActivities,
   getLogin,
   handleRegister,
   handleSignout,
@@ -11,13 +10,18 @@ import {
   handleUpdateProvider,
   handleDeleteProvider,
   handleGetProvidersByParams,
+  handleGetActivities,
+  handleGetActivity,
+  handleCreateActivity,
+  handleUpdateActivity,
+  handleDeleteActivity,
+  handleGetActivitiesByParams,
 } from "../api/request.api";
 import Context from "./Context";
 import Reducer from "./Reducer";
 import {
   POST_SIGNIN,
   POST_SIGNUP,
-  GET_ACTIVITIES,
   POST_SIGNOUT,
   GET_PROVIDERS,
   GET_PROVIDER,
@@ -25,17 +29,25 @@ import {
   PATCH_PROVIDER,
   DELETE_PROVIDER,
   GET_PROVIDERS_BY_SEARCH,
+  GET_ACTIVITIES,
+  GET_ACTIVITY,
+  POST_ACTIVITY,
+  PATCH_ACTIVITY,
+  DELETE_ACTIVITY,
+  GET_ACTIVITIES_BY_SEARCH,
 } from "./Types";
 
 const AppProvider = (props) => {
   const initialState = {
     user: { token: null },
     activities: [],
+    activity: {},
     providers: [],
     provider: {},
   };
   const [state, dispatch] = useReducer(Reducer, initialState);
 
+  // auth actions
   const handleLogin = async (data) => {
     try {
       const response = await getLogin(data);
@@ -97,20 +109,6 @@ const AppProvider = (props) => {
     }
   };
 
-  const getActivities = async (data) => {
-    try {
-      const response = await handleGetActivities(data);
-      const data = await response.json();
-      dispatch({
-        type: GET_ACTIVITIES,
-        payload: data,
-      });
-    } catch (error) {
-      console.log(error);
-      return error;
-    }
-  };
-
   const postSignout = async () => {
     const response = await handleSignout(data);
 
@@ -118,6 +116,135 @@ const AppProvider = (props) => {
       type: POST_SIGNOUT,
     });
   };
+
+  // end auth actions
+  // activities actions
+
+  const getActivities = async (data) => {
+    try {
+      const response = await handleGetActivities(data);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { actividades } = await response.data;
+      dispatch({
+        type: GET_ACTIVITIES,
+        payload: actividades,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getActivity = async (id) => {
+    try {
+      const response = await handleGetActivity(id, state.user.token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { actividad } = await response.data;
+      dispatch({
+        type: GET_ACTIVITY,
+        payload: actividad,
+      });
+      return actividad;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const createActivity = async (data) => {
+    try {
+      const response = await handleCreateActivity(data, state.user.token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { actividad } = await response.data;
+      dispatch({
+        type: POST_ACTIVITY,
+        payload: actividad,
+      });
+      return actividad;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const updateActivity = async (id, data, token) => {
+    try {
+      const response = await handleUpdateActivity(id, data, token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { actividad } = await response.data;
+      dispatch({
+        type: PATCH_ACTIVITY,
+        payload: actividad,
+      });
+      return actividad;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const deleteActivity = async (id) => {
+    try {
+      const response = await handleDeleteActivity(id, state.user.token);
+      console.log(response);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { actividades } = await response.data;
+      dispatch({
+        type: DELETE_ACTIVITY,
+        payload: actividades,
+      });
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getActivitiesBySearch = async (body) => {
+    try {
+      const response = await handleGetActivitiesByParams(
+        body,
+        state.user.token
+      );
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { actividades } = await response.data;
+      dispatch({
+        type: GET_ACTIVITIES_BY_SEARCH,
+        payload: actividades,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const clearActivity = () => {
+    dispatch({
+      type: GET_ACTIVITY,
+      payload: {},
+    });
+  };
+
+  useEffect(() => {
+    if (state.user.token) {
+      getActivities(state.user.token);
+    }
+  }, [state.user.token, state.activity]);
+
+  // end activities actions
 
   const getProviders = async (token) => {
     try {
@@ -157,7 +284,7 @@ const AppProvider = (props) => {
   const createProvider = async (data) => {
     try {
       const response = await handleCreateProvider(data, state.user.token);
-      if (response?.status >= 299) {
+      if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
       const { proveedor } = await response.data;
@@ -175,7 +302,7 @@ const AppProvider = (props) => {
   const updateProvider = async (id, data, token) => {
     try {
       const response = await handleUpdateProvider(id, data, token);
-      if (response?.status >= 299) {
+      if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
       const { provider } = await response.data;
@@ -194,7 +321,7 @@ const AppProvider = (props) => {
     try {
       const response = await handleDeleteProvider(id, state.user.token);
       console.log(response);
-      if (response?.status >= 299) {
+      if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
       const { proveedores } = await response.data;
@@ -212,7 +339,7 @@ const AppProvider = (props) => {
   const getProvidersBySearch = async (body) => {
     try {
       const response = await handleGetProvidersByParams(body, state.user.token);
-      if (response?.status >= 299) {
+      if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
       const { proveedores } = await response.data;
@@ -245,9 +372,9 @@ const AppProvider = (props) => {
       value={{
         user: state.user,
         activities: state.activities,
+        activity: state.activity,
         handleLogin,
         postSignup,
-        getActivities,
         postSignout,
         providers: state.providers,
         provider: state.provider,
@@ -258,6 +385,13 @@ const AppProvider = (props) => {
         deleteProvider,
         getProvidersBySearch,
         clearProvider,
+        getActivities,
+        getActivity,
+        createActivity,
+        updateActivity,
+        deleteActivity,
+        getActivitiesBySearch,
+        clearActivity,
       }}
     >
       {props.children}

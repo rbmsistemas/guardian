@@ -50,25 +50,7 @@ export const handleSignout = async () => {
   }
 };
 
-export const handleGetActivities = async () => {
-  try {
-    const response = await axios.get(`${urlEnv}/api/activities`);
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
-export const handleGetActivity = async (id) => {
-  try {
-    const response = await axios.get(`${urlEnv}/api/activities/${id}`);
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
-// proveedores
+// start proveedores
 
 export const handleGetProviders = async (token) => {
   config.headers["x-access-token"] = token;
@@ -156,6 +138,99 @@ export const uploadImageProviders = async (data, token) => {
   try {
     const response = await axios.post(
       `${urlEnv}/api/uploads/provider`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// end proveedores
+// start actividades
+
+export const handleGetActivities = async (token) => {
+  config.headers["x-access-token"] = token;
+  try {
+    const response = await axios.get(`${urlEnv}/api/activities`, config);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleGetActivity = async (id, token) => {
+  config.headers["x-access-token"] = token;
+  try {
+    const response = await axios.get(`${urlEnv}/api/activities/${id}`, config);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleCreateActivity = async (data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(`${urlEnv}/api/activities`, data, config);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleUpdateActivity = async (id, data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.patch(
+      `${urlEnv}/api/activities/${id}`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleDeleteActivity = async (id, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.delete(
+      `${urlEnv}/api/activities/${id}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleGetActivitiesByParams = async (body, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/activities/search`,
+      body,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const uploadImagesActivities = async (data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "multipart/form-data";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/uploads/activities`,
       data,
       config
     );

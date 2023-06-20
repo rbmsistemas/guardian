@@ -24,7 +24,7 @@ const Actividad = () => {
           </Link>
         </div>
         <Link
-          to="/actividad/crear"
+          to="/actividades/crear"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
         >
           <span>

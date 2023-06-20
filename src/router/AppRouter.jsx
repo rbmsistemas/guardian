@@ -15,6 +15,7 @@ const Proveedores = lazy(() => import("../pages/proveedores/Proveedores"));
 const Home = lazy(() => import("../pages/home/Home"));
 const Inventario = lazy(() => import("../pages/inventary/Inventario"));
 const Actividad = lazy(() => import("../pages/actividad/Actividad"));
+const ActividadForm = lazy(() => import("../pages/actividad/ActividadForm"));
 const InventaryForm = lazy(() => import("../pages/inventary/InventaryForm"));
 const ShowInventario = lazy(() => import("../pages/inventary/ShowInventario"));
 const Nav = lazy(() => import("../components/navbar/Navbar"));
@@ -46,8 +47,8 @@ const AuthRouter = () => {
             <Route path="/inventario/editar/:id" element={<InventaryForm />} />
             <Route path="/inventario/ver/:id" element={<ShowInventario />} />
             <Route path="/actividades" element={<Actividad />} />
-            <Route path="/actividades/crear" element={<InventaryForm />} />
-            <Route path="/actividades/editar/:id" element={<InventaryForm />} />
+            <Route path="/actividades/crear" element={<ActividadForm />} />
+            <Route path="/actividades/editar/:id" element={<ActividadForm />} />
             <Route path="/actividades/ver/:id" element={<ShowInventario />} />
             <Route path="/proveedores" element={<Proveedores />} />
             <Route path="/proveedores/crear" element={<ProveedoresForm />} />

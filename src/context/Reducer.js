@@ -2,13 +2,18 @@ import {
   POST_SIGNIN,
   POST_SIGNUP,
   POST_SIGNOUT,
-  GET_ACTIVITIES,
   GET_PROVIDERS,
   GET_PROVIDER,
   POST_PROVIDER,
   PATCH_PROVIDER,
   DELETE_PROVIDER,
   GET_PROVIDERS_BY_SEARCH,
+  GET_ACTIVITIES,
+  GET_ACTIVITY,
+  POST_ACTIVITY,
+  PATCH_ACTIVITY,
+  DELETE_ACTIVITY,
+  GET_ACTIVITIES_BY_SEARCH,
 } from "./Types";
 
 export default (state, action) => {
@@ -24,11 +29,6 @@ export default (state, action) => {
       return {
         ...state,
         user: payload,
-      };
-    case GET_ACTIVITIES:
-      return {
-        ...state,
-        activities: payload,
       };
     case POST_SIGNOUT:
       return {
@@ -64,6 +64,36 @@ export default (state, action) => {
       return {
         ...state,
         providers: payload,
+      };
+    case GET_ACTIVITIES:
+      return {
+        ...state,
+        activities: payload,
+      };
+    case GET_ACTIVITY:
+      return {
+        ...state,
+        activity: payload,
+      };
+    case POST_ACTIVITY:
+      return {
+        ...state,
+        activity: payload,
+      };
+    case PATCH_ACTIVITY:
+      return {
+        ...state,
+        activity: payload,
+      };
+    case DELETE_ACTIVITY:
+      return {
+        ...state,
+        activities: payload,
+      };
+    case GET_ACTIVITIES_BY_SEARCH:
+      return {
+        ...state,
+        activities: payload,
       };
 
     default:
