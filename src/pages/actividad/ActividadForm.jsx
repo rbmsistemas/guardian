@@ -39,6 +39,16 @@ const ActividadForm = () => {
     status: false,
   });
   const [voler, setVoler] = useState(false);
+  const [workers, setWorkers] = useState([
+    {
+      name: "Raul Belloso",
+      tia: "12359",
+    },
+    {
+      name: "Julio Bahena",
+      tia: "123",
+    },
+  ]);
 
   const [photosVehicle, setPhotosVehicle] = useState([]);
   const [photosDriver, setPhotosDriver] = useState([]);
@@ -257,6 +267,8 @@ const ActividadForm = () => {
             setPhotosVehicle={setPhotosVehicle}
             photosDriver={photosDriver}
             setPhotosDriver={setPhotosDriver}
+            workers={workers}
+            setWorkers={setWorkers}
           />
         </form>
       </div>

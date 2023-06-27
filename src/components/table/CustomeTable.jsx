@@ -19,10 +19,7 @@ const CustomeTable = ({
   return (
     <>
       <div className="overflow-x-scroll">
-        <Table
-          hoverable={true}
-          className="w-full rounded-lg whitespace-nowrap "
-        >
+        <Table hoverable={true} className="w-full rounded-lg whitespace-nowrap">
           <Table.Head className="uppercase">
             {data.length >= 1 &&
               Object.keys(data[0]).map((item) =>
