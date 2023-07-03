@@ -7,9 +7,12 @@ import {
   FaPhone,
   FaUser,
   FaStore,
+  FaClock,
+  FaCalendar,
 } from "react-icons/fa";
 import {
   MdEditSquare,
+  MdGavel,
   MdPersonAdd,
   MdRemove,
   MdRemoveCircleOutline,
@@ -18,6 +21,7 @@ import {
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-hot-toast";
+import InputDateRange from "../../components/DateRange/InputDateRange";
 
 const CrearActividad = ({
   actividad = {
@@ -109,7 +113,7 @@ const CrearActividad = ({
         <TextInput
           id="titulo"
           type="text"
-          icon={FaStore}
+          icon={MdGavel}
           placeholder="Titulo de la actividad"
           required={true}
           value={actividad.titulo}
@@ -138,40 +142,27 @@ const CrearActividad = ({
           }
         />
       </div>
-      <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
-        <div className="w-full">
-          <Label
-            className="font-semibold"
-            htmlFor="fechas"
-            value="Fechas en que se realizara el servicio"
-          />
-        </div>
-        <TextInput
-          id="fechas"
-          type="date"
-          multiple={true}
-          icon={FaEnvelope}
-          placeholder="Fecha"
-          required={true}
-          value={actividad.fechas}
-          onChange={(e) =>
-            setActividad({ ...actividad, fechas: e.target.value })
-          }
-        />
-      </div>
+      <InputDateRange
+        startDate={actividad.fechas[0]}
+        endDate={actividad.fechas[1]}
+        setStartDate={(date) =>
+          setActividad({ ...actividad, fechas: [date, actividad.fechas[1]] })
+        }
+        setEndDate={(date) =>
+          setActividad({ ...actividad, fechas: [actividad.fechas[0], date] })
+        }
+      />
       <div className="col-span-2 md:col-span-1 flex flex-col md:flex-row gap-2">
         <div className="w-full flex flex-col gap-2">
-          <div>
-            <Label
-              className="font-semibold"
-              htmlFor="horario_inicial"
-              value="Hora de inicio"
-            />
-          </div>
+          <Label
+            className="font-semibold"
+            htmlFor="horario_inicial"
+            value="Hora de inicio"
+          />
           <TextInput
             id="horario_inicial"
             type="time"
-            icon={FaEnvelope}
+            icon={FaClock}
             required={true}
             value={actividad.horario_inicial}
             onChange={(e) =>
@@ -180,17 +171,15 @@ const CrearActividad = ({
           />
         </div>
         <div className="w-full flex flex-col gap-2">
-          <div>
-            <Label
-              className="font-semibold"
-              htmlFor="horario_final"
-              value="Hora de finalización aproximada"
-            />
-          </div>
+          <Label
+            className="font-semibold"
+            htmlFor="horario_final"
+            value="Hora de finalización aproximada"
+          />
           <TextInput
             id="horario_final"
             type="time"
-            icon={FaEnvelope}
+            icon={FaClock}
             required={true}
             value={actividad.horario_final}
             onChange={(e) =>
@@ -200,7 +189,7 @@ const CrearActividad = ({
         </div>
       </div>
       <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
-        <div className="w-full flex items-center gap-2">
+        <div className="w-full flex items-center p-2 gap-2 border border-gray-300 rounded-md bg-gray-50">
           <input
             type="checkbox"
             id="isVisita"
@@ -215,7 +204,7 @@ const CrearActividad = ({
         </div>
       </div>
       <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
-        <div className="w-full flex items-center gap-2">
+        <div className="w-full flex items-center p-2 gap-2 border border-gray-300 rounded-md bg-gray-50">
           <input
             type="checkbox"
             id="isVehicle"
@@ -230,7 +219,11 @@ const CrearActividad = ({
         </div>
       </div>
       <div className="col-span-2 flex flex-col gap-2">
-        <Table hoverable className="w-full rounded-lg whitespace-nowrap">
+        <Table
+          striped
+          hoverable
+          className="w-full rounded-lg whitespace-nowrap border border-collapse border-gray-200 dark:border-gray-700"
+        >
           <Table.Head className="uppercase">
             <Table.HeadCell>Trabajador</Table.HeadCell>
             <Table.HeadCell>Numero de TIA</Table.HeadCell>
@@ -240,7 +233,7 @@ const CrearActividad = ({
             {workers.map((worker, index) => (
               <Table.Row
                 key={index}
-                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                className="bg-white dark:border-gray-700 dark:bg-gray-800 font-semibold"
               >
                 <Table.Cell>{worker.name}</Table.Cell>
                 <Table.Cell>{worker.tia}</Table.Cell>
@@ -315,8 +308,96 @@ const CrearActividad = ({
           </Table.Body>
         </Table>
       </div>
-      <div className="col-span-2 md:col-span-2 flex flex-col gap-2">
-        <div className="w-full">
+      <div className="col-span-2 flex flex-col gap-2">
+        <Table
+          striped
+          hoverable
+          className="w-full rounded-lg whitespace-nowrap border border-collapse border-gray-200 dark:border-gray-700"
+        >
+          <Table.Head className="uppercase">
+            <Table.HeadCell>Herramienta</Table.HeadCell>
+            <Table.HeadCell>Cantidad</Table.HeadCell>
+            <Table.HeadCell>Acciones</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {workers.map((worker, index) => (
+              <Table.Row
+                key={index}
+                className="bg-white dark:border-gray-700 dark:bg-gray-800 font-semibold"
+              >
+                <Table.Cell>{worker.name}</Table.Cell>
+                <Table.Cell>{worker.tia}</Table.Cell>
+                <Table.Cell className="flex gap-3">
+                  <button
+                    type="button"
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center Table.Rowansition ease-in-out duration-200 hover:scale-105"
+                    onClick={(e) => {
+                      handleDeleteWorker(e, worker.tia);
+                    }}
+                  >
+                    <span>
+                      <MdRemoveCircleOutline className="text-white text-lg" />
+                    </span>
+                    Eliminar
+                  </button>
+                  <button
+                    type="button"
+                    className="bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center Table.Rowansition ease-in-out duration-200 hover:scale-105"
+                    onClick={(e) => {
+                      handleEdithWorker(e, worker.tia);
+                    }}
+                  >
+                    <span>
+                      <MdEditSquare className="text-white text-lg" />
+                    </span>
+                    Editar
+                  </button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+            <Table.Row>
+              <Table.Cell>
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="Nombre del trabajador"
+                  className="w-full bg-gray-50 p-2 border-b border-gray-300 border-t-0 border-r-0 border-l-0"
+                  required={true}
+                  value={newWorker.name}
+                  onChange={(e) =>
+                    setNewWorker({ ...newWorker, name: e.target.value })
+                  }
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <input
+                  id="tia"
+                  type="text"
+                  placeholder="Número de TIA"
+                  className="w-full bg-gray-50 p-2 border-b border-gray-300 border-t-0 border-r-0 border-l-0"
+                  required={true}
+                  value={newWorker.tia}
+                  onChange={(e) =>
+                    setNewWorker({ ...newWorker, tia: e.target.value })
+                  }
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <button
+                  type="button"
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center Table.Rowansition ease-in-out duration-200 hover:scale-105"
+                  onClick={handleNewWorker}
+                >
+                  <span>
+                    <MdPersonAdd className="text-white text-lg" />
+                  </span>
+                  Agregar
+                </button>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+        {/* <div className="w-full">
           <Label
             className="font-semibold"
             htmlFor="herramientas"
@@ -330,7 +411,7 @@ const CrearActividad = ({
           onChange={(e) =>
             setActividad({ ...actividad, herramientas: e.target.value })
           }
-        />
+        /> */}
       </div>
       <div className="col-span-2 md:col-span-2 flex flex-col gap-2">
         <div className="w-full">
