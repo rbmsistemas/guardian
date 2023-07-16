@@ -22,12 +22,13 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     setCapturedImage(newCapturedImage);
   };
 
-  const onClose = () => setShowModal(false);
-
   const selectImage = (index) => {
     setImage(capturedImage[index]);
     setShowModal(true);
   };
+
+  const onClose = () => setShowModal(false);
+
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="flex flex-col gap-4">
@@ -37,7 +38,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
           screenshotFormat="image/jpeg"
           height={720}
           width={1280}
-          className="rounded-lg bg-gray-300"
+          className="rounded-lg bg-gray-300 md:max-h-96"
         />
         <button
           type="button"

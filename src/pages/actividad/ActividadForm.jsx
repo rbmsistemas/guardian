@@ -32,8 +32,11 @@ const ActividadForm = () => {
     observaciones: "",
     isVehicle: false,
     isVisita: false,
-    vehiclePhotos: [],
-    driverPhotos: [],
+    vehiclePhotos: { placas_front: "", placas_back: "" },
+    driverPhotos: {
+      driver_front: "",
+      driver_back: "",
+    },
     placas: "",
     chofer: "",
     status: false,
@@ -43,15 +46,33 @@ const ActividadForm = () => {
     {
       name: "Raul Belloso",
       tia: "12359",
+      isVisita: false,
     },
     {
       name: "Julio Bahena",
       tia: "123",
+      isVisita: false,
+    },
+  ]);
+  const [tools, setTools] = useState([
+    {
+      name: "Desarmador de cruz",
+      quantity: "2",
+    },
+    {
+      name: "Desarmador plano",
+      quantity: "1",
     },
   ]);
 
-  const [photosVehicle, setPhotosVehicle] = useState([]);
-  const [photosDriver, setPhotosDriver] = useState([]);
+  const [photosVehicle, setPhotosVehicle] = useState({
+    placas_front: "",
+    placas_back: "",
+  });
+  const [photosDriver, setPhotosDriver] = useState({
+    driver_front: "",
+    driver_back: "",
+  });
   const [observaciones, setObservaciones] = useState(actividad.observaciones);
   const [loading, setLoading] = useState(false);
   const notificationError = (message) => toast.error(message);
@@ -79,8 +100,14 @@ const ActividadForm = () => {
         observaciones: observaciones || "",
         isVehicle: actividad.isVehicle || false,
         isVisita: actividad.isVisita || false,
-        vehiclePhotos: actividad.vehiclePhotos || [],
-        driverPhotos: actividad.driverPhotos || [],
+        vehiclePhotos: actividad.vehiclePhotos || {
+          driver_front: "",
+          driver_back: "",
+        },
+        driverPhotos: actividad.driverPhotos || {
+          placas_front: "",
+          placas_back: "",
+        },
         placas: actividad.placas || "",
         chofer: actividad.chofer || "",
         status: actividad.status || false,
@@ -269,6 +296,8 @@ const ActividadForm = () => {
             setPhotosDriver={setPhotosDriver}
             workers={workers}
             setWorkers={setWorkers}
+            tools={tools}
+            setTools={setTools}
           />
         </form>
       </div>
