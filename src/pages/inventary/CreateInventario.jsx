@@ -6,25 +6,31 @@ import CameraComponent from "../../utils/CameraComponent";
 import { BiDevices } from "react-icons/bi";
 import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import { Tb3DCubeSphere } from "react-icons/tb";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
-const CreateInventario = () => {
-  const [body, setBody] = useState({
+const CreateInventario = ({
+  body = {
     inventaryType: "",
     otherInventary: "",
     brandType: "",
     otherBrand: "",
     model: "",
+    otherModel: "",
     sn: "",
     activo: "",
     comment: "",
     status: "",
-  });
-  const [images, setImages] = useState([]);
-
+  },
+  setBody,
+  images = [],
+  setImages,
+}) => {
   useEffect(() => {
     if (body.inventaryType !== "otro") setBody({ ...body, otherInventary: "" });
     if (body.brandType !== "otro") setBody({ ...body, otherBrand: "" });
-  }, [body.inventaryType, body.brandType]);
+    if (body.model !== "otro") setBody({ ...body, otherModel: "" });
+  }, [body.inventaryType, body.brandType, body.model]);
 
   return (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
@@ -126,19 +132,39 @@ const CreateInventario = () => {
           <span className="text-red-500">*</span>
           <Label htmlFor="model" value="Modelo" />
         </div>
-        <TextInput
+        <Select
           id="model"
-          type="text"
           icon={Tb3DCubeSphere}
-          placeholder="Modelo"
           required={true}
           value={body.model}
           onChange={(e) => setBody({ ...body, model: e.target.value })}
-        />
+        >
+          <option value="">-- Selecciona una opción --</option>
+          <option value="otro">Otro</option>
+        </Select>
       </div>
       <div className="col-span-12 md:col-span-6">
-        <div className="w-full flex gap-1">
-          <span className="text-red-500">*</span>
+        {body.model == "otro" && (
+          <div>
+            <div className="w-full flex gap-1">
+              <span className="text-red-500">*</span>
+              <Label htmlFor="model" value="Especifique el Modelo" />
+            </div>
+            <TextInput
+              id="model"
+              type="text"
+              icon={Tb3DCubeSphere}
+              placeholder="Especicar modelo"
+              required={true}
+              value={body.otherModel}
+              onChange={(e) => setBody({ ...body, otherModel: e.target.value })}
+            />
+          </div>
+        )}
+      </div>
+      <div className="col-span-12 md:col-span-6">
+        <div className="mb-1 w-full flex gap-1">
+          <span className="pr-2"></span>
           <Label htmlFor="SN" value="Número de Serie" />
         </div>
         <TextInput
@@ -169,7 +195,7 @@ const CreateInventario = () => {
       <div className="col-span-12 md:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
-          <Label htmlFor="status" value="Selecciona el estado del equipo" />
+          <Label htmlFor="status" value="Selecciona el tipo de inventario" />
         </div>
         <Select id="status" icon={MdOutlineCategory} required={true}>
           <option value="">-- Selecciona una opción --</option>
@@ -177,16 +203,34 @@ const CreateInventario = () => {
           <option value="0">Baja</option>
         </Select>
       </div>
-      <div className="col-span-12" id="textarea">
-        <div className="mb-1 w-full flex gap-1">
-          <span className="text-red-500 pr-2"> </span>
-          <Label htmlFor="comment" value="Comentarios" />
+      <div className="col-span-12">
+        <div className="w-full">
+          <Label
+            className="font-semibold"
+            htmlFor="comments"
+            value="Comentarios"
+          />
         </div>
-        <Textarea
+        <ReactQuill
           id="comment"
           placeholder="Comentarios..."
-          required={true}
-          rows={4}
+          modules={{
+            toolbar: [
+              [{ header: [1, 2, false] }],
+              ["bold", "italic", "underline", "strike", "blockquote"],
+              [
+                { list: "ordered" },
+                { list: "bullet" },
+                { indent: "-1" },
+                { indent: "+1" },
+              ],
+              ["link", "image"],
+              ["clean"],
+            ],
+          }}
+          theme="snow"
+          value={body.comment}
+          onChange={(e) => setBody({ ...body, comment: e })}
         />
       </div>
 
