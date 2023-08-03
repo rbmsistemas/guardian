@@ -27,6 +27,12 @@ const InventaryForm = () => {
     if (id) console.log(id);
   }, [id]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(data);
+    console.log(images);
+  };
+
   return (
     <div className="min-h-full h-auto w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
@@ -59,7 +65,7 @@ const InventaryForm = () => {
       </div>
       <div className="flex flex-col">
         <h2 className="text-xl font-bold"></h2>
-        <form className="flex flex-col gap-5 mt-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-5">
           {id ? (
             <EditarInventario data={data} setData={setData} />
           ) : (

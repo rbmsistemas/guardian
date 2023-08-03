@@ -92,7 +92,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
                   <FaRegTrashAlt />
                 </span>
                 <img
-                  className="w-full rounded-lg cursor-pointer"
+                  className="w-full min-h-full rounded-lg cursor-pointer"
                   onClick={() => selectImage(index)}
                   src={item}
                   alt="image-captured"
