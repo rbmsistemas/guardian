@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import Context from "../../context/Context";
 import { FaHome } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
@@ -9,16 +10,19 @@ import { MdSaveAlt } from "react-icons/md";
 
 const InventaryForm = () => {
   const { id } = useParams();
+  const { inventaryTypes, inventaryModels, inventaryBrands } =
+    useContext(Context);
+
   const [data, setData] = useState({
-    inventaryType: "",
+    inventaryTypeId: "",
     otherInventary: "",
-    brandType: "",
+    inventaryBrandId: "",
     otherBrand: "",
-    model: "",
+    inventaryModelId: "",
     otherModel: "",
-    sn: "",
+    serialNumber: "",
     activo: "",
-    comment: "",
+    comments: "",
     status: "",
   });
   const [images, setImages] = useState([]);
@@ -33,6 +37,7 @@ const InventaryForm = () => {
     console.log(images);
   };
 
+  console.log(data);
   return (
     <div className="min-h-full h-auto w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
@@ -74,6 +79,9 @@ const InventaryForm = () => {
               setBody={setData}
               images={images}
               setImages={setImages}
+              inventaryTypes={inventaryTypes}
+              inventaryBrands={inventaryBrands}
+              inventaryModels={inventaryModels}
             />
           )}
           {/* boton guardar */}

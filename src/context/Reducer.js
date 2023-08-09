@@ -14,6 +14,9 @@ import {
   PATCH_ACTIVITY,
   DELETE_ACTIVITY,
   GET_ACTIVITIES_BY_SEARCH,
+  GET_INVENTARY_TYPES,
+  GET_INVENTARY_BRANDS,
+  GET_INVENTARY_MODELS,
 } from "./Types";
 
 export default (state, action) => {
@@ -95,7 +98,21 @@ export default (state, action) => {
         ...state,
         activities: payload,
       };
-
+    case GET_INVENTARY_TYPES:
+      return {
+        ...state,
+        inventaryTypes: payload,
+      };
+    case GET_INVENTARY_BRANDS:
+      return {
+        ...state,
+        inventaryBrands: payload,
+      };
+    case GET_INVENTARY_MODELS:
+      return {
+        ...state,
+        inventaryModels: payload,
+      };
     default:
       return state;
   }

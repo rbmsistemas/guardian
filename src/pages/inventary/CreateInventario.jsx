@@ -1,7 +1,6 @@
-import { Label, Select, TextInput, Textarea } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { Label, Select, TextInput, Textarea } from "flowbite-react";
 import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
-import { BrandType, InventaryType } from "../../utils/Types";
 import CameraComponent from "../../utils/CameraComponent";
 import { BiDevices } from "react-icons/bi";
 import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
@@ -11,26 +10,30 @@ import "react-quill/dist/quill.snow.css";
 
 const CreateInventario = ({
   body = {
-    inventaryType: "",
+    inventaryTypeId: "",
     otherInventary: "",
-    brandType: "",
+    inventaryBrandId: "",
     otherBrand: "",
-    model: "",
+    inventaryModelId: "",
     otherModel: "",
-    sn: "",
+    serialNumber: "",
     activo: "",
-    comment: "",
+    comments: "",
     status: "",
   },
   setBody,
   images = [],
   setImages,
+  inventaryTypes = [],
+  inventaryBrands = [],
+  inventaryModels = [],
 }) => {
   useEffect(() => {
-    if (body.inventaryType !== "otro") setBody({ ...body, otherInventary: "" });
-    if (body.brandType !== "otro") setBody({ ...body, otherBrand: "" });
-    if (body.model !== "otro") setBody({ ...body, otherModel: "" });
-  }, [body.inventaryType, body.brandType, body.model]);
+    if (body.inventaryTypeId !== "otro")
+      setBody({ ...body, otherInventary: "" });
+    if (body.inventaryBrandId !== "otro") setBody({ ...body, otherBrand: "" });
+    if (body.inventaryModelId !== "otro") setBody({ ...body, otherModel: "" });
+  }, [body.inventaryTypeId, body.inventaryBrandId, body.inventaryModelId]);
 
   return (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
@@ -44,28 +47,33 @@ const CreateInventario = ({
       <div className="col-span-12 md:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
-          <Label htmlFor="inventaryType" value="Selecciona el tipo de equipo" />
+          <Label
+            htmlFor="inventaryTypeId"
+            value="Selecciona el tipo de equipo"
+          />
         </div>
         <Select
-          id="inventaryType"
+          id="inventaryTypeId"
           icon={BiDevices}
           required={true}
-          value={body.inventaryType}
-          onChange={(e) => setBody({ ...body, inventaryType: e.target.value })}
+          value={body.inventaryTypeId}
+          onChange={(e) =>
+            setBody({ ...body, inventaryTypeId: e.target.value })
+          }
         >
           <option value="">-- Selecciona una opción --</option>
-          {InventaryType.map((item) => {
+          {inventaryTypes.map((item) => {
             return (
-              <option key={item.clave} value={item.name}>
+              <option key={item.id} value={item.id}>
                 {item.name}
               </option>
             );
           })}
-          <option value="otro">Otro</option>
+          <option value="0">Otro</option>
         </Select>
       </div>
       <div className="col-span-12 md:col-span-6">
-        {body.inventaryType == "otro" && (
+        {body.inventaryTypeId == "0" && (
           <div>
             <div className="w-full flex gap-1">
               <span className="text-red-500">*</span>
@@ -88,28 +96,33 @@ const CreateInventario = ({
       <div className="col-span-12 md:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
-          <Label htmlFor="brandType" value="Selecciona la marca del equipo" />
+          <Label
+            htmlFor="inventaryBrandId"
+            value="Selecciona la marca del equipo"
+          />
         </div>
         <Select
-          id="brandType"
+          id="inventaryBrandId"
           icon={MdNewReleases}
           required={true}
-          value={body.brandType}
-          onChange={(e) => setBody({ ...body, brandType: e.target.value })}
+          value={body.inventaryBrandId}
+          onChange={(e) =>
+            setBody({ ...body, inventaryBrandId: e.target.value })
+          }
         >
           <option value="">-- Selecciona una opción --</option>
-          {BrandType.map((item) => {
+          {inventaryBrands.map((item) => {
             return (
-              <option key={item.clave} value={item.clave}>
+              <option key={item.id} value={item.id}>
                 {item.name}
               </option>
             );
           })}
-          <option value="otro">Otro</option>
+          <option value="0">Otro</option>
         </Select>
       </div>
       <div className="col-span-12 md:col-span-6">
-        {body.brandType == "otro" && (
+        {body.inventaryBrandId == "0" && (
           <div>
             <div className="w-full flex gap-1">
               <span className="text-red-500">*</span>
@@ -130,28 +143,37 @@ const CreateInventario = ({
       <div className="col-span-12 md:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
-          <Label htmlFor="model" value="Modelo" />
+          <Label htmlFor="inventaryModelId" value="Modelo" />
         </div>
         <Select
-          id="model"
+          id="inventaryModelId"
           icon={Tb3DCubeSphere}
           required={true}
-          value={body.model}
-          onChange={(e) => setBody({ ...body, model: e.target.value })}
+          value={body.inventaryModelId}
+          onChange={(e) =>
+            setBody({ ...body, inventaryModelId: e.target.value })
+          }
         >
           <option value="">-- Selecciona una opción --</option>
-          <option value="otro">Otro</option>
+          {inventaryModels.map((item) => {
+            return (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            );
+          })}
+          <option value="0">Otro</option>
         </Select>
       </div>
       <div className="col-span-12 md:col-span-6">
-        {body.model == "otro" && (
+        {body.inventaryModelId == "0" && (
           <div>
             <div className="w-full flex gap-1">
               <span className="text-red-500">*</span>
-              <Label htmlFor="model" value="Especifique el Modelo" />
+              <Label htmlFor="inventaryModelId" value="Especifique el Modelo" />
             </div>
             <TextInput
-              id="model"
+              id="inventaryModelId"
               type="text"
               icon={Tb3DCubeSphere}
               placeholder="Especicar modelo"
@@ -165,16 +187,16 @@ const CreateInventario = ({
       <div className="col-span-12 md:col-span-6">
         <div className="mb-1 w-full flex gap-1">
           <span className="pr-2"></span>
-          <Label htmlFor="SN" value="Número de Serie" />
+          <Label htmlFor="serialNumber" value="Número de Serie" />
         </div>
         <TextInput
-          id="SN"
+          id="serialNumber"
           type="text"
           icon={AiOutlineFieldNumber}
-          placeholder="SN"
+          placeholder="serialNumber"
           required={true}
-          value={body.sn}
-          onChange={(e) => setBody({ ...body, sn: e.target.value })}
+          value={body.serialNumber}
+          onChange={(e) => setBody({ ...body, serialNumber: e.target.value })}
         />
       </div>
       <div className="col-span-12 md:col-span-6">
@@ -212,7 +234,7 @@ const CreateInventario = ({
           />
         </div>
         <ReactQuill
-          id="comment"
+          id="comments"
           placeholder="Comentarios..."
           modules={{
             toolbar: [
@@ -229,8 +251,8 @@ const CreateInventario = ({
             ],
           }}
           theme="snow"
-          value={body.comment}
-          onChange={(e) => setBody({ ...body, comment: e })}
+          value={body.comments}
+          onChange={(e) => setBody({ ...body, comments: e })}
         />
       </div>
 

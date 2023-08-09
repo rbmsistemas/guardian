@@ -1,4 +1,6 @@
 import React, { useReducer, useEffect } from "react";
+import Context from "./Context";
+import Reducer from "./Reducer";
 import {
   getLogin,
   handleRegister,
@@ -17,8 +19,11 @@ import {
   handleDeleteActivity,
   handleGetActivitiesByParams,
 } from "../api/request.api";
-import Context from "./Context";
-import Reducer from "./Reducer";
+import {
+  handleGetInventaryTypes,
+  handleGetInventaryBrands,
+  handleGetInventaryModels,
+} from "../api/inventary.api";
 import {
   POST_SIGNIN,
   POST_SIGNUP,
@@ -35,11 +40,19 @@ import {
   PATCH_ACTIVITY,
   DELETE_ACTIVITY,
   GET_ACTIVITIES_BY_SEARCH,
+  GET_INVENTARY_TYPES,
+  GET_INVENTARY_BRANDS,
+  GET_INVENTARY_MODELS,
 } from "./Types";
 
 const AppProvider = (props) => {
   const initialState = {
     user: { token: null },
+    inventaries: [],
+    inventary: {},
+    inventaryTypes: [],
+    inventaryBrands: [],
+    inventaryModels: [],
     activities: [],
     activity: {},
     providers: [],
@@ -111,13 +124,65 @@ const AppProvider = (props) => {
 
   const postSignout = async () => {
     const response = await handleSignout(data);
-
     dispatch({
       type: POST_SIGNOUT,
     });
   };
 
   // end auth actions
+  // inventary actions
+
+  const getInventaryTypes = async (token) => {
+    try {
+      const response = await handleGetInventaryTypes(token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventaryTypes } = await response.data;
+      dispatch({
+        type: GET_INVENTARY_TYPES,
+        payload: inventaryTypes,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getInventaryBrands = async (token) => {
+    try {
+      const response = await handleGetInventaryBrands(token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventaryBrands } = await response.data;
+      dispatch({
+        type: GET_INVENTARY_BRANDS,
+        payload: inventaryBrands,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getInventaryModels = async (token) => {
+    try {
+      const response = await handleGetInventaryModels(token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventaryModels } = await response.data;
+      dispatch({
+        type: GET_INVENTARY_MODELS,
+        payload: inventaryModels,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   // activities actions
 
   const getActivities = async (data) => {
@@ -238,11 +303,11 @@ const AppProvider = (props) => {
     });
   };
 
-  useEffect(() => {
-    if (state.user.token) {
-      getActivities(state.user.token);
-    }
-  }, [state.user.token, state.activity]);
+  // useEffect(() => {
+  //   if (state.user.token) {
+  //     getActivities(state.user.token);
+  //   }
+  // }, [state.user.token, state.activity]);
 
   // end activities actions
 
@@ -364,6 +429,9 @@ const AppProvider = (props) => {
   useEffect(() => {
     if (state.user.token) {
       getProviders(state.user.token);
+      getInventaryTypes(state.user.token);
+      getInventaryBrands(state.user.token);
+      getInventaryModels(state.user.token);
     }
   }, [state.user.token, state.provider]);
 
@@ -392,6 +460,12 @@ const AppProvider = (props) => {
         deleteActivity,
         getActivitiesBySearch,
         clearActivity,
+        getInventaryTypes,
+        inventaryTypes: state.inventaryTypes,
+        getInventaryBrands,
+        inventaryBrands: state.inventaryBrands,
+        getInventaryModels,
+        inventaryModels: state.inventaryModels,
       }}
     >
       {props.children}

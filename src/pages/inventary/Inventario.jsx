@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import Context from "../../context/Context";
 import CustomeTable from "../../components/table/CustomeTable";
-import { Breadcrumb, Label, Select, TextInput } from "flowbite-react";
+import { Label, Select, TextInput } from "flowbite-react";
 import { FaHome, FaSearch } from "react-icons/fa";
 import { AiFillFileAdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { InventaryType, BrandType } from "../../utils/Types";
+import { BrandType } from "../../utils/Types";
 import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 import { FiChevronRight } from "react-icons/fi";
 
 const Inventario = () => {
+  const { inventaryTypes } = useContext(Context);
+
   const [filters, setFilters] = useState({
     inventaryType: "",
     searchs: "",
@@ -58,9 +61,9 @@ const Inventario = () => {
               }
             >
               <option value="">Todos</option>
-              {InventaryType.map((item) => {
+              {inventaryTypes.map((item) => {
                 return (
-                  <option key={item.clave} value={item.name}>
+                  <option key={item.id} value={item.name}>
                     {item.name}
                   </option>
                 );
