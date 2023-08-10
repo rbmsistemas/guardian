@@ -219,7 +219,13 @@ const CreateInventario = ({
           <span className="text-red-500">*</span>
           <Label htmlFor="status" value="Selecciona el tipo de inventario" />
         </div>
-        <Select id="status" icon={MdOutlineCategory} required={true}>
+        <Select
+          value={body.status}
+          onChange={(e) => setBody({ ...body, status: e.target.value })}
+          id="status"
+          icon={MdOutlineCategory}
+          required={true}
+        >
           <option value="">-- Selecciona una opción --</option>
           <option value="1">Alta</option>
           <option value="0">Baja</option>

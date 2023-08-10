@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FakeData } from "./Inventario";
 import { useParams } from "react-router-dom";
 
 const ShowInventario = () => {
@@ -19,9 +18,6 @@ const ShowInventario = () => {
 
   useEffect(() => {
     setLoading(false);
-    FakeData.find((item) => {
-      if (item.id == id) setInventary(item);
-    });
   }, []);
   return (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
@@ -36,7 +32,7 @@ const ShowInventario = () => {
           Inventario
         </Link>
       </div>
-      <div className="col-span-12">
+      {/* <div className="col-span-12">
         <h2 className="text-xl font-bold text-gap-primary">
           Inventario - <p className="text-md text-slate-500"></p>{" "}
           {inventary.status == 1 ? "Alta" : "Baja"}{" "}
@@ -61,7 +57,7 @@ const ShowInventario = () => {
         <p className=" text-gray-500">
           Comentario: <span className="text-black">{inventary.comment}</span>
         </p>
-      </div>
+      </div> */}
       <div className="col-span-12">
         <p className=" text-gray-500">
           Imagenes: <span className="text-black"></span>

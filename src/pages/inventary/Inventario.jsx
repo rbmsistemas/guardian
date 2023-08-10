@@ -5,12 +5,29 @@ import { Label, Select, TextInput } from "flowbite-react";
 import { FaHome, FaSearch } from "react-icons/fa";
 import { AiFillFileAdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { BrandType } from "../../utils/Types";
 import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 import { FiChevronRight } from "react-icons/fi";
 
 const Inventario = () => {
-  const { inventaryTypes } = useContext(Context);
+  const { inventaryTypes, inventaryBrands, inventaryModels, inventaries } =
+    useContext(Context);
+
+  const inventariesData = inventaries.map((item, index) => {
+    return {
+      id: index + 1,
+      imagen: item.images["image1"],
+      tipo: inventaryTypes.find((type) => type.id === item.inventaryTypeId)
+        .name,
+      marca: inventaryBrands.find((brand) => brand.id === item.inventaryBrandId)
+        .name,
+      modelo: inventaryModels.find(
+        (model) => model.id === item.inventaryModelId
+      ).name,
+      SN: item.serialNumber,
+      activo: item.activo,
+      estado: item.status ? "Alta" : "Baja",
+    };
+  });
 
   const [filters, setFilters] = useState({
     inventaryType: "",
@@ -68,7 +85,6 @@ const Inventario = () => {
                   </option>
                 );
               })}
-              <option value="otro">Otro</option>
             </Select>
           </div>
           <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
@@ -89,14 +105,13 @@ const Inventario = () => {
               }
             >
               <option value="">Todos</option>
-              {BrandType.map((item) => {
+              {inventaryBrands.map((item) => {
                 return (
-                  <option key={item.clave} value={item.clave}>
+                  <option key={item.id} value={item.id}>
                     {item.name}
                   </option>
                 );
               })}
-              <option value="otro">Otro</option>
             </Select>
           </div>
           <div className="col-span-4 md:col-span-2 flex flex-col gap-2">
@@ -116,113 +131,10 @@ const Inventario = () => {
             />
           </div>
         </div>
-        <CustomeTable data={FakeData} />
+        <CustomeTable showId={true} showImagen={true} data={inventariesData} />
       </div>
     </div>
   );
 };
 
 export default Inventario;
-
-export const FakeData = [
-  {
-    id: "001",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "002",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "003",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "004",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "005",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "006",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "007",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "008",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "009",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A1JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-  {
-    id: "010",
-    tipo: "Teléfono",
-    marca: "CISCO",
-    modelo: "CP-7821-K9",
-    sn: "FCH2132A2JH",
-    activo: "PVRT-M23",
-    fecha: "21-05-2023",
-    comentarios: "Comments",
-  },
-];

@@ -8,8 +8,8 @@ import EditarInventario from "./EditarInventario";
 import { FiChevronRight } from "react-icons/fi";
 import { MdSaveAlt } from "react-icons/md";
 import { toast } from "react-hot-toast";
-import { handleUploadImagesInventary } from "../../api/inventary.api";
 import Loading from "../../utils/Loading";
+import { uploadImagesInventary } from "../../api/inventary.api";
 
 const InventaryForm = () => {
   const { id } = useParams();
@@ -53,8 +53,6 @@ const InventaryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
-    console.log(images);
     if (id) {
       console.log("editar inventario");
     } else {
@@ -68,14 +66,22 @@ const InventaryForm = () => {
             })
           );
 
-          const newImagesJSON = JSON.stringify(newImages);
+          const imagesObject = {}; // Creamos un objeto para almacenar las imágenes
+          newImages.forEach((imageUrl, index) => {
+            imagesObject[`image${index + 1}`] = imageUrl;
+          });
+
+          console.log(imagesObject);
+
+          const newImagesJSON = JSON.stringify(imagesObject);
 
           if (newImagesJSON) {
-            setData({ ...data, images: newImagesJSON });
+            setData({ ...data, images: imagesObject });
           }
         }
-
+        console.log(data);
         const res = await createInventary(data, user.token);
+        console.log(res);
         if (res?.status > 299) {
           setLoading(false);
           notificationError("Error al crear el inventario");
@@ -94,13 +100,10 @@ const InventaryForm = () => {
 
   const handleUploadFile = async (image) => {
     try {
-      console.log(image);
       let formData = new FormData();
       formData.append("image", image);
-      formData.append("Content-Type", "multipart/form-data");
 
-      const imageRes = await handleUploadImagesInventary(formData, user.token);
-      console.log(imageRes);
+      const imageRes = await uploadImagesInventary(formData, user.token);
       if (imageRes?.status > 299) {
         setLoading(false);
         notificationError("Error al actualizar la imagen");

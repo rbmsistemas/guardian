@@ -13,7 +13,7 @@ const config = {
 export const handleGetInventaries = async (token) => {
   config.headers["x-access-token"] = token;
   try {
-    const response = await axios.get(`${urlEnv}/api/inventary`, config);
+    const response = await axios.get(`${urlEnv}/api/inventarys`, config);
     return response;
   } catch (error) {
     return error.response;
@@ -24,7 +24,7 @@ export const handleGetInventaries = async (token) => {
 export const handleGetInventaryById = async (token, id) => {
   config.headers["x-access-token"] = token;
   try {
-    const response = await axios.get(`${urlEnv}/api/inventary/${id}`, config);
+    const response = await axios.get(`${urlEnv}/api/inventarys/${id}`, config);
     return response;
   } catch (error) {
     return error.response;
@@ -34,8 +34,9 @@ export const handleGetInventaryById = async (token, id) => {
 // create inventary
 export const handleCreateInventary = async (token, data) => {
   config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
   try {
-    const response = await axios.post(`${urlEnv}/api/inventary`, data, config);
+    const response = await axios.post(`${urlEnv}/api/inventarys`, data, config);
     return response;
   } catch (error) {
     return error.response;
@@ -47,7 +48,7 @@ export const handleUpdateInventary = async (token, id, data) => {
   config.headers["x-access-token"] = token;
   try {
     const response = await axios.put(
-      `${urlEnv}/api/inventary/${id}`,
+      `${urlEnv}/api/inventarys/${id}`,
       data,
       config
     );
@@ -62,7 +63,7 @@ export const handleDeleteInventary = async (token, id) => {
   config.headers["x-access-token"] = token;
   try {
     const response = await axios.delete(
-      `${urlEnv}/api/inventary/${id}`,
+      `${urlEnv}/api/inventarys/${id}`,
       config
     );
     return response;
@@ -104,12 +105,12 @@ export const handleGetInventaryBrands = async (token) => {
   }
 };
 
-export const handleUploadImagesInventary = async (token, data) => {
+export const uploadImagesInventary = async (data, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "multipart/form-data";
   try {
     const response = await axios.post(
-      `${urlEnv}/api/uploadsInventary/inventary`,
+      `${urlEnv}/api/uploads/inventary`,
       data,
       config
     );

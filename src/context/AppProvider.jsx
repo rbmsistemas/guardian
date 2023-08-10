@@ -148,10 +148,10 @@ const AppProvider = (props) => {
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventaries } = await response.data;
+      const { inventarys } = await response.data;
       dispatch({
         type: GET_INVENTARY,
-        payload: inventaries,
+        payload: inventarys,
       });
     } catch (error) {
       console.log(error);
@@ -178,7 +178,7 @@ const AppProvider = (props) => {
 
   const createInventary = async (data) => {
     try {
-      const response = await handleCreateInventary(data);
+      const response = await handleCreateInventary(state.user.token, data);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
@@ -187,6 +187,7 @@ const AppProvider = (props) => {
         type: POST_INVENTARY,
         payload: inventary,
       });
+      return inventary;
     } catch (error) {
       console.log(error);
       return false;
@@ -524,6 +525,7 @@ const AppProvider = (props) => {
   useEffect(() => {
     if (state.user.token) {
       getProviders(state.user.token);
+      getInventaries(state.user.token);
       getInventaryTypes(state.user.token);
       getInventaryBrands(state.user.token);
       getInventaryModels(state.user.token);
