@@ -123,7 +123,6 @@ const ProveedoresForm = () => {
         comments,
       };
 
-      console.log(newProvider);
       const res = await createProvider(newProvider);
 
       if (res?.status > 299) {

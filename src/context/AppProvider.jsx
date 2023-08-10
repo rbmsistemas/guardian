@@ -23,6 +23,11 @@ import {
   handleGetInventaryTypes,
   handleGetInventaryBrands,
   handleGetInventaryModels,
+  handleGetInventaries,
+  handleGetInventaryById,
+  handleCreateInventary,
+  handleUpdateInventary,
+  handleDeleteInventary,
 } from "../api/inventary.api";
 import {
   POST_SIGNIN,
@@ -43,6 +48,11 @@ import {
   GET_INVENTARY_TYPES,
   GET_INVENTARY_BRANDS,
   GET_INVENTARY_MODELS,
+  GET_INVENTARY,
+  GET_INVENTARY_BY_ID,
+  POST_INVENTARY,
+  PATCH_INVENTARY,
+  DELETE_INVENTARY,
 } from "./Types";
 
 const AppProvider = (props) => {
@@ -131,6 +141,91 @@ const AppProvider = (props) => {
 
   // end auth actions
   // inventary actions
+
+  const getInventaries = async (data) => {
+    try {
+      const response = await handleGetInventaries(data);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventaries } = await response.data;
+      dispatch({
+        type: GET_INVENTARY,
+        payload: inventaries,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getInventaryById = async (data) => {
+    try {
+      const response = await handleGetInventaryById(data);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventary } = await response.data;
+      dispatch({
+        type: GET_INVENTARY_BY_ID,
+        payload: inventary,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const createInventary = async (data) => {
+    try {
+      const response = await handleCreateInventary(data);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventary } = await response.data;
+      dispatch({
+        type: POST_INVENTARY,
+        payload: inventary,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const updateInventary = async (data) => {
+    try {
+      const response = await handleUpdateInventary(data);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventary } = await response.data;
+      dispatch({
+        type: PATCH_INVENTARY,
+        payload: inventary,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const deleteInventary = async (data) => {
+    try {
+      const response = await handleDeleteInventary(data);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventary } = await response.data;
+      dispatch({
+        type: DELETE_INVENTARY,
+        payload: inventary,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
 
   const getInventaryTypes = async (token) => {
     try {
@@ -441,11 +536,16 @@ const AppProvider = (props) => {
         user: state.user,
         activities: state.activities,
         activity: state.activity,
+        providers: state.providers,
+        provider: state.provider,
+        inventaryTypes: state.inventaryTypes,
+        inventaryBrands: state.inventaryBrands,
+        inventaryModels: state.inventaryModels,
+        inventaries: state.inventaries,
+        inventary: state.inventary,
         handleLogin,
         postSignup,
         postSignout,
-        providers: state.providers,
-        provider: state.provider,
         getProviders,
         getProvider,
         createProvider,
@@ -461,11 +561,13 @@ const AppProvider = (props) => {
         getActivitiesBySearch,
         clearActivity,
         getInventaryTypes,
-        inventaryTypes: state.inventaryTypes,
         getInventaryBrands,
-        inventaryBrands: state.inventaryBrands,
         getInventaryModels,
-        inventaryModels: state.inventaryModels,
+        getInventaries,
+        getInventaryById,
+        createInventary,
+        updateInventary,
+        deleteInventary,
       }}
     >
       {props.children}

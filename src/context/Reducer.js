@@ -17,6 +17,11 @@ import {
   GET_INVENTARY_TYPES,
   GET_INVENTARY_BRANDS,
   GET_INVENTARY_MODELS,
+  DELETE_INVENTARY,
+  PATCH_INVENTARY,
+  POST_INVENTARY,
+  GET_INVENTARY_BY_ID,
+  GET_INVENTARY,
 } from "./Types";
 
 export default (state, action) => {
@@ -97,6 +102,31 @@ export default (state, action) => {
       return {
         ...state,
         activities: payload,
+      };
+    case GET_INVENTARY:
+      return {
+        ...state,
+        inventaries: payload,
+      };
+    case GET_INVENTARY_BY_ID:
+      return {
+        ...state,
+        inventary: payload,
+      };
+    case POST_INVENTARY:
+      return {
+        ...state,
+        inventary: payload,
+      };
+    case PATCH_INVENTARY:
+      return {
+        ...state,
+        inventary: payload,
+      };
+    case DELETE_INVENTARY:
+      return {
+        ...state,
+        inventaries: payload,
       };
     case GET_INVENTARY_TYPES:
       return {

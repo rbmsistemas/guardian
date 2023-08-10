@@ -67,15 +67,19 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             type="file"
             id="upload"
             className="hidden"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              const reader = new FileReader();
-              reader.readAsDataURL(file);
-              reader.onloadend = () => {
-                setCapturedImage([...capturedImage, reader.result]);
-              };
-            }}
+            // accept png, jpg, jpeg, webp
+            accept={".png, .jpg, .jpeg, .webp"}
+            onChange={(e) =>
+              setCapturedImage([...capturedImage, e.target.files[0]])
+            }
+            // onChange={(e) => {
+            //   const file = e.target.files[0];
+            //   const reader = new FileReader();
+            //   reader.readAsDataURL(file);
+            //   reader.onloadend = () => {
+            //     setCapturedImage([...capturedImage, reader.result]);
+            //   };
+            // }}
           />
         </div>
         {capturedImage.length > 0 &&
@@ -94,7 +98,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
                 <img
                   className="w-full min-h-full rounded-lg cursor-pointer"
                   onClick={() => selectImage(index)}
-                  src={item}
+                  src={URL.createObjectURL(item)}
                   alt="image-captured"
                 />
               </div>

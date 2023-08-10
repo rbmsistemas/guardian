@@ -1,17 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
 import Context from "../../context/Context";
 import { FaHome } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import CreateInventario from "./CreateInventario";
 import EditarInventario from "./EditarInventario";
 import { FiChevronRight } from "react-icons/fi";
 import { MdSaveAlt } from "react-icons/md";
+import { toast } from "react-hot-toast";
+import { handleUploadImagesInventary } from "../../api/inventary.api";
+import Loading from "../../utils/Loading";
 
 const InventaryForm = () => {
   const { id } = useParams();
-  const { inventaryTypes, inventaryModels, inventaryBrands } =
-    useContext(Context);
+  const navigate = useNavigate();
+
+  const {
+    inventaryTypes,
+    inventaryModels,
+    inventaryBrands,
+    createInventary,
+    user,
+  } = useContext(Context);
+
+  const [voler, setVoler] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const notificationError = (message) => toast.error(message);
+  const successNotification = (message) => toast.success(message);
 
   const [data, setData] = useState({
     inventaryTypeId: "",
@@ -29,15 +44,75 @@ const InventaryForm = () => {
 
   useEffect(() => {
     if (id) console.log(id);
+    if (id) {
+      setVoler(true);
+    } else {
+      setVoler(false);
+    }
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
     console.log(images);
+    if (id) {
+      console.log("editar inventario");
+    } else {
+      try {
+        let newImages = [];
+        if (images.length > 0) {
+          newImages = await Promise.all(
+            images.map(async (image) => {
+              const imageUrl = await handleUploadFile(image);
+              return imageUrl;
+            })
+          );
+
+          const newImagesJSON = JSON.stringify(newImages);
+
+          if (newImagesJSON) {
+            setData({ ...data, images: newImagesJSON });
+          }
+        }
+
+        const res = await createInventary(data, user.token);
+        if (res?.status > 299) {
+          setLoading(false);
+          notificationError("Error al crear el inventario");
+          console.log(res);
+        }
+        successNotification("Inventario creado correctamente");
+        // setTimeout(() => {
+        //   navigate(`/inventario/editar/${res.id}`);
+        // }, 2000);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
-  console.log(data);
+  const handleUploadFile = async (image) => {
+    try {
+      console.log(image);
+      let formData = new FormData();
+      formData.append("image", image);
+      formData.append("Content-Type", "multipart/form-data");
+
+      const imageRes = await handleUploadImagesInventary(formData, user.token);
+      console.log(imageRes);
+      if (imageRes?.status > 299) {
+        setLoading(false);
+        notificationError("Error al actualizar la imagen");
+        console.log(imageRes);
+      }
+      return imageRes.data;
+    } catch (error) {
+      console.log(error);
+      notificationError("Error al actualizar la imagen");
+    }
+  };
+
   return (
     <div className="min-h-full h-auto w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
@@ -65,7 +140,7 @@ const InventaryForm = () => {
           <span>
             <IoArrowBack className="text-white text-lg" />
           </span>
-          Cancelar
+          {voler ? "Cancelar" : "Volver"}
         </Link>
       </div>
       <div className="flex flex-col">
@@ -98,6 +173,7 @@ const InventaryForm = () => {
           </div>
         </form>
       </div>
+      {loading && <Loading />}
     </div>
   );
 };
