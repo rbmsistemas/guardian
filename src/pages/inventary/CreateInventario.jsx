@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Label, Select, TextInput, Textarea } from "flowbite-react";
+import React, { useEffect } from "react";
+import { Checkbox, Label, Select, TextInput } from "flowbite-react";
 import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 import CameraComponent from "../../utils/CameraComponent";
 import { BiDevices } from "react-icons/bi";
@@ -7,6 +7,7 @@ import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import { Tb3DCubeSphere } from "react-icons/tb";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { FaUserCheck } from "react-icons/fa";
 
 const CreateInventario = ({
   body = {
@@ -20,6 +21,10 @@ const CreateInventario = ({
     activo: "",
     comments: "",
     status: "",
+    isAsigned: false,
+    altaDate: "",
+    bajaDate: "",
+    asignacionDate: "",
   },
   setBody,
   images = [],
@@ -227,9 +232,23 @@ const CreateInventario = ({
           required={true}
         >
           <option value="">-- Selecciona una opción --</option>
-          <option value="1">Alta</option>
-          <option value="0">Baja</option>
+          <option value={true}>Alta</option>
+          <option value={false}>Baja</option>
         </Select>
+      </div>
+      <div className="col-span-12 md:col-span-6">
+        <div className="w-full flex gap-1">
+          <span className="text-red-500"></span>
+          <Label htmlFor="isAsigned" value="¿El equipo ha sido asignado?" />
+        </div>
+        <div className="flex bg-gray-50 gap-4 items-center justify-start w-full p-3 py-2 rounded-md mt-1 border border-gray-300">
+          <FaUserCheck className="text-2xl text-gray-500" />
+          <Checkbox
+            checked={body.isAsigned}
+            onChange={(e) => setBody({ ...body, isAsigned: e.target.checked })}
+          />
+          <span className="text-gray-500">{body.isAsigned ? "Sí" : "No"}</span>
+        </div>
       </div>
       <div className="col-span-12">
         <div className="w-full">

@@ -30,10 +30,10 @@ const Proveedores = () => {
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
 
-  const Proveedores = providers?.map((provider) => {
+  const Proveedores = providers?.map((provider, index) => {
     return {
+      no: index + 1,
       imagen: provider.logo,
-      id: provider.id,
       proveedor: provider.proveedor,
       encargado: provider.encargado,
       "correo electronico": provider.email,
@@ -43,6 +43,7 @@ const Proveedores = () => {
           ? provider.address.slice(0, 50) + "..."
           : provider.address,
       estado: provider.status ? "Activo" : "Inactivo",
+      id: provider.id,
     };
   });
 

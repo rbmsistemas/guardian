@@ -1,6 +1,6 @@
-import { Table } from "flowbite-react";
-import React from "react";
-import { FaEye, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { Modal, Table } from "flowbite-react";
+import React, { useState } from "react";
+import { FaEye, FaImage, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
 const CustomeTable = ({
   data = [],
@@ -16,6 +16,14 @@ const CustomeTable = ({
   totalEntries = 0,
   totalPages = 0,
 }) => {
+  const [imageSelected, setImageSelected] = useState("");
+  const [modal, setModal] = useState(false);
+
+  const handleShowImage = (image) => {
+    setImageSelected(image);
+    setModal(true);
+  };
+
   return (
     <>
       <div className="overflow-x-scroll">
@@ -39,6 +47,7 @@ const CustomeTable = ({
               data.map((item) => (
                 <Table.Row
                   key={item.id}
+                  onDoubleClick={() => onShow(item.id)}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
                   {Object.keys(item).map((key) =>
@@ -49,6 +58,7 @@ const CustomeTable = ({
                           src={item[key]}
                           alt={item[key]}
                           className="w-14 h-auto rounded-lg"
+                          onClick={() => handleShowImage(item[key])}
                         />
                       </Table.Cell>
                     ) : (
@@ -137,6 +147,34 @@ const CustomeTable = ({
           </div>
         </div>
       </div>
+      {modal && (
+        <Modal
+          title="Ver imagen"
+          dismissible={true}
+          onClose={() => {
+            setModal(false);
+          }}
+          show={modal}
+        >
+          <Modal.Header>
+            <div className="flex gap-2 items-center">
+              <span className="bg-blue-500 rounded-full p-2">
+                <FaImage className="text-white text-xl" />
+              </span>
+              <p className="text-xl font-bold text-blue-500">Ver imagen</p>
+            </div>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="flex justify-center items-center">
+              <img
+                src={imageSelected}
+                alt={imageSelected}
+                className="w-96 h-auto rounded-lg"
+              />
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
     </>
   );
 };

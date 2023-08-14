@@ -10,6 +10,7 @@ import { MdSaveAlt } from "react-icons/md";
 import { toast } from "react-hot-toast";
 import Loading from "../../utils/Loading";
 import { uploadImagesInventary } from "../../api/inventary.api";
+import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
 
 const InventaryForm = () => {
   const { id } = useParams();
@@ -38,7 +39,11 @@ const InventaryForm = () => {
     serialNumber: "",
     activo: "",
     comments: "",
-    status: "",
+    isAsigned: false,
+    altaDate: null,
+    bajaDate: null,
+    asignacionDate: null,
+    status: true,
   });
   const [images, setImages] = useState([]);
 
@@ -58,6 +63,8 @@ const InventaryForm = () => {
     } else {
       try {
         let newImages = [];
+        let newImagesJSON = {};
+        setLoading(true);
         if (images.length > 0) {
           newImages = await Promise.all(
             images.map(async (image) => {
@@ -66,31 +73,49 @@ const InventaryForm = () => {
             })
           );
 
-          const imagesObject = {}; // Creamos un objeto para almacenar las imágenes
+          const imagesObject = {};
           newImages.forEach((imageUrl, index) => {
             imagesObject[`image${index + 1}`] = imageUrl;
           });
 
-          console.log(imagesObject);
-
-          const newImagesJSON = JSON.stringify(imagesObject);
-
-          if (newImagesJSON) {
-            setData({ ...data, images: imagesObject });
-          }
+          newImagesJSON = imagesObject;
         }
-        console.log(data);
-        const res = await createInventary(data, user.token);
-        console.log(res);
+        let sendData = {
+          ...data,
+          images: newImagesJSON,
+        };
+        if (data.status === false) {
+          sendData = {
+            ...sendData,
+            bajaDate: getCurrentFormattedDate(),
+          };
+        } else if (data.status === true) {
+          sendData = {
+            ...sendData,
+            bajaDate: null,
+            altaDate: getCurrentFormattedDate(),
+          };
+        }
+
+        if (data.isAsigned === false) {
+          sendData = { ...sendData, asignacionDate: null };
+        } else if (data.isAsigned === true) {
+          sendData = {
+            ...sendData,
+            asignacionDate: getCurrentFormattedDate(),
+          };
+        }
+
+        const res = await createInventary(sendData, user.token);
         if (res?.status > 299) {
           setLoading(false);
           notificationError("Error al crear el inventario");
           console.log(res);
         }
         successNotification("Inventario creado correctamente");
-        // setTimeout(() => {
-        //   navigate(`/inventario/editar/${res.id}`);
-        // }, 2000);
+        setTimeout(() => {
+          navigate(`/inventario/editar/${res.id}`);
+        }, 2000);
         setLoading(false);
       } catch (error) {
         console.log(error);

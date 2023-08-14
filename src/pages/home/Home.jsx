@@ -1,6 +1,6 @@
 import React from "react";
 // import GuardianLogo from "../../assets/img/guardian_alt.png";
-import GuardianLogo from "../../assets/img/guardian_alt_icon.png";
+import GuardianLogo from "../../assets/logo/sinabe_icon.png";
 import { Link } from "react-router-dom";
 import Bodega from "../../assets/img/bodega.webp";
 import Users from "../../assets/img/users.webp";
@@ -8,8 +8,8 @@ import Reports from "../../assets/img/reportes.jpg";
 
 const Home = () => {
   return (
-    <div className="flex flex-col min-h-full h-full p-3 gap-4">
-      <div className="flex flex-col gap-2 items-center justify-center">
+    <div className="flex flex-col min-h-full h-full p-4 gap-4">
+      {/* <div className="flex flex-col gap-2 items-center justify-center">
         <div className="flex justify-center items-center gap-3">
           <img
             src={GuardianLogo}
@@ -17,10 +17,8 @@ const Home = () => {
             alt="Guardian Logo"
           />
         </div>
-        <h1 className="text-xl font-bold text-sky-800">
-          Bienvenido a GUARDIAN
-        </h1>
-      </div>
+      </div> */}
+      <h1 className="text-xl text-left font-bold text-sky-800">Bienvenido</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
         <Link
           to={"/inventario"}

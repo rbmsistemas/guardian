@@ -20,8 +20,23 @@ export const handleGetInventaries = async (token) => {
   }
 };
 
+export const handleGetInventariesByParams = async (body, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/inventarys/search`,
+      body,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 // get inventary
-export const handleGetInventaryById = async (token, id) => {
+export const handleGetInventaryById = async (id, token) => {
   config.headers["x-access-token"] = token;
   try {
     const response = await axios.get(`${urlEnv}/api/inventarys/${id}`, config);

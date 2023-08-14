@@ -22,6 +22,7 @@ import {
   POST_INVENTARY,
   GET_INVENTARY_BY_ID,
   GET_INVENTARY,
+  GET_INVENTARIES_BY_SEARCH,
 } from "./Types";
 
 export default (state, action) => {
@@ -112,6 +113,11 @@ export default (state, action) => {
       return {
         ...state,
         inventary: payload,
+      };
+    case GET_INVENTARIES_BY_SEARCH:
+      return {
+        ...state,
+        inventaries: payload,
       };
     case POST_INVENTARY:
       return {

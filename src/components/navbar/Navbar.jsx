@@ -1,14 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import Side from "../sidebar/Sidebar";
 import Logo from ".././../assets/img/images.jfif";
-import LogoGuardian from ".././../assets/img/guardian_logo.png";
+import LogoGuardian from ".././../assets/logo/sinabe.png";
 import { CgMenu } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import Context from "../../context/Context";
 import { MdAccountCircle } from "react-icons/md";
 
 const Nav = ({ children }) => {
-  const { user } = useContext(Context);
+  const { user, providers } = useContext(Context);
+
+  const [userProvider, setUserProvider] = useState(null);
+
+  useEffect(() => {
+    if (user?.user) {
+      const provider = providers.find(
+        (provider) => provider.id === user.user.proveedorId
+      );
+      setUserProvider(provider.proveedor);
+    }
+  }, [user, providers]);
 
   const [showMenu, setShowMenu] = useState(true);
 
@@ -32,10 +43,10 @@ const Nav = ({ children }) => {
             <CgMenu className="h-6 w-6" />
           </span>
           <Link to="/">
-            <img src={Logo} className="h-12 hidden md:block" alt="Logo GAP" />
+            <img src={Logo} className="h-10 hidden md:block" alt="Logo GAP" />
           </Link>
         </div>
-        <img src={LogoGuardian} className="h-14" alt="Logo Guardian" />
+        <img src={LogoGuardian} className="h-10" alt="Logo Guardian" />
       </div>
       <div className="flex flex-1 min-h-0">
         <div
@@ -50,10 +61,12 @@ const Nav = ({ children }) => {
                 <MdAccountCircle className="h-10 w-10 text-gap-primary" />
               </span>
               <div className="flex flex-col justify-center items-start">
-                <p className="text-sm">
-                  {user.user.firstName + " " + user.user.lastName}
+                <p className="text-sm font-bold">
+                  {`${user.user.firstName} ${user.user.lastName}`.slice(0, 25)}
                 </p>
-                <p className="text-xs text-gray-400">{user.user.userName}</p>
+                <p className="text-xs text-gray-400">
+                  {`${user.user.userName}`.slice(0, 20)}
+                </p>
               </div>
             </div>
           )}
