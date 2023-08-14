@@ -61,8 +61,9 @@ export const handleCreateInventary = async (token, data) => {
 // update inventary
 export const handleUpdateInventary = async (token, id, data) => {
   config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
   try {
-    const response = await axios.put(
+    const response = await axios.patch(
       `${urlEnv}/api/inventarys/${id}`,
       data,
       config

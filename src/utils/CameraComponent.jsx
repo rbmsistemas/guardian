@@ -53,15 +53,17 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
       </div>
 
       <div className="w-full min-w-full h-32 max-h-32 grid grid-cols-3 xl:grid-cols-4 gap-2 mt-2">
-        <div className="w-full border-2 border-dashed border-gray-400 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
+        <div className="w-full border-2 border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
           <label
             htmlFor="upload"
             className="w-full h-full flex flex-col justify-center items-center gap-2 cursor-pointer"
           >
-            <span className="text-3xl text-gray-500">
+            <span className="text-3xl ">
               <AiOutlineCamera />
             </span>
-            <span className="text-gray-500 font-semibold">Subir imagen</span>
+            <span className="text-center text-sm font-semibold">
+              Subir imagen
+            </span>
           </label>
           <input
             type="file"

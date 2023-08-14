@@ -11,6 +11,7 @@ import {
   MdOutlineInventory2,
 } from "react-icons/md";
 import { FiChevronRight } from "react-icons/fi";
+import { toast } from "react-hot-toast";
 
 const Inventario = () => {
   const navigate = useNavigate();
@@ -34,6 +35,9 @@ const Inventario = () => {
   const [totals, setTotals] = useState({ totalEntries: 0, totalPages: 0 });
   const [modal, setModal] = useState(false);
   const [inventaryToDelete, setinventaryToDelete] = useState({});
+  const [timer, setTimer] = useState(null);
+  const errorNotify = (message) => toast.error(message);
+  const successNotify = (message) => toast.success(message);
 
   useEffect(() => {
     const res = async () => {
@@ -67,17 +71,33 @@ const Inventario = () => {
   });
 
   const handleValidateSearch = (e) => {
-    if (e.target.value.slice(-1) === " ") {
-      e.target.value = e.target.value.slice(0, -1);
-    } else if (
-      e.target.value.slice(-1) === e.target.value.slice(-2, -1) &&
-      e.target.value.slice(-1) === e.target.value.slice(-3, -2)
-    ) {
-      e.target.value = e.target.value.slice(0, -1);
-    } else {
-      setFilters({ ...filters, search: e.target.value });
+    const inputValue = e.target.value;
+
+    if (inputValue.length >= 4) {
+      const lastFourChars = inputValue.slice(-4);
+      if (
+        lastFourChars[0] === lastFourChars[1] &&
+        lastFourChars[1] === lastFourChars[2] &&
+        lastFourChars[2] === lastFourChars[3]
+      ) {
+        return;
+      }
     }
+
+    setFilters({ ...filters, search: inputValue });
   };
+
+  useEffect(() => {
+    clearTimeout(timer);
+
+    if (filters.search.length > 0) {
+      const newTimer = setTimeout(() => {
+        console.log("Realizar solicitud al servidor:", filters.search);
+      }, 500);
+
+      setTimer(newTimer);
+    }
+  }, [filters.search]);
 
   const handleDelete = async (id) => {
     setModal(true);
@@ -90,8 +110,7 @@ const Inventario = () => {
       errorNotify("Error al eliminar el inventario");
       setModal(false);
       return;
-    }
-    if (data) {
+    } else if (data) {
       const res = await getInventariesBySearch(filters);
       if (res) {
         setTotals({
@@ -226,7 +245,7 @@ const Inventario = () => {
                   quantityResults: 5,
                 })
               }
-              className="bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+              className="bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded flex gap-2 items-center justify-center transition ease-in-out duration-200 hover:scale-105"
             >
               <span>
                 <AiOutlineClear className="text-white text-lg" />

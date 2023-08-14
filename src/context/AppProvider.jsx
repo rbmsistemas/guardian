@@ -189,16 +189,16 @@ const AppProvider = (props) => {
         type: POST_INVENTARY,
         payload: inventary,
       });
-      return inventary;
+      return { inventary, status: true };
     } catch (error) {
       console.log(error);
-      return false;
+      return { status: false, error };
     }
   };
 
-  const updateInventary = async (data) => {
+  const updateInventary = async (id, data) => {
     try {
-      const response = await handleUpdateInventary(data);
+      const response = await handleUpdateInventary(state.user.token, id, data);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
@@ -207,6 +207,7 @@ const AppProvider = (props) => {
         type: PATCH_INVENTARY,
         payload: inventary,
       });
+      return inventary;
     } catch (error) {
       console.log(error);
       return false;
@@ -215,15 +216,12 @@ const AppProvider = (props) => {
 
   const deleteInventary = async (data) => {
     try {
-      const response = await handleDeleteInventary(data);
+      const response = await handleDeleteInventary(state.user.token, data);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
+      } else {
+        return true;
       }
-      const { inventary } = await response.data;
-      dispatch({
-        type: DELETE_INVENTARY,
-        payload: inventary,
-      });
     } catch (error) {
       console.log(error);
       return false;

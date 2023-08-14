@@ -21,6 +21,7 @@ const InventaryForm = () => {
     inventaryModels,
     inventaryBrands,
     createInventary,
+    updateInventary,
     getInventaryById,
     inventary,
     user,
@@ -104,28 +105,13 @@ const InventaryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (id) {
       console.log("editar inventario");
     } else {
       try {
-        let newImages = [];
         let newImagesJSON = {};
-        setLoading(true);
-        if (images.length > 0) {
-          newImages = await Promise.all(
-            images.map(async (image) => {
-              const imageUrl = await handleUploadFile(image);
-              return imageUrl;
-            })
-          );
 
-          const imagesObject = {};
-          newImages.forEach((imageUrl, index) => {
-            imagesObject[`image${index + 1}`] = imageUrl;
-          });
-
-          newImagesJSON = imagesObject;
-        }
         let sendData = {
           ...data,
           images: newImagesJSON,
@@ -153,20 +139,44 @@ const InventaryForm = () => {
         }
 
         const res = await createInventary(sendData, user.token);
-        if (res?.status > 299) {
-          setLoading(false);
+        if (!res.status) {
           notificationError("Error al crear el inventario");
-          console.log(res);
+        } else {
+          let newImages = [];
+          if (images.length > 0) {
+            newImages = await Promise.all(
+              images.map(async (image) => {
+                const imageUrl = await handleUploadFile(image);
+                return imageUrl;
+              })
+            );
+
+            let imagesObject = {};
+            newImages.forEach((imageUrl, index) => {
+              imagesObject[`image${index + 1}`] = imageUrl;
+            });
+
+            const response = await updateInventary(
+              res?.inventary?.id,
+              { images: imagesObject },
+              user.token
+            );
+            if (!response.id) {
+              notificationError("Error al cargar las imagenes del inventario.");
+              console.log(response);
+            }
+          }
+          successNotification("Inventario creado correctamente");
+          setTimeout(() => {
+            navigate(`/inventario/editar/${res?.inventary?.id}`);
+          }, 2000);
         }
-        successNotification("Inventario creado correctamente");
-        setTimeout(() => {
-          navigate(`/inventario/editar/${res.id}`);
-        }, 2000);
-        setLoading(false);
       } catch (error) {
         console.log(error);
+        notificationError("Error al crear el inventario");
       }
     }
+    setLoading(false);
   };
 
   const handleUploadFile = async (image) => {

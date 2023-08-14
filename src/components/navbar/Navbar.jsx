@@ -8,18 +8,7 @@ import Context from "../../context/Context";
 import { MdAccountCircle } from "react-icons/md";
 
 const Nav = ({ children }) => {
-  const { user, providers } = useContext(Context);
-
-  const [userProvider, setUserProvider] = useState(null);
-
-  useEffect(() => {
-    if (user?.user) {
-      const provider = providers.find(
-        (provider) => provider.id === user.user.proveedorId
-      );
-      setUserProvider(provider.proveedor);
-    }
-  }, [user, providers]);
+  const { user } = useContext(Context);
 
   const [showMenu, setShowMenu] = useState(true);
 
