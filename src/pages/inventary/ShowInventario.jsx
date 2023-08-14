@@ -113,8 +113,6 @@ const ShowInventario = () => {
     setLoading(false);
   };
 
-  console.log(inventario);
-
   return (
     <div className="min-h-full w-full p-5 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-3">

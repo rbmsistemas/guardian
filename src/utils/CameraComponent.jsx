@@ -67,8 +67,9 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             type="file"
             id="upload"
             className="hidden"
-            // accept png, jpg, jpeg, webp
-            accept={".png, .jpg, .jpeg, .webp"}
+            accept={
+              ".png, .jpg, .jpeg, .webp, avif, .gif, .jfif, .svg, .bmp, .tiff"
+            }
             onChange={(e) =>
               setCapturedImage([...capturedImage, e.target.files[0]])
             }
@@ -98,7 +99,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
                 <img
                   className="w-full min-h-full rounded-lg cursor-pointer"
                   onClick={() => selectImage(index)}
-                  src={URL.createObjectURL(item)}
+                  src={item?.name ? URL.createObjectURL(item) : item}
                   alt="image-captured"
                 />
               </div>

@@ -21,6 +21,8 @@ const InventaryForm = () => {
     inventaryModels,
     inventaryBrands,
     createInventary,
+    getInventaryById,
+    inventary,
     user,
   } = useContext(Context);
 
@@ -44,17 +46,61 @@ const InventaryForm = () => {
     bajaDate: null,
     asignacionDate: null,
     status: true,
+    images: [],
   });
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    if (id) console.log(id);
     if (id) {
+      getInventaryById(id);
       setVoler(true);
     } else {
       setVoler(false);
+      setData({
+        inventaryTypeId: "",
+        otherInventary: "",
+        inventaryBrandId: "",
+        otherBrand: "",
+        inventaryModelId: "",
+        otherModel: "",
+        serialNumber: "",
+        activo: "",
+        comments: "",
+        isAsigned: false,
+        altaDate: null,
+        bajaDate: null,
+        asignacionDate: null,
+        status: true,
+        images: [],
+      });
     }
+    setLoading(false);
   }, [id]);
+
+  useEffect(() => {
+    if (id && inventary.id) {
+      setData({
+        id: inventary.id ?? "",
+        inventaryTypeId: inventary.inventaryTypeId ?? "",
+        inventaryBrandId: inventary.inventaryBrandId ?? "",
+        inventaryModelId: inventary.inventaryModelId ?? "",
+        serialNumber: inventary.serialNumber ?? "",
+        activo: inventary.activo ?? "",
+        comments: inventary.comments ?? "",
+        status: inventary.status ?? false,
+        images: inventary.images ?? [],
+        altaDate: inventary.altaDate ?? "",
+        asignacionDate: inventary.asignacionDate ?? null,
+        isAsigned: inventary.isAsigned ?? false,
+        bajaDate: inventary.bajaDate ?? null,
+        createdAt: inventary.createdAt ?? "",
+        updatedAt: inventary.updatedAt ?? "",
+      });
+      setImages(
+        Object.entries(inventary?.images)?.map(([, link]) => link) ?? []
+      );
+    }
+  }, [inventary]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -175,7 +221,15 @@ const InventaryForm = () => {
         <h2 className="text-xl font-bold"></h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-5">
           {id ? (
-            <EditarInventario data={data} setData={setData} />
+            <CreateInventario
+              body={data}
+              setBody={setData}
+              images={images}
+              setImages={setImages}
+              inventaryTypes={inventaryTypes}
+              inventaryBrands={inventaryBrands}
+              inventaryModels={inventaryModels}
+            />
           ) : (
             <CreateInventario
               body={data}
@@ -187,7 +241,6 @@ const InventaryForm = () => {
               inventaryModels={inventaryModels}
             />
           )}
-          {/* boton guardar */}
           <div className="flex justify-end">
             <button
               type="submit"
@@ -196,7 +249,8 @@ const InventaryForm = () => {
               <span>
                 <MdSaveAlt className="text-white text-lg" />
               </span>
-              Guardar inventario
+
+              {id ? "Actualizar" : "Guardar"}
             </button>
           </div>
         </form>

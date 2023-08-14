@@ -48,6 +48,10 @@ const CustomeTable = ({
                 <Table.Row
                   key={item.id}
                   onDoubleClick={() => onShow(item.id)}
+                  onDrag={(e) => {
+                    e.preventDefault();
+                    onEdit(item.id);
+                  }}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
                   {Object.keys(item).map((key) =>
@@ -57,7 +61,7 @@ const CustomeTable = ({
                         <img
                           src={item[key]}
                           alt={item[key]}
-                          className="w-14 h-auto rounded-lg"
+                          className="w-14 h-auto rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
                           onClick={() => handleShowImage(item[key])}
                         />
                       </Table.Cell>
