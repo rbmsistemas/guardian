@@ -29,6 +29,7 @@ import {
   handleUpdateInventary,
   handleDeleteInventary,
   handleGetInventariesByParams,
+  handleValidateActivoSn,
 } from "../api/inventary.api";
 import {
   POST_SIGNIN,
@@ -242,6 +243,19 @@ const AppProvider = (props) => {
         type: GET_INVENTARIES_BY_SEARCH,
         payload: inventaries,
       });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getValidateActivoSn = async (body) => {
+    try {
+      const response = await handleValidateActivoSn(body, state.user.token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
       return response.data;
     } catch (error) {
       console.log(error);
@@ -592,6 +606,7 @@ const AppProvider = (props) => {
         updateInventary,
         deleteInventary,
         getInventariesBySearch,
+        getValidateActivoSn,
       }}
     >
       {props.children}

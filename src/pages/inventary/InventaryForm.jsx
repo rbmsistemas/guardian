@@ -23,6 +23,7 @@ const InventaryForm = () => {
     createInventary,
     updateInventary,
     getInventaryById,
+    getValidateActivoSn,
     inventary,
     user,
   } = useContext(Context);
@@ -103,11 +104,85 @@ const InventaryForm = () => {
     }
   }, [inventary]);
 
+  const handleValidateActivoSn = async (
+    activo,
+    serialNumber,
+    currentId = null
+  ) => {
+    const res = await getValidateActivoSn({ activo, serialNumber, currentId });
+    if (res.status === true) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     if (id) {
-      console.log("editar inventario");
+      try {
+        let newImagesJSON = {};
+        if (images.length > 0) {
+          newImagesJSON = await Promise.all(
+            images.map(async (image) => {
+              const imageUrl = await handleUploadFile(image);
+              return imageUrl;
+            })
+          );
+
+          let imagesObject = {};
+          newImagesJSON.forEach((imageUrl, index) => {
+            imagesObject[`image${index + 1}`] = imageUrl;
+          });
+          setData({ ...data, images: imagesObject });
+        } else {
+          setData({ ...data, images: [] });
+        }
+
+        if (data.status === false) {
+          setData({ ...data, bajaDate: getCurrentFormattedDate() });
+        } else if (data.status === true) {
+          setData({
+            ...data,
+            bajaDate: null,
+            altaDate: getCurrentFormattedDate(),
+          });
+        }
+
+        if (data.isAsigned === false) {
+          setData({ ...data, asignacionDate: null });
+        } else if (data.isAsigned === true) {
+          setData({
+            ...data,
+            asignacionDate: getCurrentFormattedDate(),
+          });
+        }
+
+        const exist = await handleValidateActivoSn(
+          data.activo,
+          data.serialNumber,
+          data.id
+        );
+        if (exist) {
+          const res = await updateInventary(id, data, user.token);
+          if (!res.id) {
+            notificationError("Error al actualizar el inventario");
+          } else {
+            successNotification("Inventario actualizado correctamente");
+            setTimeout(() => {
+              navigate(`/inventario/editar/${res.id}`);
+            }, 2000);
+          }
+        } else {
+          notificationError(
+            "El Numero de Serie o Activo ya existe. Verifique la información."
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        notificationError("Error al actualizar el inventario");
+      }
     } else {
       try {
         let newImagesJSON = {};
@@ -137,39 +212,50 @@ const InventaryForm = () => {
             asignacionDate: getCurrentFormattedDate(),
           };
         }
+        const exist = await handleValidateActivoSn(
+          data.activo,
+          data.serialNumber
+        );
+        if (exist) {
+          const res = await createInventary(sendData, user.token);
+          if (!res.status) {
+            notificationError("Error al crear el inventario");
+          } else {
+            let newImages = [];
+            if (images.length > 0) {
+              newImages = await Promise.all(
+                images.map(async (image) => {
+                  const imageUrl = await handleUploadFile(image);
+                  return imageUrl;
+                })
+              );
 
-        const res = await createInventary(sendData, user.token);
-        if (!res.status) {
-          notificationError("Error al crear el inventario");
-        } else {
-          let newImages = [];
-          if (images.length > 0) {
-            newImages = await Promise.all(
-              images.map(async (image) => {
-                const imageUrl = await handleUploadFile(image);
-                return imageUrl;
-              })
-            );
+              let imagesObject = {};
+              newImages.forEach((imageUrl, index) => {
+                imagesObject[`image${index + 1}`] = imageUrl;
+              });
 
-            let imagesObject = {};
-            newImages.forEach((imageUrl, index) => {
-              imagesObject[`image${index + 1}`] = imageUrl;
-            });
-
-            const response = await updateInventary(
-              res?.inventary?.id,
-              { images: imagesObject },
-              user.token
-            );
-            if (!response.id) {
-              notificationError("Error al cargar las imagenes del inventario.");
-              console.log(response);
+              const response = await updateInventary(
+                res?.inventary?.id,
+                { images: imagesObject },
+                user.token
+              );
+              if (!response.id) {
+                notificationError(
+                  "Error al cargar las imagenes del inventario."
+                );
+                console.log(response);
+              }
             }
+            successNotification("Inventario creado correctamente");
+            setTimeout(() => {
+              navigate(`/inventario/editar/${res?.inventary?.id}`);
+            }, 2000);
           }
-          successNotification("Inventario creado correctamente");
-          setTimeout(() => {
-            navigate(`/inventario/editar/${res?.inventary?.id}`);
-          }, 2000);
+        } else {
+          notificationError(
+            "El Numero de Serie o Activo ya existe. Verifique la información."
+          );
         }
       } catch (error) {
         console.log(error);

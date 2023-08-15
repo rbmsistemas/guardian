@@ -58,6 +58,21 @@ export const handleCreateInventary = async (token, data) => {
   }
 };
 
+export const handleValidateActivoSn = async (data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/inventarys/validateActivoSn`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 // update inventary
 export const handleUpdateInventary = async (token, id, data) => {
   config.headers["x-access-token"] = token;
