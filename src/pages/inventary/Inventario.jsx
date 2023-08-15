@@ -57,12 +57,12 @@ const Inventario = () => {
       no: index + 1,
       imagen: item.images["image1"],
       tipo: inventaryTypes.find((type) => type.id === item.inventaryTypeId)
-        .name,
+        ?.name,
       marca: inventaryBrands.find((brand) => brand.id === item.inventaryBrandId)
-        .name,
+        ?.name,
       modelo: inventaryModels.find(
         (model) => model.id === item.inventaryModelId
-      ).name,
+      )?.name,
       SN: item.serialNumber,
       activo: item.activo,
       estado: item.status ? "Alta" : "Baja",
