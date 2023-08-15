@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "../utils/Loading";
 import Login from "../pages/auth/Login";
 import NotFound from "../pages/notFound/NotFound";
-import SSL from "../FA2141ACF7A6F70C29B4FFE00875EEDA.txt";
 
 import Context from "../context/Context";
 const ProveedoresForm = lazy(() =>
@@ -27,7 +26,6 @@ const LoginRouter = () => {
       <Router>
         <Nav>
           <Routes>
-            <Route path="/.well-known/pki-validation/FA2141ACF7A6F70C29B4FFE00875EEDA.txt" elemetn={<SSL />} />
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Login />} />
           </Routes>
