@@ -4,6 +4,7 @@ import Context from "../../context/Context";
 import {
   FaCheck,
   FaHome,
+  FaImage,
   FaList,
   FaRegEdit,
   FaRegTrashAlt,
@@ -25,6 +26,7 @@ import { BiDevices } from "react-icons/bi";
 import { Tb3DCubeSphere } from "react-icons/tb";
 import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import "../../Quill.css";
+import { toast } from "react-hot-toast";
 
 const ShowInventario = () => {
   const { id } = useParams();
@@ -37,8 +39,16 @@ const ShowInventario = () => {
     deleteInventary,
   } = useContext(Context);
   const [modal, setModal] = useState(false);
+  const [modal2, setModal2] = useState(false);
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
+
+  const [imageSelected, setImageSelected] = useState("");
+
+  const handleShowImage = (image) => {
+    setImageSelected(image);
+    setModal2(true);
+  };
 
   const [inventario, setInventario] = useState({
     id: "",
@@ -96,7 +106,7 @@ const ShowInventario = () => {
   const onDelete = async () => {
     setLoading(true);
     console.log("inventario", inventario);
-    const data = await deleteProvider(inventario.id);
+    const data = await deleteInventary(inventario.id);
     if (!data) {
       errorNotify("Error al eliminar el inventario");
       setModal(false);
@@ -105,12 +115,31 @@ const ShowInventario = () => {
     }
 
     successNotify("Inventario eliminado correctamente");
-    clearProvider();
+    clearInventary();
     setTimeout(() => {
       navigate("/inventario");
     }, 500);
     setModal(false);
     setLoading(false);
+  };
+  const clearInventary = () => {
+    setInventario({
+      id: "",
+      inventaryTypeId: "",
+      inventaryBrandId: "",
+      inventaryModelId: "",
+      serialNumber: "",
+      activo: "",
+      comments: "",
+      status: false,
+      images: [],
+      altaDate: "",
+      asignacionDate: null,
+      isAsigned: false,
+      bajaDate: null,
+      createdAt: "",
+      updatedAt: "",
+    });
   };
 
   return (
@@ -337,6 +366,7 @@ const ShowInventario = () => {
                   className="col-span-1 rounded-md flex items-center justify-center border border-gray-300 p-3 cursor-pointer"
                 >
                   <img
+                    onClick={() => handleShowImage(image)}
                     src={image}
                     alt="imagen"
                     className="w-full h-full object-cover rounded-md"
@@ -370,17 +400,11 @@ const ShowInventario = () => {
             <p className="text-gray-500">
               ¿Está seguro que desea eliminar el inventario{" "}
               <span className="font-bold">
-                {inventaryTypes.find(
-                  (item) => item.id === inventario.inventaryTypeId
-                )?.name +
+                {inventario.inventaryTypeId +
                   " " +
-                  inventaryBrands.find(
-                    (item) => item.id === inventario.inventaryBrandId
-                  )?.name +
+                  inventario.inventaryBrandId +
                   " Modelo " +
-                  inventaryModels.find(
-                    (item) => item.id === inventario.inventaryModelId
-                  )?.name +
+                  inventario.inventaryModelId +
                   " SN - " +
                   inventario.serialNumber}
               </span>
@@ -413,6 +437,35 @@ const ShowInventario = () => {
               </button>
             </div>
           </Modal.Footer>
+        </Modal>
+      )}
+      {modal2 && (
+        <Modal
+          title="Ver imagen"
+          dismissible={true}
+          size={"4xl"}
+          onClose={() => {
+            setModal2(false);
+          }}
+          show={modal2}
+        >
+          <Modal.Header>
+            <div className="flex gap-2 items-center">
+              <span className="bg-blue-500 rounded-full p-2">
+                <FaImage className="text-white text-xl" />
+              </span>
+              <p className="text-xl font-bold text-blue-500">Ver imagen</p>
+            </div>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="flex justify-center items-center">
+              <img
+                src={imageSelected}
+                alt={imageSelected}
+                className="w-full h-96 rounded-lg"
+              />
+            </div>
+          </Modal.Body>
         </Modal>
       )}
       {loading && <Loading />}

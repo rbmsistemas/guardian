@@ -3,18 +3,30 @@ import React, { useRef, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import Webcam from "react-webcam";
+import { Image } from "image-js";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
   const [image, setImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const captureImage = () => {
+  const captureImage = async () => {
     const imageSrc = webcamRef.current.getScreenshot({
       width: 1920,
       height: 1080,
     });
-    setCapturedImage([...capturedImage, imageSrc]);
+
+    try {
+      const response = await fetch(imageSrc);
+      const blob = await response.blob();
+      const file = new File([blob], "captured_image.jpeg", {
+        type: "image/jpeg",
+      });
+
+      setCapturedImage([...capturedImage, file]);
+    } catch (error) {
+      console.error("Error capturing image:", error);
+    }
   };
 
   const removeCapturedImage = (index) => {
@@ -98,12 +110,21 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
                 >
                   <FaRegTrashAlt />
                 </span>
-                <img
-                  className="w-full min-h-full rounded-lg cursor-pointer"
-                  onClick={() => selectImage(index)}
-                  src={item?.name ? URL.createObjectURL(item) : item}
-                  alt="image-captured"
-                />
+                {item instanceof File ? (
+                  <img
+                    className="w-full min-h-full rounded-lg cursor-pointer"
+                    onClick={() => selectImage(index)}
+                    src={URL.createObjectURL(item)}
+                    alt="image-captured"
+                  />
+                ) : (
+                  <img
+                    className="w-full min-h-full rounded-lg cursor-pointer"
+                    onClick={() => selectImage(index)}
+                    src={item}
+                    alt="image-captured"
+                  />
+                )}
               </div>
             );
           })}

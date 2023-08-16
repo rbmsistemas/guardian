@@ -155,6 +155,7 @@ const CustomeTable = ({
         <Modal
           title="Ver imagen"
           dismissible={true}
+          size={"4xl"}
           onClose={() => {
             setModal(false);
           }}
@@ -173,7 +174,7 @@ const CustomeTable = ({
               <img
                 src={imageSelected}
                 alt={imageSelected}
-                className="w-96 h-auto rounded-lg"
+                className="w-full h-96 rounded-lg"
               />
             </div>
           </Modal.Body>

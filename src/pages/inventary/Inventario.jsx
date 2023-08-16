@@ -148,7 +148,7 @@ const Inventario = () => {
       </div>
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-6 gap-2 md:gap-5 pb-2">
-          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
             <div className="w-full">
               <Label
                 htmlFor="inventaryType"
@@ -175,7 +175,7 @@ const Inventario = () => {
               })}
             </Select>
           </div>
-          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
             <div className="w-full">
               <Label htmlFor="brandType" value="Marca" className="font-bold" />
             </div>
@@ -198,7 +198,7 @@ const Inventario = () => {
               })}
             </Select>
           </div>
-          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
             <div className="w-full">
               <Label htmlFor="status" value="Status" className="font-bold" />
             </div>
@@ -230,9 +230,9 @@ const Inventario = () => {
               onChange={handleValidateSearch}
             />
           </div>
-          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-2 md:col-span-1 flex flex-col justify-end pb-1 gap-2">
             <div className="w-full hidden md:block">
-              <Label htmlFor="status" value="&nbsp;" />
+              <Label htmlFor="" value="&nbsp;" />
             </div>
             <button
               onClick={() =>
