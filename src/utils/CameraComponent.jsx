@@ -64,7 +64,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         </button>
       </div>
 
-      <div className="w-full min-w-full h-32 max-h-32 grid grid-cols-3 xl:grid-cols-4 gap-2 mt-2">
+      <div className="w-full min-w-full h-32 max-h-full grid grid-cols-3 xl:grid-cols-4 gap-2 mt-2">
         <div className="w-full border-2 border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
           <label
             htmlFor="upload"
@@ -102,7 +102,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             return (
               <div
                 key={index}
-                className="w-full border-2 border-dashed border-gray-400 rounded-lg relative"
+                className="w-full min-h-[20vh] border-2 border-dashed border-gray-400 rounded-lg relative"
               >
                 <span
                   onClick={() => removeCapturedImage(index)}
@@ -112,7 +112,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
                 </span>
                 {item instanceof File ? (
                   <img
-                    className="w-full min-h-full rounded-lg cursor-pointer"
+                    className="w-full h-full rounded-lg cursor-pointer"
                     onClick={() => selectImage(index)}
                     src={URL.createObjectURL(item)}
                     alt="image-captured"

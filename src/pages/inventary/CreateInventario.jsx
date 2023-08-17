@@ -281,7 +281,7 @@ const CreateInventario = ({
         />
       </div>
 
-      <div className="col-span-12">
+      <div className="col-span-12 h-fit">
         <div className="mb-2 ">
           <Label value="Agregar imagenes" />
         </div>

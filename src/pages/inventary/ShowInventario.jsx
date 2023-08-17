@@ -462,7 +462,7 @@ const ShowInventario = () => {
               <img
                 src={imageSelected}
                 alt={imageSelected}
-                className="w-full h-96 rounded-lg"
+                className="w-fit h-full max-h-[78vh] rounded-lg"
               />
             </div>
           </Modal.Body>

@@ -55,7 +55,7 @@ const Inventario = () => {
   const inventariesData = inventaries?.map((item, index) => {
     return {
       no: index + 1,
-      imagen: item.images["image1"],
+      imagen: item.images[0],
       tipo: inventaryTypes.find((type) => type.id === item.inventaryTypeId)
         ?.name,
       marca: inventaryBrands.find((brand) => brand.id === item.inventaryBrandId)
