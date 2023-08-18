@@ -12,6 +12,8 @@ const config = {
 // get inventary
 export const handleGetInventaries = async (token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   try {
     const response = await axios.get(`${urlEnv}/api/inventarys`, config);
     return response;
@@ -22,6 +24,8 @@ export const handleGetInventaries = async (token) => {
 
 export const handleGetInventariesByParams = async (body, token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
@@ -38,6 +42,8 @@ export const handleGetInventariesByParams = async (body, token) => {
 // get inventary
 export const handleGetInventaryById = async (id, token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   try {
     const response = await axios.get(`${urlEnv}/api/inventarys/${id}`, config);
     return response;
@@ -49,6 +55,8 @@ export const handleGetInventaryById = async (id, token) => {
 // create inventary
 export const handleCreateInventary = async (token, data) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(`${urlEnv}/api/inventarys`, data, config);
@@ -60,6 +68,8 @@ export const handleCreateInventary = async (token, data) => {
 
 export const handleValidateActivoSn = async (data, token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
@@ -76,6 +86,8 @@ export const handleValidateActivoSn = async (data, token) => {
 // update inventary
 export const handleUpdateInventary = async (token, id, data) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.patch(
@@ -92,6 +104,8 @@ export const handleUpdateInventary = async (token, id, data) => {
 // delete inventary
 export const handleDeleteInventary = async (token, id) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   try {
     const response = await axios.delete(
       `${urlEnv}/api/inventarys/${id}`,
@@ -106,6 +120,8 @@ export const handleDeleteInventary = async (token, id) => {
 // get inventaryTypes
 export const handleGetInventaryTypes = async (token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   try {
     const response = await axios.get(`${urlEnv}/api/inventaryTypes`, config);
     return response;
@@ -117,6 +133,8 @@ export const handleGetInventaryTypes = async (token) => {
 // get inventaryModels
 export const handleGetInventaryModels = async (token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   try {
     const response = await axios.get(`${urlEnv}/api/inventaryModels`, config);
     return response;
@@ -128,6 +146,8 @@ export const handleGetInventaryModels = async (token) => {
 // get inventaryBrands
 export const handleGetInventaryBrands = async (token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   try {
     const response = await axios.get(`${urlEnv}/api/inventaryBrands`, config);
     return response;
@@ -138,6 +158,8 @@ export const handleGetInventaryBrands = async (token) => {
 
 export const uploadImagesInventary = async (data, token) => {
   config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["Content-Type"] = "multipart/form-data";
   try {
     const response = await axios.post(

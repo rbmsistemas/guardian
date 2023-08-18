@@ -10,6 +10,7 @@ const config = {
 };
 
 export const getLogin = async (data) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
   try {
     const response = await axios.post(`${urlEnv}/api/auth/login`, data, config);
     return response;
@@ -19,6 +20,7 @@ export const getLogin = async (data) => {
 };
 
 export const getProfile = async (token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
   config.headers["x-access-token"] = token;
   try {
     const response = await axios.get(`${urlEnv}/api/auth/profile`, config);
@@ -29,6 +31,8 @@ export const getProfile = async (token) => {
 };
 
 export const handleRegister = async (data) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   try {
     const response = await axios.post(
       `${urlEnv}/api/auth/signup`,
@@ -42,6 +46,8 @@ export const handleRegister = async (data) => {
 };
 
 export const handleSignout = async () => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   try {
     const response = await axios.post(`${urlEnv}/api/auth/signout`, config);
     return response;
@@ -53,6 +59,8 @@ export const handleSignout = async () => {
 // start proveedores
 
 export const handleGetProviders = async (token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   try {
     const response = await axios.get(`${urlEnv}/api/proveedores`, config);
@@ -63,6 +71,8 @@ export const handleGetProviders = async (token) => {
 };
 
 export const handleGetProvider = async (id, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   try {
     const response = await axios.get(`${urlEnv}/api/proveedores/${id}`, config);
@@ -73,6 +83,8 @@ export const handleGetProvider = async (id, token) => {
 };
 
 export const handleCreateProvider = async (data, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
@@ -88,6 +100,8 @@ export const handleCreateProvider = async (data, token) => {
 };
 
 export const handleUpdateProvider = async (id, data, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
@@ -103,6 +117,8 @@ export const handleUpdateProvider = async (id, data, token) => {
 };
 
 export const handleDeleteProvider = async (id, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
 
@@ -118,6 +134,8 @@ export const handleDeleteProvider = async (id, token) => {
 };
 
 export const handleGetProvidersByParams = async (body, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
@@ -133,6 +151,8 @@ export const handleGetProvidersByParams = async (body, token) => {
 };
 
 export const uploadImageProviders = async (data, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "multipart/form-data";
   try {
@@ -151,6 +171,8 @@ export const uploadImageProviders = async (data, token) => {
 // start actividades
 
 export const handleGetActivities = async (token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   try {
     const response = await axios.get(`${urlEnv}/api/activities`, config);
@@ -161,6 +183,8 @@ export const handleGetActivities = async (token) => {
 };
 
 export const handleGetActivity = async (id, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   try {
     const response = await axios.get(`${urlEnv}/api/activities/${id}`, config);
@@ -171,6 +195,8 @@ export const handleGetActivity = async (id, token) => {
 };
 
 export const handleCreateActivity = async (data, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
@@ -182,6 +208,8 @@ export const handleCreateActivity = async (data, token) => {
 };
 
 export const handleUpdateActivity = async (id, data, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
@@ -197,6 +225,8 @@ export const handleUpdateActivity = async (id, data, token) => {
 };
 
 export const handleDeleteActivity = async (id, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
@@ -211,6 +241,8 @@ export const handleDeleteActivity = async (id, token) => {
 };
 
 export const handleGetActivitiesByParams = async (body, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
@@ -226,6 +258,8 @@ export const handleGetActivitiesByParams = async (body, token) => {
 };
 
 export const uploadImagesActivities = async (data, token) => {
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "multipart/form-data";
   try {
