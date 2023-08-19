@@ -118,7 +118,7 @@ const Side = ({
           )}
           <Sidebar.ItemGroup>
             <Link
-              to="/"
+              to="/actividades"
               className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
             >
               <span className="text-2xl">

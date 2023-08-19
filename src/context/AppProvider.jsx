@@ -85,6 +85,7 @@ const AppProvider = (props) => {
         payload: response.data,
       });
       localStorage.setItem("user", JSON.stringify(response.data));
+      return response;
     } catch (error) {
       console.log(error);
       return error;

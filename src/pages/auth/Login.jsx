@@ -17,6 +17,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const notifyError = (text) => toast.error(text);
+  const notifySuccess = (text) => toast.success(text);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -32,8 +33,12 @@ const Login = () => {
         setIsLoading(false);
         return notifyError(res.data.message);
       }
-      navigate("/");
-      setIsLoading(false);
+      notifySuccess("Bienvenido, has iniciado sesión correctamente.");
+      notifySuccess(window.location.host);
+      setTimeout(() => {
+        navigate("/");
+        setIsLoading(false);
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +136,7 @@ const Login = () => {
             </div>
             <div className="text-sm">
               <a
-                href="#"
+                href="/acividades"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 ¿Olvidaste tu contraseña?
