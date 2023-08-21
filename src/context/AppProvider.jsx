@@ -78,14 +78,14 @@ const AppProvider = (props) => {
     try {
       const response = await getLogin(data);
       if (response?.status !== 200) {
-        return response;
+        return { status: false, error: response.data.message };
       }
       dispatch({
         type: POST_SIGNIN,
         payload: response.data,
       });
       localStorage.setItem("user", JSON.stringify(response.data));
-      return response;
+      return { status: true, data: response.data };
     } catch (error) {
       console.log(error);
       return error;
@@ -137,18 +137,19 @@ const AppProvider = (props) => {
   };
 
   const postSignout = async () => {
-    const response = await handleSignout(data);
+    await handleSignout();
     dispatch({
       type: POST_SIGNOUT,
     });
+    localStorage.removeItem("user");
   };
 
   // end auth actions
   // inventary actions
 
-  const getInventaries = async (token) => {
+  const getInventaries = async () => {
     try {
-      const response = await handleGetInventaries(token);
+      const response = await handleGetInventaries(state.user.token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
@@ -216,12 +217,19 @@ const AppProvider = (props) => {
     }
   };
 
-  const deleteInventary = async (data) => {
+  const deleteInventary = async (id) => {
     try {
-      const response = await handleDeleteInventary(state.user.token, data);
+      const response = await handleDeleteInventary(state.user.token, id);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       } else {
+        const inventaryUpdated = state.inventaries.filter(
+          (inventary) => inventary._id !== id
+        );
+        dispatch({
+          type: DELETE_INVENTARY,
+          payload: inventaryUpdated,
+        });
         return true;
       }
     } catch (error) {
@@ -566,7 +574,7 @@ const AppProvider = (props) => {
       getInventaryBrands(state.user.token);
       getInventaryModels(state.user.token);
     }
-  }, [state.user.token, state.provider]);
+  }, [state.user.token, state.provider, state.inventary]);
 
   return (
     <Context.Provider

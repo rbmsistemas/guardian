@@ -126,7 +126,6 @@ const InventaryForm = () => {
         let imagesObject = [];
         newImagesJSON = await Promise.all(
           images.map(async (image) => {
-            console.log(image);
             if (image instanceof File) {
               console.log("entre a subir imagen");
               const imageUrl = await handleUploadFile(image);
@@ -190,7 +189,6 @@ const InventaryForm = () => {
             );
           }
         } else {
-          console.log("enviando info:", { ...data, images: imagesObject });
           const res = await updateInventary(
             id,
             { ...data, images: imagesObject },

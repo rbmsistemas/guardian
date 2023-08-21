@@ -29,12 +29,11 @@ const Login = () => {
         return;
       }
       const res = await handleLogin(user);
-      if (res?.data) {
+      if (!res.status) {
         setIsLoading(false);
-        return notifyError(res.data.message);
+        return notifyError(res.error);
       }
       notifySuccess("Bienvenido, has iniciado sesión correctamente.");
-      notifySuccess(window.location.host);
       setTimeout(() => {
         navigate("/");
         setIsLoading(false);

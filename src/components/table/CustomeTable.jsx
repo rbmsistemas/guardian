@@ -170,11 +170,11 @@ const CustomeTable = ({
             </div>
           </Modal.Header>
           <Modal.Body>
-            <div className="flex justify-center items-center">
+            <div className="grid place-content-center">
               <img
                 src={imageSelected}
-                alt={imageSelected}
-                className="w-full h-96 rounded-lg"
+                alt={"Imagen seleccionada"}
+                className="object-contain w-96 h-96 rounded-lg"
               />
             </div>
           </Modal.Body>

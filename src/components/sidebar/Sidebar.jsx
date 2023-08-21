@@ -1,5 +1,5 @@
 import { Sidebar } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineLogout } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
 import {
@@ -11,7 +11,8 @@ import {
   MdSupport,
 } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Context from "../../context/Context";
 
 const Side = ({
   user = {
@@ -26,9 +27,11 @@ const Side = ({
     updatedAt: "",
   },
 }) => {
+  const { postSignout } = useContext(Context);
+  const navigate = useNavigate();
   const closeSession = () => {
-    localStorage.removeItem("user");
-    window.location.reload();
+    postSignout();
+    navigate("/");
   };
   return (
     <div className={`h-full min-h-screen bg-white w-full`}>
@@ -38,7 +41,7 @@ const Side = ({
             <Sidebar.ItemGroup>
               <Link
                 to="/"
-                className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
                   <MdDashboard />
@@ -47,7 +50,7 @@ const Side = ({
               </Link>
               <Link
                 to="/inventario"
-                className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
                   <MdOutlineInventory2 />
@@ -56,7 +59,7 @@ const Side = ({
               </Link>
               <Link
                 to="/inventario"
-                className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
                   <TbReportSearch />
@@ -65,7 +68,7 @@ const Side = ({
               </Link>
               <Link
                 to="/actividades"
-                className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
                   <MdGavel />
@@ -74,7 +77,7 @@ const Side = ({
               </Link>
               <Link
                 to="/proveedores"
-                className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
                   <MdLan />
@@ -83,7 +86,7 @@ const Side = ({
               </Link>
               <Link
                 to="/"
-                className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
                   <FaUsers />
@@ -93,7 +96,7 @@ const Side = ({
               <div onClick={() => closeSession()}>
                 <Link
                   to={"/login"}
-                  className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                  className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
                 >
                   <span className="text-2xl">
                     <AiOutlineLogout />
@@ -107,7 +110,7 @@ const Side = ({
             <Sidebar.ItemGroup>
               <Link
                 to="/login"
-                className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
                   <MdAccountCircle />
@@ -119,7 +122,7 @@ const Side = ({
           <Sidebar.ItemGroup>
             <Link
               to="/actividades"
-              className="p-3 py-2 hover:bg-gray-100 text-gap-primary hover:text-blue-500 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+              className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
             >
               <span className="text-2xl">
                 <MdSupport />

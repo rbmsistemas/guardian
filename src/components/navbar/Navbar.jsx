@@ -45,9 +45,9 @@ const Nav = ({ children }) => {
           } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen overflow-y-auto md:overflow-y-visible`}
         >
           {user?.user && (
-            <div className="flex justify-start items-center h-20 px-3 text-gap-primary gap-2 bg-white border-b border-gray-300">
+            <div className="flex justify-start items-center h-20 px-3 text-purple-600 gap-2 bg-white border-b border-gray-300">
               <span>
-                <MdAccountCircle className="h-10 w-10 text-gap-primary" />
+                <MdAccountCircle className="h-10 w-10 text-purple-600" />
               </span>
               <div className="flex flex-col justify-center items-start">
                 <p className="text-sm font-bold">

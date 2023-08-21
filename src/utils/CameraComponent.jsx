@@ -1,9 +1,8 @@
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import React, { useRef, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import Webcam from "react-webcam";
-import { Image } from "image-js";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
@@ -42,7 +41,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const onClose = () => setShowModal(false);
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="flex flex-col gap-4">
         <Webcam
           audio={false}
@@ -64,13 +63,13 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         </button>
       </div>
 
-      <div className="w-full min-w-full h-32 max-h-full grid grid-cols-3 xl:grid-cols-4 gap-2 mt-2">
-        <div className="w-full border-2 border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
+      <div className="w-full h-full max-h-full grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2 mt-2">
+        <div className="w-32 h-32 border-2 border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
           <label
             htmlFor="upload"
-            className="w-full h-full flex flex-col justify-center items-center gap-2 cursor-pointer"
+            className="w-32 h-32 flex flex-col justify-center items-center gap-2 cursor-pointer"
           >
-            <span className="text-3xl ">
+            <span className="text-3xl">
               <AiOutlineCamera />
             </span>
             <span className="text-center text-sm font-semibold">
@@ -102,24 +101,24 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             return (
               <div
                 key={index}
-                className="w-full min-h-[20vh] border-2 border-dashed border-gray-400 rounded-lg relative"
+                className="w-32 h-32 border-2 border-dashed border-gray-500 rounded-lg relative transition ease-in-out duration-200 hover:scale-105"
               >
                 <span
                   onClick={() => removeCapturedImage(index)}
-                  className="absolute top-3 right-3 bg-white rounded-full text-red-500 hover:bg-red-500 hover:text-white text-xl cursor-pointer p-2 transition ease-in-out hover:scale-110 duration-150"
+                  className="absolute top-3 right-3 bg-red-500 rounded-full text-white hover:bg-red-600 hover:text-white text-xl cursor-pointer p-2 transition ease-in-out hover:scale-110 duration-150"
                 >
                   <FaRegTrashAlt />
                 </span>
                 {item instanceof File ? (
                   <img
-                    className="w-full h-full rounded-lg cursor-pointer"
+                    className="object-fill p-1 h-32 w-32 rounded-lg cursor-pointer"
                     onClick={() => selectImage(index)}
                     src={URL.createObjectURL(item)}
                     alt="image-captured"
                   />
                 ) : (
                   <img
-                    className="w-full min-h-full rounded-lg cursor-pointer"
+                    className="object-fill p-1 h-32 w-32 rounded-lg cursor-pointer"
                     onClick={() => selectImage(index)}
                     src={item}
                     alt="image-captured"
