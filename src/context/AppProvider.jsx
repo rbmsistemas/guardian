@@ -154,6 +154,15 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { inventarys } = await response.data;
+
+      inventarys.forEach((inventary) => {
+        inventary.images = inventary.images.map((image) => {
+          return `${
+            import.meta.env.VITE_API_URL || "http://localhost:4000"
+          }${image}`;
+        });
+      });
+
       dispatch({
         type: GET_INVENTARY,
         payload: inventarys,
@@ -171,6 +180,11 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { inventary } = await response.data;
+      inventary.images = inventary.images.map((image) => {
+        return `${
+          import.meta.env.VITE_API_URL || "http://localhost:4000"
+        }${image}`;
+      });
       dispatch({
         type: GET_INVENTARY_BY_ID,
         payload: inventary,
@@ -248,6 +262,13 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { inventaries } = await response.data;
+      inventaries.forEach((inventary) => {
+        inventary.images = inventary.images.map((image) => {
+          return `${
+            import.meta.env.VITE_API_URL || "http://localhost:4000"
+          }${image}`;
+        });
+      });
       dispatch({
         type: GET_INVENTARIES_BY_SEARCH,
         payload: inventaries,
