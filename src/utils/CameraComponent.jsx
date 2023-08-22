@@ -1,5 +1,5 @@
 import { Modal } from "flowbite-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdCameraswitch } from "react-icons/md";
@@ -8,13 +8,14 @@ import Webcam from "react-webcam";
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
   const [currentFacingMode, setCurrentFacingMode] = useState("environment");
+
   const [image, setImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const isCordova = typeof window.cordova !== "undefined";
 
-  useEffect(() => {
-    startCamera();
-  }, [currentFacingMode]);
+  const videoConstraints = {
+    facingMode: currentFacingMode,
+  };
 
   const captureImage = async () => {
     try {
@@ -59,17 +60,6 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     );
   };
 
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: currentFacingMode },
-      });
-      webcamRef.current.srcObject = stream;
-    } catch (error) {
-      console.error("Error starting camera:", error);
-    }
-  };
-
   const removeCapturedImage = (index) => {
     const newCapturedImage = capturedImage.filter((item, i) => i !== index);
     setCapturedImage(newCapturedImage);
@@ -86,7 +76,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="relative flex flex-col gap-4">
         <p
-          className="text-2xl text-white absolute top-5 right-5"
+          className="text-2xl text-white absolute top-5 right-5 bg-white/20"
           onClick={switchCamera}
         >
           <MdCameraswitch color="#ffffff" />
@@ -94,6 +84,8 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         <Webcam
           audio={false}
           ref={webcamRef}
+          videoConstraints={videoConstraints}
+          mirrored={currentFacingMode === "user"}
           screenshotFormat="image/jpeg"
           height={720}
           width={1280}
