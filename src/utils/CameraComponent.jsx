@@ -2,13 +2,20 @@ import { Modal } from "flowbite-react";
 import React, { useRef, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { MdCameraswitch } from "react-icons/md";
 import Webcam from "react-webcam";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
+  const videoRef = useRef(null);
+  const [currentFacingMode, setCurrentFacingMode] = useState("environment");
   const [image, setImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const isCordova = typeof window.cordova !== "undefined";
+
+  useEffect(() => {
+    startCamera();
+  }, [currentFacingMode]);
 
   const captureImage = async () => {
     try {
@@ -47,6 +54,23 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     }
   };
 
+  const switchCamera = () => {
+    setCurrentFacingMode((prevMode) =>
+      prevMode === "user" ? "environment" : "user"
+    );
+  };
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: currentFacingMode },
+      });
+      videoRef.current.srcObject = stream;
+    } catch (error) {
+      console.error("Error starting camera:", error);
+    }
+  };
+
   const removeCapturedImage = (index) => {
     const newCapturedImage = capturedImage.filter((item, i) => i !== index);
     setCapturedImage(newCapturedImage);
@@ -61,7 +85,13 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
 
   return (
     <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="flex flex-col gap-4">
+      <div className="relative flex flex-col gap-4">
+        <p
+          className="text-2xl text-white absolute top-5 right-5"
+          onClick={switchCamera}
+        >
+          <MdCameraswitch color="#ffffff" />
+        </p>
         <Webcam
           audio={false}
           ref={webcamRef}
@@ -99,6 +129,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             type="file"
             id="upload"
             className="hidden"
+            multiple={false}
             accept={
               ".png, .jpg, .jpeg, .webp, avif, .gif, .jfif, .svg, .bmp, .tiff"
             }
@@ -152,7 +183,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         <Modal.Body>
           {image && (
             <img
-              src={image}
+              src={image instanceof File ? URL.createObjectURL(image) : image}
               alt="imagen-selected"
               className="w-full rounded-lg "
             />
