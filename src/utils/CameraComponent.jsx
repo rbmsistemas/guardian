@@ -7,7 +7,6 @@ import Webcam from "react-webcam";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
-  const videoRef = useRef(null);
   const [currentFacingMode, setCurrentFacingMode] = useState("environment");
   const [image, setImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -65,7 +64,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: currentFacingMode },
       });
-      videoRef.current.srcObject = stream;
+      webcamRef.current.srcObject = stream;
     } catch (error) {
       console.error("Error starting camera:", error);
     }
