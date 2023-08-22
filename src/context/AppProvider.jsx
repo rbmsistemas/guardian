@@ -156,16 +156,17 @@ const AppProvider = (props) => {
       const { inventarys } = await response.data;
 
       inventarys.forEach((inventary) => {
-        inventary.images = inventary.images.map((image) => {
-          // if image starts with http, return image, else return image with api url
-          if (!image.startsWith("http") || !image.startsWith("https")) {
-            return `${
-              import.meta.env.VITE_API_URL || "http://localhost:4000"
-            }${image}`;
-          } else {
-            return image;
-          }
-        });
+        if (inventary.images.length > 0) {
+          inventary.images = inventary.images.map((image) => {
+            if (!image.startsWith("http") || !image.startsWith("https")) {
+              return `${
+                import.meta.env.VITE_API_URL || "http://localhost:4000"
+              }${image}`;
+            } else {
+              return image;
+            }
+          });
+        }
       });
 
       dispatch({
@@ -185,15 +186,17 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { inventary } = await response.data;
-      inventary.images = inventary.images.map((image) => {
-        if (!image.startsWith("http") || !image.startsWith("https")) {
-          return `${
-            import.meta.env.VITE_API_URL || "http://localhost:4000"
-          }${image}`;
-        } else {
-          return image;
-        }
-      });
+      if (inventary.images.length > 0) {
+        inventary.images = inventary.images.map((image) => {
+          if (!image.startsWith("http") || !image.startsWith("https")) {
+            return `${
+              import.meta.env.VITE_API_URL || "http://localhost:4000"
+            }${image}`;
+          } else {
+            return image;
+          }
+        });
+      }
       dispatch({
         type: GET_INVENTARY_BY_ID,
         payload: inventary,
@@ -211,15 +214,7 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { inventary } = await response.data;
-      inventary.images = inventary.images.map((image) => {
-        if (!image.startsWith("http") || !image.startsWith("https")) {
-          return `${
-            import.meta.env.VITE_API_URL || "http://localhost:4000"
-          }${image}`;
-        } else {
-          return image;
-        }
-      });
+
       dispatch({
         type: POST_INVENTARY,
         payload: inventary,
@@ -238,15 +233,17 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { inventary } = await response.data;
-      inventary.images = inventary.images.map((image) => {
-        if (!image.startsWith("http") || !image.startsWith("https")) {
-          return `${
-            import.meta.env.VITE_API_URL || "http://localhost:4000"
-          }${image}`;
-        } else {
-          return image;
-        }
-      });
+      if (inventary.images.length > 0) {
+        inventary.images = inventary.images.map((image) => {
+          if (!image.startsWith("http") || !image.startsWith("https")) {
+            return `${
+              import.meta.env.VITE_API_URL || "http://localhost:4000"
+            }${image}`;
+          } else {
+            return image;
+          }
+        });
+      }
       dispatch({
         type: PATCH_INVENTARY,
         payload: inventary,
@@ -289,16 +286,19 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { inventaries } = await response.data;
+
       inventaries.forEach((inventary) => {
-        inventary.images = inventary.images.map((image) => {
-          if (!image.startsWith("http") || !image.startsWith("https")) {
-            return `${
-              import.meta.env.VITE_API_URL || "http://localhost:4000"
-            }${image}`;
-          } else {
-            return image;
-          }
-        });
+        if (inventary.images.length > 0) {
+          inventary.images = inventary.images.map((image) => {
+            if (!image.startsWith("http") || !image.startsWith("https")) {
+              return `${
+                import.meta.env.VITE_API_URL || "http://localhost:4000"
+              }${image}`;
+            } else {
+              return image;
+            }
+          });
+        }
       });
       dispatch({
         type: GET_INVENTARIES_BY_SEARCH,
