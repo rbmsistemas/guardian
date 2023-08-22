@@ -76,7 +76,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="relative flex flex-col gap-4">
         <p
-          className="text-2xl text-white absolute top-5 right-5 bg-white/20 p-2 rounded-full"
+          className="text-2xl text-white absolute top-5 right-5 bg-white/20 p-2 rounded-full hover:bg-purple-600/30"
           onClick={switchCamera}
         >
           <MdCameraswitch color="#ffffff" />
