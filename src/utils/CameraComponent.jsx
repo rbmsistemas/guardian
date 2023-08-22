@@ -19,36 +19,36 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
 
   const captureImage = async () => {
     try {
-      if (isCordova) {
-        navigator.camera.getPicture(onSuccess, onFail, {
-          quality: 50,
-          destinationType: Camera.DestinationType.FILE_URI,
-          correctOrientation: true,
-        });
+      // if (isCordova) {
+      //   navigator.camera.getPicture(onSuccess, onFail, {
+      //     quality: 50,
+      //     destinationType: Camera.DestinationType.FILE_URI,
+      //     correctOrientation: true,
+      //   });
 
-        function onSuccess(imageData) {
-          const image = document.getElementById("image");
-          image.src = imageData;
-          setCapturedImage([...capturedImage, imageData]);
-        }
+      //   function onSuccess(imageData) {
+      //     const image = document.getElementById("image");
+      //     image.src = imageData;
+      //     setCapturedImage([...capturedImage, imageData]);
+      //   }
 
-        function onFail(message) {
-          alert("Failed because: " + message);
-        }
-      } else {
-        const imageSrc = webcamRef.current.getScreenshot({
-          width: 1920,
-          height: 1080,
-        });
+      //   function onFail(message) {
+      //     alert("Failed because: " + message);
+      //   }
+      // } else {
+      const imageSrc = webcamRef.current.getScreenshot({
+        width: 1920,
+        height: 1080,
+      });
 
-        const response = await fetch(imageSrc);
-        const blob = await response.blob();
-        const file = new File([blob], "captured_image.jpeg", {
-          type: "image/jpeg",
-        });
+      const response = await fetch(imageSrc);
+      const blob = await response.blob();
+      const file = new File([blob], "captured_image.jpeg", {
+        type: "image/jpeg",
+      });
 
-        setCapturedImage([...capturedImage, file]);
-      }
+      setCapturedImage([...capturedImage, file]);
+      // }
     } catch (error) {
       console.error("Error capturing image:", error);
     }
