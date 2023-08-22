@@ -13,7 +13,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const [showModal, setShowModal] = useState(false);
   const isCordova = typeof window.cordova !== "undefined";
 
-  useEffectt(() => {
+  useEffect(() => {
     startCamera();
   }, [currentFacingMode]);
 
