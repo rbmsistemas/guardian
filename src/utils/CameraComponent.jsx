@@ -1,5 +1,5 @@
 import { Modal } from "flowbite-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdCameraswitch } from "react-icons/md";
@@ -13,7 +13,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const [showModal, setShowModal] = useState(false);
   const isCordova = typeof window.cordova !== "undefined";
 
-  useEffect(() => {
+  useEffectt(() => {
     startCamera();
   }, [currentFacingMode]);
 
