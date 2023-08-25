@@ -1,17 +1,22 @@
 import { Modal } from "flowbite-react";
 import React, { useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { MdCameraswitch } from "react-icons/md";
+import { MdCameraswitch, MdFlashOff, MdFlashOn } from "react-icons/md";
 import Webcam from "react-webcam";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
+  const mediaStreamRef = useRef(null);
   const [currentFacingMode, setCurrentFacingMode] = useState("environment");
 
   const [image, setImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isFlash, setisFlash] = useState(false);
   const isCordova = typeof window.cordova !== "undefined";
+
+  const notifyError = (error) => toast.error(error);
 
   const videoConstraints = {
     facingMode: currentFacingMode,
@@ -19,36 +24,33 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
 
   const captureImage = async () => {
     try {
-      // if (isCordova) {
-      //   navigator.camera.getPicture(onSuccess, onFail, {
-      //     quality: 50,
-      //     destinationType: Camera.DestinationType.FILE_URI,
-      //     correctOrientation: true,
-      //   });
+      if (isCordova) {
+        navigator.camera.getPicture(onSuccess, onFail, {
+          quality: 50,
+          destinationType: Camera.DestinationType.FILE_URI,
+          correctOrientation: true,
+        });
 
-      //   function onSuccess(imageData) {
-      //     const image = document.getElementById("image");
-      //     image.src = imageData;
-      //     setCapturedImage([...capturedImage, imageData]);
-      //   }
+        function onSuccess(imageData) {
+          const image = document.getElementById("image");
+          image.src = imageData;
+          setCapturedImage([...capturedImage, imageData]);
+        }
 
-      //   function onFail(message) {
-      //     alert("Failed because: " + message);
-      //   }
-      // } else {
-      const imageSrc = webcamRef.current.getScreenshot({
-        width: 1920,
-        height: 1080,
-      });
+        function onFail(message) {
+          alert("Failed because: " + message);
+        }
+      } else {
+        const imageSrc = webcamRef.current.getScreenshot();
 
-      const response = await fetch(imageSrc);
-      const blob = await response.blob();
-      const file = new File([blob], "captured_image.jpeg", {
-        type: "image/jpeg",
-      });
+        const response = await fetch(imageSrc);
+        const blob = await response.blob();
+        const file = new File([blob], "captured_image.jpeg", {
+          type: "image/jpeg",
+        });
 
-      setCapturedImage([...capturedImage, file]);
-      // }
+        setCapturedImage([...capturedImage, file]);
+      }
     } catch (error) {
       console.error("Error capturing image:", error);
     }
@@ -72,19 +74,47 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
 
   const onClose = () => setShowModal(false);
 
+  const toggleFlash = async () => {
+    const track = mediaStreamRef.current.getVideoTracks()[0];
+    if (track) {
+      try {
+        await track.applyConstraints({
+          advanced: [{ torch: !track.getSettings().torch }],
+        });
+        setisFlash(!track.getSettings().torch);
+      } catch (error) {
+        notifyError("El dispositivo no soporta flash");
+        console.error("Flash control not supported:", error);
+      }
+    }
+  };
+
   return (
     <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="relative flex flex-col gap-4">
         <p
-          className="text-2xl text-white absolute top-5 right-5 bg-white/20 p-2 rounded-full hover:bg-purple-600/30 z-20"
+          className="text-2xl text-white absolute top-5 right-5 bg-white/20 p-2 rounded-full cursor-pointer hover:bg-purple-600/30 z-10"
           onClick={switchCamera}
         >
           <MdCameraswitch color="#ffffff" />
+        </p>
+        <p
+          className="text-2xl text-white absolute top-5 left-5 bg-white/20 p-2 rounded-full cursor-pointer hover:bg-purple-600/30 z-10 hover:scale-110 transition ease-in-out duration-200"
+          onClick={toggleFlash}
+        >
+          {isFlash ? (
+            <MdFlashOff color="#ffffff" />
+          ) : (
+            <MdFlashOn color="#ffffff" />
+          )}
         </p>
         <Webcam
           audio={false}
           ref={webcamRef}
           videoConstraints={videoConstraints}
+          onUserMedia={(stream) => {
+            mediaStreamRef.current = stream;
+          }}
           mirrored={currentFacingMode === "user"}
           screenshotFormat="image/jpeg"
           height={720}
