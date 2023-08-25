@@ -38,8 +38,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
       }
     };
     comprobarFlash();
-  }, [isFlash]);
-  console.log(isFlash);
+  }, []);
 
   const captureImage = async () => {
     try {
