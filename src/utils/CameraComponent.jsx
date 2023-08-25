@@ -99,7 +99,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         await track.applyConstraints({
           advanced: [{ torch: !track.getSettings().torch }],
         });
-        setisFlash(!track.getSettings().torch);
+        setisFlash(!isFlash);
       } catch (error) {
         notifyError("El dispositivo no soporta flash");
         console.error("Flash control not supported:", error);
