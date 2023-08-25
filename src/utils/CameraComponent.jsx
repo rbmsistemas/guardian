@@ -1,5 +1,5 @@
 import { Modal } from "flowbite-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -21,6 +21,25 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const videoConstraints = {
     facingMode: currentFacingMode,
   };
+
+  // useEffect para ver el estado del flash
+  useEffect(() => {
+    const comprobarFlash = async () => {
+      const track = mediaStreamRef.current?.getVideoTracks()[0];
+      if (track) {
+        try {
+          await track.applyConstraints({
+            advanced: [{ torch: !track.getSettings().torch }],
+          });
+          setisFlash(track.getSettings().torch);
+        } catch (error) {
+          notifyError("El dispositivo no soporta flash");
+          console.error("Flash control not supported:", error);
+        }
+      }
+    };
+    comprobarFlash();
+  }, [isFlash]);
 
   const captureImage = async () => {
     try {
@@ -93,19 +112,19 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="relative flex flex-col gap-4">
         <p
-          className="text-2xl text-white absolute top-5 right-5 bg-white/20 p-2 rounded-full cursor-pointer hover:bg-purple-600/30 z-10"
+          className="text-2xl text-white absolute top-5 right-5 bg-black/20 p-2 rounded-full cursor-pointer hover:bg-purple-600/30 z-10 hover:scale-110 transition ease-in-out duration-200"
           onClick={switchCamera}
         >
           <MdCameraswitch color="#ffffff" />
         </p>
         <p
-          className="text-2xl text-white absolute top-5 left-5 bg-white/20 p-2 rounded-full cursor-pointer hover:bg-purple-600/30 z-10 hover:scale-110 transition ease-in-out duration-200"
+          className="text-2xl text-white absolute top-5 left-5 bg-black/20 p-2 rounded-full cursor-pointer hover:bg-purple-600/30 z-10 hover:scale-110 transition ease-in-out duration-200"
           onClick={toggleFlash}
         >
           {isFlash ? (
-            <MdFlashOff color="#ffffff" />
+            <MdFlashOn color="#ff0" />
           ) : (
-            <MdFlashOn color="#ffffff" />
+            <MdFlashOff color="#ffffff" />
           )}
         </p>
         <Webcam
