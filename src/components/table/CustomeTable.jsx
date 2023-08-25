@@ -174,7 +174,7 @@ const CustomeTable = ({
               <img
                 src={imageSelected}
                 alt={"Imagen seleccionada"}
-                className="object-contain w-96 h-96 rounded-lg"
+                className="w-full h-96 rounded-lg"
               />
             </div>
           </Modal.Body>
