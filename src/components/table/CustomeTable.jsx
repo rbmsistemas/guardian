@@ -61,7 +61,7 @@ const CustomeTable = ({
                         <img
                           src={item[key]}
                           alt={item[key]}
-                          className="w-14 h-10 object-cover rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
+                          className="w-10 h-10 object-cover rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
                           onClick={() => handleShowImage(item[key])}
                         />
                       </Table.Cell>

@@ -33,13 +33,13 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
           });
           setisFlash(track.getSettings().torch);
         } catch (error) {
-          notifyError("El dispositivo no soporta flash");
           console.error("Flash control not supported:", error);
         }
       }
     };
     comprobarFlash();
   }, [isFlash]);
+  console.log(isFlash);
 
   const captureImage = async () => {
     try {
@@ -112,13 +112,13 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="relative flex flex-col gap-4">
         <p
-          className="text-2xl text-white absolute top-5 right-5 bg-black/20 p-2 rounded-full cursor-pointer hover:bg-purple-600/30 z-10 hover:scale-110 transition ease-in-out duration-200"
+          className="text-2xl text-white absolute top-5 right-5 bg-black/20 p-2 rounded-full cursor-pointer z-10"
           onClick={switchCamera}
         >
           <MdCameraswitch color="#ffffff" />
         </p>
         <p
-          className="text-2xl text-white absolute top-5 left-5 bg-black/20 p-2 rounded-full cursor-pointer hover:bg-purple-600/30 z-10 hover:scale-110 transition ease-in-out duration-200"
+          className="text-2xl text-white absolute top-5 left-5 bg-black/20 p-2 rounded-full cursor-pointer z-10"
           onClick={toggleFlash}
         >
           {isFlash ? (
