@@ -280,7 +280,27 @@ const InventaryForm = () => {
             }
             successNotification("Inventario creado correctamente");
             setTimeout(() => {
-              navigate(`/inventario/editar/${res?.inventary?.id}`);
+              // limpiar el formulario
+              setData({
+                inventaryTypeId: "",
+                otherInventary: "",
+                inventaryBrandId: "",
+                otherBrand: "",
+                inventaryModelId: "",
+                otherModel: "",
+                serialNumber: "",
+                activo: "",
+                comments: "",
+                isAsigned: false,
+                altaDate: null,
+                bajaDate: null,
+                asignacionDate: null,
+                status: true,
+                images: [],
+              });
+              setImages([]);
+
+              navigate(`/inventario/crear`);
             }, 2000);
           }
         } else {
