@@ -199,7 +199,7 @@ const CreateInventario = ({
           type="text"
           icon={AiOutlineFieldNumber}
           placeholder="serialNumber"
-          required={true}
+          required={false}
           value={body.serialNumber}
           onChange={(e) => setBody({ ...body, serialNumber: e.target.value })}
         />
@@ -214,7 +214,7 @@ const CreateInventario = ({
           type="text"
           icon={AiOutlineNumber}
           placeholder="Activo"
-          required={true}
+          required={false}
           value={body.activo}
           onChange={(e) => setBody({ ...body, activo: e.target.value })}
         />

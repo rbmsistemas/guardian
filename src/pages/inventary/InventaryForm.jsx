@@ -127,7 +127,6 @@ const InventaryForm = () => {
         newImagesJSON = await Promise.all(
           images.map(async (image) => {
             if (image instanceof File) {
-              console.log("entre a subir imagen");
               const imageUrl = await handleUploadFile(image);
               return imageUrl;
             } else {
@@ -215,16 +214,22 @@ const InventaryForm = () => {
           ...data,
           images: newImagesJSON,
         };
-        if (data.status === false) {
-          sendData = {
-            ...sendData,
-            bajaDate: getCurrentFormattedDate(),
-          };
-        } else if (data.status === true) {
+        // if (data.status === false) {
+        //   sendData = {
+        //     ...sendData,
+        //     bajaDate: getCurrentFormattedDate(),
+        //   };
+        // } else if (data.status === true) {
+        sendData = {
+          ...sendData,
+          bajaDate: getCurrentFormattedDate(),
+          altaDate: getCurrentFormattedDate(),
+        };
+        // }
+        if (data.status === true) {
           sendData = {
             ...sendData,
             bajaDate: null,
-            altaDate: getCurrentFormattedDate(),
           };
         }
 
