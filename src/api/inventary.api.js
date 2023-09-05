@@ -66,14 +66,31 @@ export const handleCreateInventary = async (token, data) => {
   }
 };
 
-export const handleValidateActivoSn = async (data, token) => {
+export const handleValidateSerialNumber = async (data, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
-      `${urlEnv}/api/inventarys/validateActivoSn`,
+      `${urlEnv}/api/inventarys/validateSerialNumber`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleValidateActivo = async (data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/inventarys/validateActivo`,
       data,
       config
     );

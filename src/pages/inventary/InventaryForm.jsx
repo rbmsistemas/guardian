@@ -23,7 +23,8 @@ const InventaryForm = () => {
     createInventary,
     updateInventary,
     getInventaryById,
-    getValidateActivoSn,
+    getValidatedSerialNumber,
+    getValidatedActivo,
     inventary,
     user,
   } = useContext(Context);
@@ -104,12 +105,16 @@ const InventaryForm = () => {
     }
   }, [inventary]);
 
-  const handleValidateActivoSn = async (
-    activo,
-    serialNumber,
-    currentId = null
-  ) => {
-    const res = await getValidateActivoSn({ activo, serialNumber, currentId });
+  const handleValidateSerialNumber = async (serialNumber, currentId = null) => {
+    const res = await getValidatedSerialNumber({ serialNumber, currentId });
+    if (res.status === true) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const handleValidateActivo = async (activo, currentId = null) => {
+    const res = await getValidatedActivo({ activo, currentId });
     if (res.status === true) {
       return true;
     } else {
@@ -163,12 +168,20 @@ const InventaryForm = () => {
           data.serialNumber !== inventary.serialNumber &&
           data.activo !== inventary.activo
         ) {
-          const exist = await handleValidateActivoSn(
-            data.activo,
-            data.serialNumber,
-            data.id
-          );
-          if (exist) {
+          let existSN = true;
+          if (data.activo) {
+            console.log("entre a activo update");
+            existSN = await handleValidateSerialNumber(
+              data.serialNumber,
+              data.id
+            );
+          }
+          let existActivo = true;
+          if (data.activo) {
+            console.log("entre a activo update");
+            existActivo = await handleValidateActivo(data.activo, data.id);
+          }
+          if (existSN || existActivo) {
             const res = await updateInventary(
               id,
               { ...data, images: imagesObject },
@@ -241,11 +254,17 @@ const InventaryForm = () => {
             asignacionDate: getCurrentFormattedDate(),
           };
         }
-        const exist = await handleValidateActivoSn(
-          data.activo,
-          data.serialNumber
-        );
-        if (exist) {
+        let existSN = true;
+        if (data.activo) {
+          console.log("entre a activo update");
+          existSN = await handleValidateSerialNumber(data.serialNumber);
+        }
+        let existActivo = true;
+        if (data.activo) {
+          console.log("entre a activo");
+          existActivo = await handleValidateActivo(data.activo);
+        }
+        if (existSN || existActivo) {
           const res = await createInventary(sendData, user.token);
           if (!res.status) {
             notificationError("Error al crear el inventario");

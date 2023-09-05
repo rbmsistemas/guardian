@@ -29,7 +29,8 @@ import {
   handleUpdateInventary,
   handleDeleteInventary,
   handleGetInventariesByParams,
-  handleValidateActivoSn,
+  handleValidateSerialNumber,
+  handleValidateActivo,
 } from "../api/inventary.api";
 import {
   POST_SIGNIN,
@@ -311,9 +312,22 @@ const AppProvider = (props) => {
     }
   };
 
-  const getValidateActivoSn = async (body) => {
+  const getValidatedSerialNumber = async (body) => {
     try {
-      const response = await handleValidateActivoSn(body, state.user.token);
+      const response = await handleValidateSerialNumber(body, state.user.token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getValidatedActivo = async (body) => {
+    try {
+      const response = await handleValidateActivo(body, state.user.token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
@@ -667,7 +681,8 @@ const AppProvider = (props) => {
         updateInventary,
         deleteInventary,
         getInventariesBySearch,
-        getValidateActivoSn,
+        getValidatedSerialNumber,
+        getValidatedActivo,
       }}
     >
       {props.children}
