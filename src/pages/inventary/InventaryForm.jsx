@@ -241,10 +241,12 @@ const InventaryForm = () => {
             asignacionDate: getCurrentFormattedDate(),
           };
         }
-        const exist = await handleValidateActivoSn(
-          data.activo,
-          data.serialNumber
-        );
+        let exist = false;
+        if (data.activo) {
+          exist = await handleValidateActivoSn(data.activo, data.serialNumber);
+        } else {
+          exist = await handleValidateActivoSn(data.serialNumber);
+        }
         if (exist) {
           const res = await createInventary(sendData, user.token);
           if (!res.status) {
