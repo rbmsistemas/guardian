@@ -104,12 +104,8 @@ const InventaryForm = () => {
     }
   }, [inventary]);
 
-  const handleValidateActivoSn = async (
-    activo,
-    serialNumber,
-    currentId = null
-  ) => {
-    const res = await getValidateActivoSn({ activo, serialNumber, currentId });
+  const handleValidateActivoSn = async (serialNumber, currentId = null) => {
+    const res = await getValidateActivoSn({ serialNumber, currentId });
     if (res.status === true) {
       return true;
     } else {
@@ -164,7 +160,6 @@ const InventaryForm = () => {
           data.activo !== inventary.activo
         ) {
           const exist = await handleValidateActivoSn(
-            data.activo,
             data.serialNumber,
             data.id
           );
@@ -241,12 +236,7 @@ const InventaryForm = () => {
             asignacionDate: getCurrentFormattedDate(),
           };
         }
-        let exist = false;
-        if (data.activo) {
-          exist = await handleValidateActivoSn(data.activo, data.serialNumber);
-        } else {
-          exist = await handleValidateActivoSn(data.serialNumber);
-        }
+        const exist = await handleValidateActivoSn(data.serialNumber);
         if (exist) {
           const res = await createInventary(sendData, user.token);
           if (!res.status) {
