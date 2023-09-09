@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Context from "../../context/Context";
-import { FaHome } from "react-icons/fa";
+import { FaEye, FaHome } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import CreateInventario from "./CreateInventario";
@@ -382,6 +382,17 @@ const InventaryForm = () => {
           </span>
           {voler ? "Cancelar" : "Volver"}
         </Link>
+        {id && (
+          <Link
+            to={`/inventario/${id}`}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+          >
+            <span>
+              <FaEye className="text-white text-lg" />
+            </span>
+            Ver
+          </Link>
+        )}
       </div>
       <div className="flex flex-col">
         <h2 className="text-xl font-bold"></h2>

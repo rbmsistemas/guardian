@@ -5,6 +5,7 @@ import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdCameraswitch, MdFlashOff, MdFlashOn } from "react-icons/md";
 import Webcam from "react-webcam";
+import ModalImageViewer from "../components/modals/ModalImageViewer";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
@@ -86,7 +87,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   };
 
   const selectImage = (index) => {
-    setImage(capturedImage[index]);
+    setImage(index);
     setShowModal(true);
   };
 
@@ -135,8 +136,8 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
           }}
           mirrored={currentFacingMode === "user"}
           screenshotFormat="image/jpeg"
-          height={720}
-          width={1280}
+          height={1080}
+          width={1920}
           className="rounded-lg bg-gray-300 md:max-h-96"
         />
         <button
@@ -217,7 +218,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             );
           })}
       </div>
-      <Modal dismissible={true} show={showModal} onClose={onClose} size="3xl">
+      {/* <Modal dismissible={true} show={showModal} onClose={onClose} size="3xl">
         <Modal.Header>Imagenes</Modal.Header>
         <Modal.Body>
           {image && (
@@ -228,7 +229,16 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             />
           )}
         </Modal.Body>
-      </Modal>
+      </Modal> */}
+      {showModal && (
+        <ModalImageViewer
+          images={capturedImage}
+          title="Imagenes"
+          show={showModal}
+          onClose={onClose}
+          currentIndex={image}
+        />
+      )}
     </div>
   );
 };

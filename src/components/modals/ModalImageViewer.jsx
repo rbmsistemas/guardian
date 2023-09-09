@@ -13,6 +13,7 @@ const ModalImageViewer = ({
   images = [],
   currentIndex = 0,
   show = false,
+  isDownloadImage = false,
   onClose = () => {},
 }) => {
   const [image, setImage] = useState("");
@@ -113,6 +114,8 @@ const ModalImageViewer = ({
   if (!show) {
     return null;
   }
+
+  console.log(images);
   return (
     <div>
       <Modal
@@ -141,7 +144,7 @@ const ModalImageViewer = ({
             </button>
             <img
               onClick={() => setScale(!scale)}
-              src={image}
+              src={image instanceof File ? URL.createObjectURL(image) : image}
               alt={title}
               className={`transform ${rotate} ${
                 scale ? "scale-150 cursor-zoom-out" : "scale-100 cursor-zoom-in"
@@ -169,13 +172,15 @@ const ModalImageViewer = ({
               >
                 <TbRotateClockwise2 />
               </button>
-              <button
-                type="button"
-                className="px-4 py-2 bg-white rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
-                onClick={handleDownload}
-              >
-                <FaDownload />
-              </button>
+              {isDownloadImage && (
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-white rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                  onClick={handleDownload}
+                >
+                  <FaDownload />
+                </button>
+              )}
             </div>
           </div>
           <div className="w-full h-auto flex flex-col md:flex-row gap-4 justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
@@ -195,7 +200,7 @@ const ModalImageViewer = ({
               >
                 <img
                   className="object-cover overflow-hidden w-24 h-24"
-                  src={img}
+                  src={img instanceof File ? URL.createObjectURL(img) : img}
                   alt={title}
                 />
               </div>

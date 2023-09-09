@@ -454,6 +454,7 @@ const ShowInventario = () => {
           show={modal2}
           onClose={() => setModal2(false)}
           currentIndex={imageSelected}
+          isDownloadImage={true}
         />
       )}
       {/* {modal2 && (
