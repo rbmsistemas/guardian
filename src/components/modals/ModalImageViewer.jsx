@@ -190,10 +190,10 @@ const ModalImageViewer = ({
           </div>
         </Modal.Body>
         <Modal.Footer style={{ padding: "10px" }}>
-          <div className="w-auto px-4 py-2 flex flex-nowrap justify-start items-center overflow-x-auto gap-2">
+          <div className="w-full px-4 py-2 flex flex-nowrap justify-start items-center overflow-x-scroll gap-2">
             {images.map((img, index) => (
               <div
-                className=" bg-gray-200 rounded-md overflow-hidden cursor-pointer"
+                className=" bg-gray-200 rounded-md overflow-hidden cursor-pointer w-24 h-24"
                 key={index}
                 onMouseOver={() => handleSelectImage(img, index)}
                 onClick={() => handleSelectImage(img, index)}
