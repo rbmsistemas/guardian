@@ -112,7 +112,7 @@ const VerProovedores = () => {
             <span>
               <FaList className="text-white text-lg" />
             </span>
-            Ir al listado
+            Listado
           </Link>
 
           <Link
