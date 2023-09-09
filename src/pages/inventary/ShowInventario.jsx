@@ -27,6 +27,7 @@ import { Tb3DCubeSphere } from "react-icons/tb";
 import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import "../../Quill.css";
 import { toast } from "react-hot-toast";
+import ModalImageViewer from "../../components/modals/ModalImageViewer";
 
 const ShowInventario = () => {
   const { id } = useParams();
@@ -43,10 +44,10 @@ const ShowInventario = () => {
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
 
-  const [imageSelected, setImageSelected] = useState("");
+  const [imageSelected, setImageSelected] = useState(0);
 
-  const handleShowImage = (image) => {
-    setImageSelected(image);
+  const handleShowImages = (index) => {
+    setImageSelected(index);
     setModal2(true);
   };
 
@@ -141,6 +142,13 @@ const ShowInventario = () => {
       updatedAt: "",
     });
   };
+
+  let inventarioTitle =
+    inventario.inventaryTypeId +
+    " " +
+    inventario.inventaryBrandId +
+    " Modelo " +
+    inventario.inventaryModelId;
 
   return (
     <div className="min-h-full w-full p-5 flex flex-col gap-4">
@@ -366,7 +374,7 @@ const ShowInventario = () => {
                   className="col-span-1 rounded-md flex items-center justify-center border border-gray-300 p-3 cursor-pointer"
                 >
                   <img
-                    onClick={() => handleShowImage(image)}
+                    onClick={() => handleShowImages(index)}
                     src={image}
                     alt="imagen"
                     className="w-full h-full object-cover rounded-md"
@@ -440,6 +448,15 @@ const ShowInventario = () => {
         </Modal>
       )}
       {modal2 && (
+        <ModalImageViewer
+          images={imageElements}
+          title={inventarioTitle}
+          show={modal2}
+          onClose={() => setModal2(false)}
+          currentIndex={imageSelected}
+        />
+      )}
+      {/* {modal2 && (
         <Modal
           title="Ver imagen"
           dismissible={true}
@@ -467,7 +484,7 @@ const ShowInventario = () => {
             </div>
           </Modal.Body>
         </Modal>
-      )}
+      )} */}
       {loading && <Loading />}
     </div>
   );
