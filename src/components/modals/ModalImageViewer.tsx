@@ -22,32 +22,35 @@ const ModalImageViewer = ({
   const [scale, setScale] = useState(false);
 
   const handleSelectImage = (img = "", index = 0) => {
+    if (img === image) {
+      return;
+    }
     setImage(img);
     setIndex(index);
+    setRotateCounter(0);
   };
 
   const handleNext = () => {
     if (index < images.length - 1) {
       setImage(images[index + 1]);
       setIndex(index + 1);
-      setRotateCounter(0);
     } else {
       setImage(images[0]);
       setIndex(0);
-      setRotateCounter(0);
     }
+    setRotateCounter(0);
   };
   const handlePrev = () => {
     if (index > 0) {
       setIndex(index - 1);
       setImage(images[index - 1]);
-      setRotateCounter(0);
     } else {
       setIndex(images.length - 1);
       setImage(images[images.length - 1]);
-      setRotateCounter(0);
     }
+    setRotateCounter(0);
   };
+
   const handleRotateRight = () => {
     if (rotateCounter < 270) {
       setRotateCounter(rotateCounter + 90);
@@ -55,6 +58,7 @@ const ModalImageViewer = ({
       setRotateCounter(0);
     }
   };
+
   const handleRotateLeft = () => {
     if (rotateCounter > 0) {
       setRotateCounter(rotateCounter - 90);
@@ -69,29 +73,31 @@ const ModalImageViewer = ({
   }, [currentIndex]);
 
   useEffect(() => {
-    setRotate(`rotate-${rotateCounter}`);
+    if (rotateCounter === 0) {
+      setRotate("rotate-0");
+    }
+    if (rotateCounter === 90) {
+      setRotate("rotate-90");
+    }
+    if (rotateCounter === 180) {
+      setRotate("rotate-180");
+    }
+    if (rotateCounter === 270) {
+      setRotate("-rotate-90");
+    }
   }, [rotateCounter]);
 
   const downloadImage = (imageUrl = "") => {
     fetch(imageUrl)
       .then((response) => response.blob())
       .then((blob) => {
-        // Create a temporary anchor element
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-
-        // Extract the filename from the URL
         const filename = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-
-        // Set the download attribute and filename
         link.setAttribute("download", filename);
         document.body.appendChild(link);
-
-        // Simulate a click on the anchor element to start the download
         link.click();
-
-        // Clean up the temporary anchor element
         link.parentNode?.removeChild(link);
       })
       .catch((error) => {
@@ -114,8 +120,9 @@ const ModalImageViewer = ({
         onClose={onClose}
         dismissible
         className="w-full h-full"
+        style={{ height: "100vh", width: "100vw" }}
       >
-        <Modal.Header>
+        <Modal.Header style={{ padding: "10px" }}>
           <div className="flex gap-2 items-center">
             <span className="bg-blue-500 rounded-full p-2">
               <FaImage className="text-white text-xl" />
@@ -123,7 +130,7 @@ const ModalImageViewer = ({
             <p className="text-xl font-bold text-blue-500">Ver imagen</p>
           </div>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ padding: "10px" }}>
           <div className="w-full h-96 flex justify-center items-center relative overflow-hidden">
             <button
               type="button"
@@ -134,7 +141,6 @@ const ModalImageViewer = ({
             </button>
             <img
               onClick={() => setScale(!scale)}
-              id="image-viewer"
               src={image}
               alt={title}
               className={`transform ${rotate} ${
@@ -148,45 +154,50 @@ const ModalImageViewer = ({
             >
               <FaChevronRight />
             </button>
-          </div>
-          <div className="w-full h-auto flex flex-col md:flex-row gap-4 justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
-            <div className="font-semibold text-gray-700 text-sm truncate max-w-full w-96">
-              {title}
-            </div>
-            <div className="flex items-center justify-between w-auto whitespace-nowrap gap-2">
+            <div className="absolute bottom-5 flex items-center justify-between w-auto whitespace-nowrap gap-2">
               <button
                 type="button"
-                className="px-4 py-2 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                className="px-4 py-2 bg-white rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
                 onClick={handleRotateLeft}
               >
                 <TbRotate2 />
               </button>
               <button
                 type="button"
-                className="px-4 py-2 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                className="px-4 py-2 bg-white rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
                 onClick={handleRotateRight}
               >
                 <TbRotateClockwise2 />
               </button>
               <button
                 type="button"
-                className="px-4 py-2 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                className="px-4 py-2 bg-white rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
                 onClick={handleDownload}
               >
                 <FaDownload />
               </button>
             </div>
           </div>
+          <div className="w-full h-auto flex flex-col md:flex-row gap-4 justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
+            <div className="font-semibold text-gray-700 text-sm truncate max-w-full w-full">
+              {title}
+            </div>
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <div className="w-full px-4 py-2 flex flex-wrap justify-start items-center gap-2">
+        <Modal.Footer style={{ padding: "10px" }}>
+          <div className="w-full px-4 py-2 flex flex-nowrap justify-start items-center overflow-x-auto gap-2">
             {images.map((img, index) => (
               <div
-                className="w-24 h-24 bg-gray-200 rounded-md overflow-hidden cursor-pointer"
+                className=" bg-gray-200 rounded-md overflow-hidden cursor-pointer"
                 key={index}
+                onMouseOver={() => handleSelectImage(img, index)}
                 onClick={() => handleSelectImage(img, index)}
               >
-                <img src={img} alt={title} />
+                <img
+                  className="object-cover overflow-hidden w-24 h-24"
+                  src={img}
+                  alt={title}
+                />
               </div>
             ))}
           </div>
