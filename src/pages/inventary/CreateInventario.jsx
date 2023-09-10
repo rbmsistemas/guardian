@@ -32,6 +32,7 @@ const CreateInventario = ({
   inventaryTypes = [],
   inventaryBrands = [],
   inventaryModels = [],
+  titleForm,
 }) => {
   useEffect(() => {
     if (body.inventaryTypeId !== "otro")
@@ -43,7 +44,7 @@ const CreateInventario = ({
   return (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
       <div className="col-span-12">
-        <h2 className="text-xl font-bold text-gap-primary">Nuevo inventario</h2>
+        <h2 className="text-xl font-bold text-blue-600">{titleForm}</h2>
         <p className=" text-gray-500">
           Llena los campos para agregar un nuevo inventario. Los campos marcados
           con <span className="text-red-500">*</span> son obligatorios.

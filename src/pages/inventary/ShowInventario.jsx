@@ -166,11 +166,11 @@ const ShowInventario = () => {
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="#" className="text-gray-500 hover:text-gray-700">
+          <Link to="#" className="text-gray-500 hover:text-gray-700 truncate">
             {inventario.inventaryTypeId + " " + inventario.inventaryBrandId}
           </Link>
         </div>
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center justify-end">
           <Link
             to="/inventario"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"

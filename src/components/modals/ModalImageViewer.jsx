@@ -115,7 +115,6 @@ const ModalImageViewer = ({
     return null;
   }
 
-  console.log(images);
   return (
     <div>
       <Modal
