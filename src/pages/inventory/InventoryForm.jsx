@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import Context from "../../context/Context";
-import { FaHome } from "react-icons/fa";
+import { FaEye, FaHome } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
-import CreateInventario from "./CreateInventario";
+import CreateInventory from "./CreateInventory";
 import { FiChevronRight } from "react-icons/fi";
 import { MdSaveAlt } from "react-icons/md";
 import { toast } from "react-hot-toast";
@@ -122,7 +122,6 @@ const InventoryForm = () => {
         ) {
           let existSN = true;
           if (data.activo) {
-            console.log("entre a activo update");
             existSN = await handleValidateSerialNumber(
               data.serialNumber,
               data.id
@@ -130,7 +129,6 @@ const InventoryForm = () => {
           }
           let existActivo = true;
           if (data.activo) {
-            console.log("entre a activo update");
             existActivo = await handleValidateActivo(data.activo, data.id);
           }
           if (existSN || existActivo) {
@@ -304,19 +302,32 @@ const InventoryForm = () => {
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="#" className="text-gray-500 hover:text-gray-700">
+          <Link to="#" className="text-gray-500 hover:text-gray-700 truncate">
             Nuevo inventario
           </Link>
         </div>
-        <Link
-          to="/inventario"
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
-        >
-          <span>
-            <IoArrowBack className="text-white text-lg" />
-          </span>
-          {voler ? "Cancelar" : "Volver"}
-        </Link>
+        <div className="flex gap-2 justify-center md:justify-end">
+          <Link
+            to="/inventario"
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+          >
+            <span>
+              <IoArrowBack className="text-white text-lg" />
+            </span>
+            {voler ? "Cancelar" : "Volver"}
+          </Link>
+          {id && (
+            <Link
+              to={`/inventario/ver/${id}`}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            >
+              <span>
+                <FaEye className="text-white text-lg" />
+              </span>
+              Ver
+            </Link>
+          )}
+        </div>
       </div>
       <div className="flex flex-col">
         <h2 className="text-xl font-bold"></h2>
@@ -325,7 +336,7 @@ const InventoryForm = () => {
           className="flex h-full flex-col gap-5 mt-5"
         >
           {id ? (
-            <CreateInventario
+            <CreateInventory
               body={data}
               setBody={setData}
               images={images}
@@ -333,9 +344,10 @@ const InventoryForm = () => {
               inventoryTypes={inventoryTypes}
               inventoryBrands={inventoryBrands}
               inventoryModels={inventoryModels}
+              titleForm={"Editar inventario"}
             />
           ) : (
-            <CreateInventario
+            <CreateInventory
               body={data}
               setBody={setData}
               images={images}
@@ -343,6 +355,7 @@ const InventoryForm = () => {
               inventoryTypes={inventoryTypes}
               inventoryBrands={inventoryBrands}
               inventoryModels={inventoryModels}
+              titleForm={"Crear inventario"}
             />
           )}
           <div className="flex justify-end">

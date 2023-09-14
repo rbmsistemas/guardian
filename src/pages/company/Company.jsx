@@ -12,7 +12,7 @@ import { Label, Modal, Select, TextInput } from "flowbite-react";
 import Context from "../../context/Context";
 import { toast } from "react-hot-toast";
 
-const Proveedores = () => {
+const Company = () => {
   const { providers, getProvidersBySearch, deleteProvider } =
     useContext(Context);
   const navigate = useNavigate();
@@ -259,4 +259,4 @@ const Proveedores = () => {
   );
 };
 
-export default Proveedores;
+export default Company;

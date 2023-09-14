@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Checkbox, Label, Select, TextInput } from "flowbite-react";
+import { Checkbox, Label, TextInput, Select } from "flowbite-react";
 import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 import CameraComponent from "../../utils/CameraComponent";
 import { BiDevices } from "react-icons/bi";
@@ -8,6 +8,7 @@ import { Tb3DCubeSphere } from "react-icons/tb";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaUserCheck } from "react-icons/fa";
+import InputSelect from "react-select";
 
 const CreateInventory = ({
   body = {
@@ -32,6 +33,7 @@ const CreateInventory = ({
   inventaryTypes = [],
   inventaryBrands = [],
   inventaryModels = [],
+  titleForm,
 }) => {
   useEffect(() => {
     if (body.inventaryTypeId !== "otro")
@@ -43,7 +45,7 @@ const CreateInventory = ({
   return (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
       <div className="col-span-12">
-        <h2 className="text-xl font-bold text-gap-primary">Nuevo inventario</h2>
+        <h2 className="text-xl font-bold text-blue-600">{titleForm}</h2>
         <p className=" text-gray-500">
           Llena los campos para agregar un nuevo inventario. Los campos marcados
           con <span className="text-red-500">*</span> son obligatorios.
@@ -150,7 +152,29 @@ const CreateInventory = ({
           <span className="text-red-500">*</span>
           <Label htmlFor="inventaryModelId" value="Modelo" />
         </div>
-        <Select
+        <InputSelect
+          placeholder="Modelo"
+          isClearable
+          value={body.inventaryModelId}
+          onChange={(e) =>
+            setBody({ ...body, inventaryModelId: e ? e.value : "" })
+          }
+          options={inventaryModels.map((item) => {
+            return {
+              value: item.id,
+              label: item.name,
+            };
+          })}
+          formatOptionLabel={(option) => (
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500">
+                <Tb3DCubeSphere />
+              </span>
+              <span>{option.label}</span>
+            </div>
+          )}
+        />
+        {/* <Select
           id="inventaryModelId"
           icon={Tb3DCubeSphere}
           required={true}
@@ -168,7 +192,7 @@ const CreateInventory = ({
             );
           })}
           <option value="0">Otro</option>
-        </Select>
+        </Select> */}
       </div>
       <div className="col-span-12 md:col-span-6">
         {body.inventaryModelId == "0" && (

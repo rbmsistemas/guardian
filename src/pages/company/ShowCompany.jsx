@@ -21,7 +21,7 @@ import { toast } from "react-hot-toast";
 import Loading from "../../utils/Loading";
 import "../../utils/Wyswyg.css";
 
-const VerProovedores = () => {
+const ShowCompany = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { provider, getProvider, deleteProvider, clearProvider } =
@@ -112,7 +112,7 @@ const VerProovedores = () => {
             <span>
               <FaList className="text-white text-lg" />
             </span>
-            Ir al listado
+            Listado
           </Link>
 
           <Link
@@ -289,4 +289,4 @@ const VerProovedores = () => {
   );
 };
 
-export default VerProovedores;
+export default ShowCompany;

@@ -1,4 +1,4 @@
-export const Base_Inventory = ({ inventory = {} }) => {
+export const Base_Inventory = (inventory = {}) => {
   if (Object.keys(inventory).length === 0) {
     return {
       id: "",

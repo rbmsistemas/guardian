@@ -3,13 +3,13 @@ import { FaEye, FaHome } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { FiChevronRight } from "react-icons/fi";
-import CrearProveedores from "./CrearProveedores";
+import CrearProveedores from "./CreateCompany";
 import Loading from "../../utils/Loading";
 import { toast } from "react-hot-toast";
 import Context from "../../context/Context";
-import { uploadImageProviders } from "../../api/request.api";
+import { uploadImageCompany } from "../../api/request.api";
 
-const ProveedoresForm = () => {
+const CompanyForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const {
@@ -142,7 +142,7 @@ const ProveedoresForm = () => {
       const formData = new FormData();
       formData.append("image", image);
 
-      const imageRes = await uploadImageProviders(formData, user.token);
+      const imageRes = await uploadImageCompany(formData, user.token);
       if (imageRes?.status > 299) {
         setLoading(false);
         notificationError("Error al actualizar la imagen");
@@ -219,4 +219,4 @@ const ProveedoresForm = () => {
   );
 };
 
-export default ProveedoresForm;
+export default CompanyForm;

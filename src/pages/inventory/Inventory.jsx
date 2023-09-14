@@ -13,7 +13,7 @@ import {
 import { FiChevronRight } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 
-const Inventario = () => {
+const Inventory = () => {
   const navigate = useNavigate();
   const {
     inventaryTypes,
@@ -360,4 +360,4 @@ const Inventario = () => {
   );
 };
 
-export default Inventario;
+export default Inventory;

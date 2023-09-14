@@ -86,7 +86,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   };
 
   const selectImage = (index) => {
-    setImage(capturedImage[index]);
+    setImage(index);
     setShowModal(true);
   };
 
@@ -135,8 +135,8 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
           }}
           mirrored={currentFacingMode === "user"}
           screenshotFormat="image/jpeg"
-          height={720}
-          width={1280}
+          height={1080}
+          width={1920}
           className="rounded-lg bg-gray-300 md:max-h-96"
         />
         <button
@@ -151,11 +151,11 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         </button>
       </div>
 
-      <div className="w-full h-full max-h-full grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2 mt-2">
-        <div className="w-32 h-32 border-2 border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
+      <div className="w-full h-full max-h-full grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 mt-2 md:mt-0">
+        <div className="w-28 h-28 border border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
           <label
             htmlFor="upload"
-            className="w-32 h-32 flex flex-col justify-center items-center gap-2 cursor-pointer"
+            className="w-full h-full flex flex-col justify-center items-center gap-2 cursor-pointer"
           >
             <span className="text-3xl">
               <AiOutlineCamera />
@@ -190,7 +190,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             return (
               <div
                 key={index}
-                className="w-32 h-32 border-2 border-dashed border-gray-500 rounded-lg relative transition ease-in-out duration-200 hover:scale-105"
+                className="w-28 h-28 border border-dashed border-gray-500 rounded-lg relative transition ease-in-out duration-200 hover:scale-105"
               >
                 <span
                   onClick={() => removeCapturedImage(index)}
@@ -217,7 +217,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             );
           })}
       </div>
-      <Modal dismissible={true} show={showModal} onClose={onClose} size="3xl">
+      {/* <Modal dismissible={true} show={showModal} onClose={onClose} size="3xl">
         <Modal.Header>Imagenes</Modal.Header>
         <Modal.Body>
           {image && (
@@ -232,7 +232,16 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             />
           )}
         </Modal.Body>
-      </Modal>
+      </Modal> */}
+      {showModal && (
+        <ModalImageViewer
+          images={capturedImage}
+          title="Imagenes"
+          show={showModal}
+          onClose={onClose}
+          currentIndex={image}
+        />
+      )}
     </div>
   );
 };

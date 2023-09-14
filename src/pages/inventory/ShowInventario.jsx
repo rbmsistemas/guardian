@@ -27,6 +27,7 @@ import { Tb3DCubeSphere } from "react-icons/tb";
 import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import "../../Quill.css";
 import { toast } from "react-hot-toast";
+import ModalImageViewer from "../../components/modals/ModalImageViewer";
 
 const ShowInventario = () => {
   const { id } = useParams();
@@ -43,10 +44,10 @@ const ShowInventario = () => {
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
 
-  const [imageSelected, setImageSelected] = useState("");
+  const [imageSelected, setImageSelected] = useState(0);
 
-  const handleShowImage = (image) => {
-    setImageSelected(image);
+  const handleShowImages = (index) => {
+    setImageSelected(index);
     setModal2(true);
   };
 
@@ -142,6 +143,13 @@ const ShowInventario = () => {
     });
   };
 
+  let inventarioTitle =
+    inventario.inventaryTypeId +
+    " " +
+    inventario.inventaryBrandId +
+    " Modelo " +
+    inventario.inventaryModelId;
+
   return (
     <div className="min-h-full w-full p-5 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-3">
@@ -158,11 +166,11 @@ const ShowInventario = () => {
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="#" className="text-gray-500 hover:text-gray-700">
+          <Link to="#" className="text-gray-500 hover:text-gray-700 truncate">
             {inventario.inventaryTypeId + " " + inventario.inventaryBrandId}
           </Link>
         </div>
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center justify-end">
           <Link
             to="/inventario"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
@@ -170,7 +178,7 @@ const ShowInventario = () => {
             <span>
               <FaList className="text-white text-lg" />
             </span>
-            Ir al listado
+            Listado
           </Link>
 
           <Link
@@ -366,7 +374,7 @@ const ShowInventario = () => {
                   className="col-span-1 rounded-md flex items-center justify-center border border-gray-300 p-3 cursor-pointer"
                 >
                   <img
-                    onClick={() => handleShowImage(image)}
+                    onClick={() => handleShowImages(index)}
                     src={image}
                     alt="imagen"
                     className="w-full h-full object-cover rounded-md"
@@ -440,6 +448,16 @@ const ShowInventario = () => {
         </Modal>
       )}
       {modal2 && (
+        <ModalImageViewer
+          images={imageElements}
+          title={inventarioTitle}
+          show={modal2}
+          onClose={() => setModal2(false)}
+          currentIndex={imageSelected}
+          isDownloadImage={true}
+        />
+      )}
+      {/* {modal2 && (
         <Modal
           title="Ver imagen"
           dismissible={true}
@@ -467,7 +485,7 @@ const ShowInventario = () => {
             </div>
           </Modal.Body>
         </Modal>
-      )}
+      )} */}
       {loading && <Loading />}
     </div>
   );

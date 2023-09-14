@@ -12,7 +12,7 @@ import { MdSaveAlt } from "react-icons/md";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const CrearProveedores = ({
+const CreateCompany = ({
   proveedor = {
     proveedor: "",
     encargado: "",
@@ -213,4 +213,4 @@ const CrearProveedores = ({
   );
 };
 
-export default CrearProveedores;
+export default CreateCompany;

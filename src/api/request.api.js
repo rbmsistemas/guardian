@@ -110,7 +110,7 @@ export const handleDeleteCompany = async (id, token) => {
   }
 };
 
-export const handleGetCompanyByParams = async (body, token) => {
+export const handleGetCompaniesByParams = async (body, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
