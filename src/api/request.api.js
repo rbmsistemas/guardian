@@ -50,49 +50,45 @@ export const handleSignout = async () => {
   }
 };
 
-// start proveedores
+// start companies
 
-export const handleGetProviders = async (token) => {
+export const handleGetCompanies = async (token) => {
   config.headers["x-access-token"] = token;
   try {
-    const response = await axios.get(`${urlEnv}/api/proveedores`, config);
+    const response = await axios.get(`${urlEnv}/api/company`, config);
     return response;
   } catch (error) {
     return error.response;
   }
 };
 
-export const handleGetProvider = async (id, token) => {
+export const handleGetCompany = async (id, token) => {
   config.headers["x-access-token"] = token;
   try {
-    const response = await axios.get(`${urlEnv}/api/proveedores/${id}`, config);
+    const response = await axios.get(`${urlEnv}/api/company/${id}`, config);
     return response;
   } catch (error) {
     return error.response;
   }
 };
 
-export const handleCreateProvider = async (data, token) => {
+export const handleCreateCompany = async (data, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
-    const response = await axios.post(
-      `${urlEnv}/api/proveedores`,
-      data,
-      config
-    );
+    const response = await axios.post(`${urlEnv}/api/company`, data, config);
     return response;
   } catch (error) {
     return error.response;
   }
 };
 
-export const handleUpdateProvider = async (id, data, token) => {
+export const handleUpdateCompany = async (id, data, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.patch(
-      `${urlEnv}/api/proveedores/${id}`,
+      `${urlEnv}/api/company/${id}`,
       data,
       config
     );
@@ -102,27 +98,24 @@ export const handleUpdateProvider = async (id, data, token) => {
   }
 };
 
-export const handleDeleteProvider = async (id, token) => {
+export const handleDeleteCompany = async (id, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
 
   try {
-    const response = await axios.delete(
-      `${urlEnv}/api/proveedores/${id}`,
-      config
-    );
+    const response = await axios.delete(`${urlEnv}/api/company/${id}`, config);
     return response;
   } catch (error) {
     return error.response;
   }
 };
 
-export const handleGetProvidersByParams = async (body, token) => {
+export const handleGetCompanyByParams = async (body, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
-      `${urlEnv}/api/proveedores/search`,
+      `${urlEnv}/api/company/search`,
       body,
       config
     );
@@ -132,12 +125,12 @@ export const handleGetProvidersByParams = async (body, token) => {
   }
 };
 
-export const uploadImageProviders = async (data, token) => {
+export const uploadImageCompany = async (data, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Content-Type"] = "multipart/form-data";
   try {
     const response = await axios.post(
-      `${urlEnv}/api/uploads/provider`,
+      `${urlEnv}/api/uploads/companies`,
       data,
       config
     );
@@ -147,7 +140,7 @@ export const uploadImageProviders = async (data, token) => {
   }
 };
 
-// end proveedores
+// end companies
 // start actividades
 
 export const handleGetActivities = async (token) => {

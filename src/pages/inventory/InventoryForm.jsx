@@ -4,28 +4,28 @@ import { FaHome } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import CreateInventario from "./CreateInventario";
-import EditarInventario from "./EditarInventario";
 import { FiChevronRight } from "react-icons/fi";
 import { MdSaveAlt } from "react-icons/md";
 import { toast } from "react-hot-toast";
 import Loading from "../../utils/Loading";
-import { uploadImagesInventary } from "../../api/inventary.api";
+import { uploadImagesInventory } from "../../api/inventory.api";
 import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
+import { Base_Inventory } from "../../context/Models";
 
-const InventaryForm = () => {
+const InventoryForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const {
-    inventaryTypes,
-    inventaryModels,
-    inventaryBrands,
-    createInventary,
-    updateInventary,
-    getInventaryById,
+    inventoryTypes,
+    inventoryModels,
+    inventoryBrands,
+    createInventory,
+    updateInventory,
+    getInventoryById,
     getValidatedSerialNumber,
     getValidatedActivo,
-    inventary,
+    inventory,
     user,
   } = useContext(Context);
 
@@ -34,76 +34,28 @@ const InventaryForm = () => {
   const notificationError = (message) => toast.error(message);
   const successNotification = (message) => toast.success(message);
 
-  const [data, setData] = useState({
-    inventaryTypeId: "",
-    otherInventary: "",
-    inventaryBrandId: "",
-    otherBrand: "",
-    inventaryModelId: "",
-    otherModel: "",
-    serialNumber: "",
-    activo: "",
-    comments: "",
-    isAsigned: false,
-    altaDate: null,
-    bajaDate: null,
-    asignacionDate: null,
-    status: true,
-    images: [],
-  });
+  const [data, setData] = useState(Base_Inventory());
   const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (id) {
-      getInventaryById(id);
+      getInventoryById(id);
       setVoler(true);
     } else {
       setVoler(false);
-      setData({
-        inventaryTypeId: "",
-        otherInventary: "",
-        inventaryBrandId: "",
-        otherBrand: "",
-        inventaryModelId: "",
-        otherModel: "",
-        serialNumber: "",
-        activo: "",
-        comments: "",
-        isAsigned: false,
-        altaDate: null,
-        bajaDate: null,
-        asignacionDate: null,
-        status: true,
-        images: [],
-      });
+      setData(Base_Inventory());
     }
     setLoading(false);
   }, [id]);
 
   useEffect(() => {
-    if (id && inventary.id) {
-      setData({
-        id: inventary.id ?? "",
-        inventaryTypeId: inventary.inventaryTypeId ?? "",
-        inventaryBrandId: inventary.inventaryBrandId ?? "",
-        inventaryModelId: inventary.inventaryModelId ?? "",
-        serialNumber: inventary.serialNumber ?? "",
-        activo: inventary.activo ?? "",
-        comments: inventary.comments ?? "",
-        status: inventary.status ?? false,
-        images: inventary.images ?? [],
-        altaDate: inventary.altaDate ?? "",
-        asignacionDate: inventary.asignacionDate ?? null,
-        isAsigned: inventary.isAsigned ?? false,
-        bajaDate: inventary.bajaDate ?? null,
-        createdAt: inventary.createdAt ?? "",
-        updatedAt: inventary.updatedAt ?? "",
-      });
+    if (id && inventory.id) {
+      setData(Base_Inventory(inventory));
       setImages(
-        Object.entries(inventary?.images)?.map(([, link]) => link) ?? []
+        Object.entries(inventory?.imagesSrc)?.map(([, link]) => link) ?? []
       );
     }
-  }, [inventary]);
+  }, [inventory]);
 
   const handleValidateSerialNumber = async (serialNumber, currentId = null) => {
     const res = await getValidatedSerialNumber({ serialNumber, currentId });
@@ -165,8 +117,8 @@ const InventaryForm = () => {
           });
         }
         if (
-          data.serialNumber !== inventary.serialNumber &&
-          data.activo !== inventary.activo
+          data.serialNumber !== inventory.serialNumber &&
+          data.activo !== inventory.activo
         ) {
           let existSN = true;
           if (data.activo) {
@@ -182,7 +134,7 @@ const InventaryForm = () => {
             existActivo = await handleValidateActivo(data.activo, data.id);
           }
           if (existSN || existActivo) {
-            const res = await updateInventary(
+            const res = await updateInventory(
               id,
               { ...data, images: imagesObject },
               user.token
@@ -201,7 +153,7 @@ const InventaryForm = () => {
             );
           }
         } else {
-          const res = await updateInventary(
+          const res = await updateInventory(
             id,
             { ...data, images: imagesObject },
             user.token
@@ -265,7 +217,7 @@ const InventaryForm = () => {
           existActivo = await handleValidateActivo(data.activo);
         }
         if (existSN || existActivo) {
-          const res = await createInventary(sendData, user.token);
+          const res = await createInventory(sendData, user.token);
           if (!res.status) {
             notificationError("Error al crear el inventario");
           } else {
@@ -285,8 +237,8 @@ const InventaryForm = () => {
                 }
               });
 
-              const response = await updateInventary(
-                res?.inventary?.id,
+              const response = await updateInventory(
+                res?.inventory?.id,
                 { images: imagesObject },
                 user.token
               );
@@ -299,24 +251,7 @@ const InventaryForm = () => {
             }
             successNotification("Inventario creado correctamente");
             setTimeout(() => {
-              // limpiar el formulario
-              setData({
-                inventaryTypeId: "",
-                otherInventary: "",
-                inventaryBrandId: "",
-                otherBrand: "",
-                inventaryModelId: "",
-                otherModel: "",
-                serialNumber: "",
-                activo: "",
-                comments: "",
-                isAsigned: false,
-                altaDate: null,
-                bajaDate: null,
-                asignacionDate: null,
-                status: true,
-                images: [],
-              });
+              setData(Base_Inventory());
               setImages([]);
 
               navigate(`/inventario/crear`);
@@ -340,7 +275,7 @@ const InventaryForm = () => {
       let formData = new FormData();
       formData.append("image", image);
 
-      const imageRes = await uploadImagesInventary(formData, user.token);
+      const imageRes = await uploadImagesInventory(formData, user.token);
       if (imageRes?.status > 299) {
         setLoading(false);
         notificationError("Error al actualizar la imagen");
@@ -395,9 +330,9 @@ const InventaryForm = () => {
               setBody={setData}
               images={images}
               setImages={setImages}
-              inventaryTypes={inventaryTypes}
-              inventaryBrands={inventaryBrands}
-              inventaryModels={inventaryModels}
+              inventoryTypes={inventoryTypes}
+              inventoryBrands={inventoryBrands}
+              inventoryModels={inventoryModels}
             />
           ) : (
             <CreateInventario
@@ -405,9 +340,9 @@ const InventaryForm = () => {
               setBody={setData}
               images={images}
               setImages={setImages}
-              inventaryTypes={inventaryTypes}
-              inventaryBrands={inventaryBrands}
-              inventaryModels={inventaryModels}
+              inventoryTypes={inventoryTypes}
+              inventoryBrands={inventoryBrands}
+              inventoryModels={inventoryModels}
             />
           )}
           <div className="flex justify-end">
@@ -429,4 +364,4 @@ const InventaryForm = () => {
   );
 };
 
-export default InventaryForm;
+export default InventoryForm;

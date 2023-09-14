@@ -9,7 +9,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaUserCheck } from "react-icons/fa";
 
-const CreateInventario = ({
+const CreateInventory = ({
   body = {
     inventaryTypeId: "",
     otherInventary: "",
@@ -291,4 +291,4 @@ const CreateInventario = ({
   );
 };
 
-export default CreateInventario;
+export default CreateInventory;

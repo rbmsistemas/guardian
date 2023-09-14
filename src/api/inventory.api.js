@@ -10,26 +10,26 @@ const config = {
 };
 
 // get inventary
-export const handleGetInventaries = async (token) => {
+export const handleGetInventories = async (token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   try {
-    const response = await axios.get(`${urlEnv}/api/inventarys`, config);
+    const response = await axios.get(`${urlEnv}/api/inventories`, config);
     return response;
   } catch (error) {
     return error.response;
   }
 };
 
-export const handleGetInventariesByParams = async (body, token) => {
+export const handleGetInventoriesByParams = async (body, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
-      `${urlEnv}/api/inventarys/search`,
+      `${urlEnv}/api/inventories/search`,
       body,
       config
     );
@@ -40,12 +40,12 @@ export const handleGetInventariesByParams = async (body, token) => {
 };
 
 // get inventary
-export const handleGetInventaryById = async (id, token) => {
+export const handleGetInventoryById = async (id, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   try {
-    const response = await axios.get(`${urlEnv}/api/inventarys/${id}`, config);
+    const response = await axios.get(`${urlEnv}/api/inventories/${id}`, config);
     return response;
   } catch (error) {
     return error.response;
@@ -53,13 +53,17 @@ export const handleGetInventaryById = async (id, token) => {
 };
 
 // create inventary
-export const handleCreateInventary = async (token, data) => {
+export const handleCreateInventory = async (token, data) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   config.headers["Content-Type"] = "application/json";
   try {
-    const response = await axios.post(`${urlEnv}/api/inventarys`, data, config);
+    const response = await axios.post(
+      `${urlEnv}/api/inventories`,
+      data,
+      config
+    );
     return response;
   } catch (error) {
     return error.response;
@@ -73,7 +77,7 @@ export const handleValidateSerialNumber = async (data, token) => {
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
-      `${urlEnv}/api/inventarys/validateSerialNumber`,
+      `${urlEnv}/api/inventories/validateSerialNumber`,
       data,
       config
     );
@@ -90,7 +94,7 @@ export const handleValidateActivo = async (data, token) => {
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
-      `${urlEnv}/api/inventarys/validateActivo`,
+      `${urlEnv}/api/inventories/validateActivo`,
       data,
       config
     );
@@ -101,14 +105,14 @@ export const handleValidateActivo = async (data, token) => {
 };
 
 // update inventary
-export const handleUpdateInventary = async (token, id, data) => {
+export const handleUpdateInventory = async (token, id, data) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.patch(
-      `${urlEnv}/api/inventarys/${id}`,
+      `${urlEnv}/api/inventories/${id}`,
       data,
       config
     );
@@ -119,13 +123,13 @@ export const handleUpdateInventary = async (token, id, data) => {
 };
 
 // delete inventary
-export const handleDeleteInventary = async (token, id) => {
+export const handleDeleteInventory = async (token, id) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   try {
     const response = await axios.delete(
-      `${urlEnv}/api/inventarys/${id}`,
+      `${urlEnv}/api/inventories/${id}`,
       config
     );
     return response;
@@ -135,12 +139,12 @@ export const handleDeleteInventary = async (token, id) => {
 };
 
 // get inventaryTypes
-export const handleGetInventaryTypes = async (token) => {
+export const handleGetInventoryTypes = async (token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   try {
-    const response = await axios.get(`${urlEnv}/api/inventaryTypes`, config);
+    const response = await axios.get(`${urlEnv}/api/inventoryTypes`, config);
     return response;
   } catch (error) {
     return error.response;
@@ -148,12 +152,12 @@ export const handleGetInventaryTypes = async (token) => {
 };
 
 // get inventaryModels
-export const handleGetInventaryModels = async (token) => {
+export const handleGetInventoryModels = async (token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   try {
-    const response = await axios.get(`${urlEnv}/api/inventaryModels`, config);
+    const response = await axios.get(`${urlEnv}/api/inventoryModels`, config);
     return response;
   } catch (error) {
     return error.response;
@@ -161,26 +165,26 @@ export const handleGetInventaryModels = async (token) => {
 };
 
 // get inventaryBrands
-export const handleGetInventaryBrands = async (token) => {
+export const handleGetInventoryBrands = async (token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   try {
-    const response = await axios.get(`${urlEnv}/api/inventaryBrands`, config);
+    const response = await axios.get(`${urlEnv}/api/inventoryBrands`, config);
     return response;
   } catch (error) {
     return error.response;
   }
 };
 
-export const uploadImagesInventary = async (data, token) => {
+export const uploadImagesInventory = async (data, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
 
   config.headers["Content-Type"] = "multipart/form-data";
   try {
     const response = await axios.post(
-      `${urlEnv}/api/uploads/inventary`,
+      `${urlEnv}/api/uploads/inventory`,
       data,
       config
     );

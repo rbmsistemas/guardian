@@ -5,6 +5,7 @@ import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdCameraswitch, MdFlashOff, MdFlashOn } from "react-icons/md";
 import Webcam from "react-webcam";
+import ImageUrlGenerator from "./ImageUrlGenerator";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
@@ -22,7 +23,6 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     facingMode: currentFacingMode,
   };
 
-  // useEffect para ver el estado del flash
   useEffect(() => {
     const comprobarFlash = async () => {
       const track = mediaStreamRef.current?.getVideoTracks()[0];
@@ -209,7 +209,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
                   <img
                     className="object-fill p-1 h-32 w-32 rounded-lg cursor-pointer"
                     onClick={() => selectImage(index)}
-                    src={item}
+                    src={ImageUrlGenerator(item)}
                     alt="image-captured"
                   />
                 )}
@@ -222,7 +222,11 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         <Modal.Body>
           {image && (
             <img
-              src={image instanceof File ? URL.createObjectURL(image) : image}
+              src={
+                image instanceof File
+                  ? URL.createObjectURL(image)
+                  : ImageUrlGenerator(image)
+              }
               alt="imagen-selected"
               className="w-full rounded-lg "
             />

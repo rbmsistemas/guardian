@@ -2,27 +2,27 @@ import {
   POST_SIGNIN,
   POST_SIGNUP,
   POST_SIGNOUT,
-  GET_PROVIDERS,
-  GET_PROVIDER,
-  POST_PROVIDER,
-  PATCH_PROVIDER,
-  DELETE_PROVIDER,
-  GET_PROVIDERS_BY_SEARCH,
+  GET_COMPANIES,
+  GET_COMPANY,
+  POST_COMPANY,
+  PATCH_COMPANY,
+  DELETE_COMPANY,
+  GET_COMPANIES_BY_SEARCH,
   GET_ACTIVITIES,
   GET_ACTIVITY,
   POST_ACTIVITY,
   PATCH_ACTIVITY,
   DELETE_ACTIVITY,
   GET_ACTIVITIES_BY_SEARCH,
-  GET_INVENTARY_TYPES,
-  GET_INVENTARY_BRANDS,
-  GET_INVENTARY_MODELS,
-  DELETE_INVENTARY,
-  PATCH_INVENTARY,
-  POST_INVENTARY,
-  GET_INVENTARY_BY_ID,
-  GET_INVENTARY,
-  GET_INVENTARIES_BY_SEARCH,
+  GET_INVENTORY_TYPES,
+  GET_INVENTORY_BRANDS,
+  GET_INVENTORY_MODELS,
+  DELETE_INVENTORY,
+  PATCH_INVENTORY,
+  POST_INVENTORY,
+  GET_INVENTORY_BY_ID,
+  GET_INVENTORY,
+  GET_INVENTORIES_BY_SEARCH,
 } from "./Types";
 
 export default (state, action) => {
@@ -44,32 +44,32 @@ export default (state, action) => {
         ...state,
         user: [],
       };
-    case GET_PROVIDERS:
+    case GET_COMPANIES:
       return {
         ...state,
         providers: payload,
       };
-    case GET_PROVIDER:
+    case GET_COMPANY:
       return {
         ...state,
         provider: payload,
       };
-    case POST_PROVIDER:
+    case POST_COMPANY:
       return {
         ...state,
         provider: payload,
       };
-    case PATCH_PROVIDER:
+    case PATCH_COMPANY:
       return {
         ...state,
         provider: payload,
       };
-    case DELETE_PROVIDER:
+    case DELETE_COMPANY:
       return {
         ...state,
         providers: payload,
       };
-    case GET_PROVIDERS_BY_SEARCH:
+    case GET_COMPANIES_BY_SEARCH:
       return {
         ...state,
         providers: payload,
@@ -104,47 +104,47 @@ export default (state, action) => {
         ...state,
         activities: payload,
       };
-    case GET_INVENTARY:
+    case GET_INVENTORY:
       return {
         ...state,
         inventaries: payload,
       };
-    case GET_INVENTARY_BY_ID:
+    case GET_INVENTORY_BY_ID:
       return {
         ...state,
         inventary: payload,
       };
-    case GET_INVENTARIES_BY_SEARCH:
+    case GET_INVENTORIES_BY_SEARCH:
       return {
         ...state,
         inventaries: payload,
       };
-    case POST_INVENTARY:
+    case POST_INVENTORY:
       return {
         ...state,
         inventary: payload,
       };
-    case PATCH_INVENTARY:
+    case PATCH_INVENTORY:
       return {
         ...state,
         inventary: payload,
       };
-    case DELETE_INVENTARY:
+    case DELETE_INVENTORY:
       return {
         ...state,
         inventaries: payload,
       };
-    case GET_INVENTARY_TYPES:
+    case GET_INVENTORY_TYPES:
       return {
         ...state,
         inventaryTypes: payload,
       };
-    case GET_INVENTARY_BRANDS:
+    case GET_INVENTORY_BRANDS:
       return {
         ...state,
         inventaryBrands: payload,
       };
-    case GET_INVENTARY_MODELS:
+    case GET_INVENTORY_MODELS:
       return {
         ...state,
         inventaryModels: payload,

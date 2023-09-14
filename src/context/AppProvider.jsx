@@ -6,12 +6,12 @@ import {
   handleRegister,
   handleSignout,
   getProfile,
-  handleGetProviders,
-  handleGetProvider,
-  handleCreateProvider,
-  handleUpdateProvider,
-  handleDeleteProvider,
-  handleGetProvidersByParams,
+  handleGetCompanies,
+  handleGetCompany,
+  handleCreateCompany,
+  handleUpdateCompany,
+  handleDeleteCompany,
+  handleGetCompaniesByParams,
   handleGetActivities,
   handleGetActivity,
   handleCreateActivity,
@@ -20,57 +20,65 @@ import {
   handleGetActivitiesByParams,
 } from "../api/request.api";
 import {
-  handleGetInventaryTypes,
-  handleGetInventaryBrands,
-  handleGetInventaryModels,
-  handleGetInventaries,
-  handleGetInventaryById,
-  handleCreateInventary,
-  handleUpdateInventary,
-  handleDeleteInventary,
-  handleGetInventariesByParams,
+  handleGetInventoryTypes,
+  handleGetInventoryBrands,
+  handleGetInventoryModels,
+  handleGetInventories,
+  handleGetInventoryById,
+  handleCreateInventory,
+  handleUpdateInventory,
+  handleDeleteInventory,
+  handleGetInventoriesByParams,
   handleValidateSerialNumber,
   handleValidateActivo,
-} from "../api/inventary.api";
+} from "../api/inventory.api";
 import {
   POST_SIGNIN,
   POST_SIGNUP,
   POST_SIGNOUT,
-  GET_PROVIDERS,
-  GET_PROVIDER,
-  POST_PROVIDER,
-  PATCH_PROVIDER,
-  DELETE_PROVIDER,
-  GET_PROVIDERS_BY_SEARCH,
+  GET_COMPANIES,
+  GET_COMPANY,
+  POST_COMPANY,
+  PATCH_COMPANY,
+  DELETE_COMPANY,
+  GET_COMPANIES_BY_SEARCH,
   GET_ACTIVITIES,
   GET_ACTIVITY,
   POST_ACTIVITY,
   PATCH_ACTIVITY,
   DELETE_ACTIVITY,
   GET_ACTIVITIES_BY_SEARCH,
-  GET_INVENTARY_TYPES,
-  GET_INVENTARY_BRANDS,
-  GET_INVENTARY_MODELS,
-  GET_INVENTARY,
-  GET_INVENTARY_BY_ID,
-  POST_INVENTARY,
-  PATCH_INVENTARY,
-  DELETE_INVENTARY,
-  GET_INVENTARIES_BY_SEARCH,
+  GET_INVENTORY_TYPES,
+  GET_INVENTORY_BRANDS,
+  GET_INVENTORY_MODELS,
+  GET_INVENTORY,
+  GET_INVENTORY_BY_ID,
+  POST_INVENTORY,
+  PATCH_INVENTORY,
+  DELETE_INVENTORY,
+  GET_INVENTORIES_BY_SEARCH,
 } from "./Types";
+import {
+  Base_Company,
+  Base_Inventory,
+  Base_InventoryBrand,
+  Base_InventoryModel,
+  Base_InventoryType,
+  Base_User,
+} from "./Models";
 
 const AppProvider = (props) => {
   const initialState = {
-    user: { token: null },
-    inventaries: [],
-    inventary: {},
-    inventaryTypes: [],
-    inventaryBrands: [],
-    inventaryModels: [],
+    user: { token: null, user: Base_User },
+    inventories: [Base_Inventory()],
+    inventory: Base_Inventory(),
+    inventoryTypes: [Base_InventoryType],
+    inventoryBrands: [Base_InventoryBrand],
+    inventoryModels: [Base_InventoryModel],
     activities: [],
     activity: {},
-    providers: [],
-    provider: {},
+    compnanies: [Base_Company],
+    company: Base_Company,
   };
   const [state, dispatch] = useReducer(Reducer, initialState);
 
@@ -117,6 +125,8 @@ const AppProvider = (props) => {
           payload: profile,
         });
         localStorage.setItem("user", JSON.stringify(profile));
+      } else {
+        localStorage.removeItem("user");
       }
     } catch (error) {
       console.log(error);
@@ -148,31 +158,17 @@ const AppProvider = (props) => {
   // end auth actions
   // inventary actions
 
-  const getInventaries = async () => {
+  const getInventories = async () => {
     try {
-      const response = await handleGetInventaries(state.user.token);
+      const response = await handleGetInventories(state.user.token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventarys } = await response.data;
-
-      inventarys.forEach((inventary) => {
-        if (inventary.images.length > 0) {
-          inventary.images = inventary.images.map((image) => {
-            if (!image.startsWith("http") || !image.startsWith("https")) {
-              return `${
-                import.meta.env.VITE_API_URL || "http://localhost:4000"
-              }${image}`;
-            } else {
-              return image;
-            }
-          });
-        }
-      });
+      const { inventories } = await response.data;
 
       dispatch({
-        type: GET_INVENTARY,
-        payload: inventarys,
+        type: GET_INVENTORY,
+        payload: inventories,
       });
     } catch (error) {
       console.log(error);
@@ -180,27 +176,17 @@ const AppProvider = (props) => {
     }
   };
 
-  const getInventaryById = async (id) => {
+  const getInventoryById = async (id) => {
     try {
-      const response = await handleGetInventaryById(id, state.user.token);
+      const response = await handleGetInventoryById(id, state.user.token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventary } = await response.data;
-      if (inventary.images.length > 0) {
-        inventary.images = inventary.images.map((image) => {
-          if (!image.startsWith("http") || !image.startsWith("https")) {
-            return `${
-              import.meta.env.VITE_API_URL || "http://localhost:4000"
-            }${image}`;
-          } else {
-            return image;
-          }
-        });
-      }
+      const { inventory } = await response.data;
+
       dispatch({
-        type: GET_INVENTARY_BY_ID,
-        payload: inventary,
+        type: GET_INVENTORY_BY_ID,
+        payload: inventory,
       });
     } catch (error) {
       console.log(error);
@@ -208,17 +194,17 @@ const AppProvider = (props) => {
     }
   };
 
-  const createInventary = async (data) => {
+  const createInventory = async (data) => {
     try {
-      const response = await handleCreateInventary(state.user.token, data);
+      const response = await handleCreateInventory(state.user.token, data);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventary } = await response.data;
+      const { inventory } = await response.data;
 
       dispatch({
-        type: POST_INVENTARY,
-        payload: inventary,
+        type: POST_INVENTORY,
+        payload: inventory,
       });
       return { inventary, status: true };
     } catch (error) {
@@ -227,47 +213,37 @@ const AppProvider = (props) => {
     }
   };
 
-  const updateInventary = async (id, data) => {
+  const updateInventory = async (id, data) => {
     try {
-      const response = await handleUpdateInventary(state.user.token, id, data);
+      const response = await handleUpdateInventory(state.user.token, id, data);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventary } = await response.data;
-      if (inventary.images.length > 0) {
-        inventary.images = inventary.images.map((image) => {
-          if (!image.startsWith("http") || !image.startsWith("https")) {
-            return `${
-              import.meta.env.VITE_API_URL || "http://localhost:4000"
-            }${image}`;
-          } else {
-            return image;
-          }
-        });
-      }
+      const { inventory } = await response.data;
+
       dispatch({
-        type: PATCH_INVENTARY,
-        payload: inventary,
+        type: PATCH_INVENTORY,
+        payload: inventory,
       });
-      return inventary;
+      return inventory;
     } catch (error) {
       console.log(error);
       return false;
     }
   };
 
-  const deleteInventary = async (id) => {
+  const deleteInventory = async (id) => {
     try {
-      const response = await handleDeleteInventary(state.user.token, id);
+      const response = await handleDeleteInventory(state.user.token, id);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       } else {
-        const inventaryUpdated = state.inventaries.filter(
+        const inventoryUpdated = state.inventaries.filter(
           (inventary) => inventary._id !== id
         );
         dispatch({
-          type: DELETE_INVENTARY,
-          payload: inventaryUpdated,
+          type: DELETE_INVENTORY,
+          payload: inventoryUpdated,
         });
         return true;
       }
@@ -277,33 +253,20 @@ const AppProvider = (props) => {
     }
   };
 
-  const getInventariesBySearch = async (body) => {
+  const getInventoriesBySearch = async (body) => {
     try {
-      const response = await handleGetInventariesByParams(
+      const response = await handleGetInventoriesByParams(
         body,
         state.user.token
       );
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventaries } = await response.data;
+      const { inventories } = await response.data;
 
-      inventaries.forEach((inventary) => {
-        if (inventary.images.length > 0) {
-          inventary.images = inventary.images.map((image) => {
-            if (!image.startsWith("http") || !image.startsWith("https")) {
-              return `${
-                import.meta.env.VITE_API_URL || "http://localhost:4000"
-              }${image}`;
-            } else {
-              return image;
-            }
-          });
-        }
-      });
       dispatch({
-        type: GET_INVENTARIES_BY_SEARCH,
-        payload: inventaries,
+        type: GET_INVENTORIES_BY_SEARCH,
+        payload: inventories,
       });
       return response.data;
     } catch (error) {
@@ -338,16 +301,16 @@ const AppProvider = (props) => {
     }
   };
 
-  const getInventaryTypes = async (token) => {
+  const getInventoryTypes = async (token) => {
     try {
-      const response = await handleGetInventaryTypes(token);
+      const response = await handleGetInventoryTypes(token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventaryTypes } = await response.data;
+      const { inventoryTypes } = await response.data;
       dispatch({
-        type: GET_INVENTARY_TYPES,
-        payload: inventaryTypes,
+        type: GET_INVENTORY_TYPES,
+        payload: inventoryTypes,
       });
     } catch (error) {
       console.log(error);
@@ -355,16 +318,16 @@ const AppProvider = (props) => {
     }
   };
 
-  const getInventaryBrands = async (token) => {
+  const getInventoryBrands = async (token) => {
     try {
-      const response = await handleGetInventaryBrands(token);
+      const response = await handleGetInventoryBrands(token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventaryBrands } = await response.data;
+      const { inventoryBrands } = await response.data;
       dispatch({
-        type: GET_INVENTARY_BRANDS,
-        payload: inventaryBrands,
+        type: GET_INVENTORY_BRANDS,
+        payload: inventoryBrands,
       });
     } catch (error) {
       console.log(error);
@@ -372,15 +335,15 @@ const AppProvider = (props) => {
     }
   };
 
-  const getInventaryModels = async (token) => {
+  const getInventoryModels = async (token) => {
     try {
-      const response = await handleGetInventaryModels(token);
+      const response = await handleGetInventoryModels(token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { inventaryModels } = await response.data;
+      const { inventoryModels } = await response.data;
       dispatch({
-        type: GET_INVENTARY_MODELS,
+        type: GET_INVENTORY_MODELS,
         payload: inventaryModels,
       });
     } catch (error) {
@@ -517,16 +480,16 @@ const AppProvider = (props) => {
 
   // end activities actions
 
-  const getProviders = async (token) => {
+  const getCompanies = async (token) => {
     try {
-      const response = await handleGetProviders(token);
+      const response = await handleGetCompanies(token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { proveedores } = await response.data;
+      const { companies } = await response.data;
       dispatch({
-        type: GET_PROVIDERS,
-        payload: proveedores,
+        type: GET_COMPANIES,
+        payload: companies,
       });
     } catch (error) {
       console.log(error);
@@ -534,71 +497,71 @@ const AppProvider = (props) => {
     }
   };
 
-  const getProvider = async (id) => {
+  const getCompany = async (id) => {
     try {
-      const response = await handleGetProvider(id, state.user.token);
+      const response = await handleGetCompany(id, state.user.token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { proveedor } = await response.data;
+      const { company } = await response.data;
       dispatch({
-        type: GET_PROVIDER,
-        payload: proveedor,
+        type: GET_COMPANY,
+        payload: company,
       });
-      return proveedor;
+      return company;
     } catch (error) {
       console.log(error);
       return false;
     }
   };
 
-  const createProvider = async (data) => {
+  const createCompany = async (data) => {
     try {
-      const response = await handleCreateProvider(data, state.user.token);
+      const response = await handleCreateCompany(data, state.user.token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { proveedor } = await response.data;
+      const { company } = await response.data;
       dispatch({
-        type: POST_PROVIDER,
-        payload: proveedor,
+        type: POST_COMPANY,
+        payload: company,
       });
-      return proveedor;
+      return company;
     } catch (error) {
       console.log(error);
       return false;
     }
   };
 
-  const updateProvider = async (id, data, token) => {
+  const updateCompany = async (id, data, token) => {
     try {
-      const response = await handleUpdateProvider(id, data, token);
+      const response = await handleUpdateCompany(id, data, token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { provider } = await response.data;
+      const { company } = await response.data;
       dispatch({
-        type: PATCH_PROVIDER,
-        payload: provider,
+        type: PATCH_COMPANY,
+        payload: company,
       });
-      return provider;
+      return company;
     } catch (error) {
       console.log(error);
       return false;
     }
   };
 
-  const deleteProvider = async (id) => {
+  const deleteCompany = async (id) => {
     try {
-      const response = await handleDeleteProvider(id, state.user.token);
+      const response = await handleDeleteCompany(id, state.user.token);
       console.log(response);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { proveedores } = await response.data;
+      const { companies } = await response.data;
       dispatch({
-        type: DELETE_PROVIDER,
-        payload: proveedores,
+        type: DELETE_COMPANY,
+        payload: companies,
       });
       return response;
     } catch (error) {
@@ -607,16 +570,16 @@ const AppProvider = (props) => {
     }
   };
 
-  const getProvidersBySearch = async (body) => {
+  const getCompanyBySearch = async (body) => {
     try {
-      const response = await handleGetProvidersByParams(body, state.user.token);
+      const response = await handleGetCompaniesByParams(body, state.user.token);
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       }
-      const { proveedores } = await response.data;
+      const { companies } = await response.data;
       dispatch({
-        type: GET_PROVIDERS_BY_SEARCH,
-        payload: proveedores,
+        type: GET_COMPANIES_BY_SEARCH,
+        payload: companies,
       });
       return response.data;
     } catch (error) {
@@ -625,22 +588,22 @@ const AppProvider = (props) => {
     }
   };
 
-  const clearProvider = () => {
+  const clearCompany = () => {
     dispatch({
-      type: GET_PROVIDER,
+      type: GET_COMPANY,
       payload: {},
     });
   };
 
   useEffect(() => {
     if (state.user.token) {
-      getProviders(state.user.token);
-      getInventaries(state.user.token);
-      getInventaryTypes(state.user.token);
-      getInventaryBrands(state.user.token);
-      getInventaryModels(state.user.token);
+      getCompanies(state.user.token);
+      getInventories(state.user.token);
+      getInventoryTypes(state.user.token);
+      getInventoryBrands(state.user.token);
+      getInventoryModels(state.user.token);
     }
-  }, [state.user.token, state.provider, state.inventary]);
+  }, [state.user.token, state.company, state.inventory, state.inventaryModels]);
 
   return (
     <Context.Provider
@@ -648,23 +611,23 @@ const AppProvider = (props) => {
         user: state.user,
         activities: state.activities,
         activity: state.activity,
-        providers: state.providers,
-        provider: state.provider,
-        inventaryTypes: state.inventaryTypes,
-        inventaryBrands: state.inventaryBrands,
-        inventaryModels: state.inventaryModels,
-        inventaries: state.inventaries,
-        inventary: state.inventary,
+        companies: state.companies,
+        company: state.company,
+        inventoryTypes: state.inventoryTypes,
+        inventoryBrands: state.inventoryBrands,
+        inventoryModels: state.inventaryModels,
+        inventories: state.inventories,
+        inventory: state.inventory,
         handleLogin,
         postSignup,
         postSignout,
-        getProviders,
-        getProvider,
-        createProvider,
-        updateProvider,
-        deleteProvider,
-        getProvidersBySearch,
-        clearProvider,
+        getCompanies,
+        getCompany,
+        createCompany,
+        updateCompany,
+        deleteCompany,
+        getCompanyBySearch,
+        clearCompany,
         getActivities,
         getActivity,
         createActivity,
@@ -672,15 +635,15 @@ const AppProvider = (props) => {
         deleteActivity,
         getActivitiesBySearch,
         clearActivity,
-        getInventaryTypes,
-        getInventaryBrands,
-        getInventaryModels,
-        getInventaries,
-        getInventaryById,
-        createInventary,
-        updateInventary,
-        deleteInventary,
-        getInventariesBySearch,
+        getInventoryTypes,
+        getInventoryBrands,
+        getInventoryModels,
+        getInventories,
+        getInventoryById,
+        createInventory,
+        updateInventory,
+        deleteInventory,
+        getInventoriesBySearch,
         getValidatedSerialNumber,
         getValidatedActivo,
       }}
