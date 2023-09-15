@@ -12,12 +12,11 @@ import {
   AiOutlineUsergroupAdd,
   AiOutlineUsergroupDelete,
 } from "react-icons/ai";
-import { Spinner } from "flowbite-react";
 import { BounceLoader } from "react-spinners";
 
 const Home = () => {
-  const { inventaries, getInventaries } = useContext(Context);
-  const [countInventaries, setCountInventaries] = useState({
+  const { inventories, getInventories } = useContext(Context);
+  const [countInventories, setCountInventories] = useState({
     alta: 0,
     baja: 0,
     asignados: 0,
@@ -27,27 +26,28 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true);
-    const handleGetInventaries = async () => {
-      await getInventaries();
+    const handleGetInventories = async () => {
+      await getInventories();
     };
-    handleGetInventaries();
+    handleGetInventories();
     setTimeout(() => {
       setLoading(false);
     }, 1500);
   }, []);
 
   useEffect(() => {
-    setCountInventaries({
-      alta: inventaries.filter((inventary) => inventary.status === true).length,
-      baja: inventaries.filter((inventary) => inventary.status === false)
+    setCountInventories({
+      alta: inventories?.filter((inventary) => inventary.status === true)
         .length,
-      asignados: inventaries.filter((inventary) => inventary.isAsigned === true)
+      baja: inventories?.filter((inventary) => inventary.status === false)
         .length,
-      sinAsignar: inventaries.filter(
-        (inventary) => inventary.isAsigned === false
-      ).length,
+      // asignados: inventories.filter((inventary) => inventary.isAsigned === true)
+      //   .length,
+      // sinAsignar: inventories.filter(
+      //   (inventary) => inventary.isAsigned === false
+      // ).length,
     });
-  }, [inventaries]);
+  }, [inventories]);
 
   return (
     <div className="flex flex-col min-h-full h-full p-2 md:p-4 gap-4">
@@ -67,7 +67,7 @@ const Home = () => {
           </div>
           <p className="text-6xl text-white font-bold">
             {!loading ? (
-              countInventaries.alta
+              countInventories.alta
             ) : (
               <BounceLoader color={"#ffffff"} loading={loading} />
             )}
@@ -85,7 +85,7 @@ const Home = () => {
           </div>
           <p className="text-6xl text-white font-bold">
             {!loading ? (
-              countInventaries.baja
+              countInventories.baja
             ) : (
               <BounceLoader color={"#ffffff"} loading={loading} />
             )}
@@ -94,7 +94,7 @@ const Home = () => {
             Equipos en baja
           </h3>
         </Link>
-        <Link
+        {/* <Link
           to={"/inventario"}
           className="relative h-32 bg-gradient-to-br from-green-400 to-teal-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
         >
@@ -103,7 +103,7 @@ const Home = () => {
           </div>
           <p className="text-6xl text-white font-bold">
             {!loading ? (
-              countInventaries.asignados
+              countInventories.asignados
             ) : (
               <BounceLoader color={"#ffffff"} loading={loading} />
             )}
@@ -121,7 +121,7 @@ const Home = () => {
           </div>
           <p className="text-6xl text-white font-bold">
             {!loading ? (
-              countInventaries.sinAsignar
+              countInventories.sinAsignar
             ) : (
               <BounceLoader color={"#ffffff"} loading={loading} />
             )}
@@ -129,7 +129,7 @@ const Home = () => {
           <h3 className="text-sm text-center lg:text-base text-white font-bold">
             Equipos sin asignar
           </h3>
-        </Link>
+        </Link> */}
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 4xl:grid-cols-5 gap-4 bg-white p-2 md:p-4 rounded-lg">
         <p className="col-span-2 md:col-span-4 4xl:col-span-5 text-base text-left font-bold text-purple-600">

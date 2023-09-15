@@ -16,16 +16,16 @@ import { toast } from "react-hot-toast";
 const Inventory = () => {
   const navigate = useNavigate();
   const {
-    inventaryTypes,
-    inventaryBrands,
-    inventaryModels,
-    deleteInventary,
-    getInventariesBySearch,
-    inventaries,
+    inventoryTypes,
+    inventoryBrands,
+    inventoryModels,
+    deleteInventory,
+    getInventoriesBySearch,
+    inventories,
   } = useContext(Context);
 
   const [filters, setFilters] = useState({
-    inventaryType: "",
+    inventoryType: "",
     brandType: "",
     search: "",
     status: "",
@@ -41,7 +41,7 @@ const Inventory = () => {
 
   useEffect(() => {
     const res = async () => {
-      const data = await getInventariesBySearch(filters);
+      const data = await getInventoriesBySearch(filters);
       if (data) {
         setTotals({
           totalEntries: data.totalEntries,
@@ -52,15 +52,15 @@ const Inventory = () => {
     res();
   }, [filters]);
 
-  const inventariesData = inventaries?.map((item, index) => {
+  const inventoriesData = inventories?.map((item, index) => {
     return {
       no: index + 1,
       imagen: item.images[0],
-      tipo: inventaryTypes.find((type) => type.id === item.inventaryTypeId)
+      tipo: inventoryTypes.find((type) => type.id === item.inventoryTypeId)
         ?.name,
-      marca: inventaryBrands.find((brand) => brand.id === item.inventaryBrandId)
+      marca: inventoryBrands.find((brand) => brand.id === item.inventaryBrandId)
         ?.name,
-      modelo: inventaryModels.find(
+      modelo: inventoryModels.find(
         (model) => model.id === item.inventaryModelId
       )?.name,
       SN: item.serialNumber,
@@ -101,17 +101,17 @@ const Inventory = () => {
 
   const handleDelete = async (id) => {
     setModal(true);
-    setinventaryToDelete(inventaries.find((inventary) => inventary.id === id));
+    setinventaryToDelete(inventories.find((inventary) => inventary.id === id));
   };
 
   const onDelete = async () => {
-    const data = await deleteInventary(inventaryToDelete.id);
+    const data = await deleteInventory(inventaryToDelete.id);
     if (!data) {
       errorNotify("Error al eliminar el inventario");
       setModal(false);
       return;
     } else if (data) {
-      const res = await getInventariesBySearch(filters);
+      const res = await getInventoriesBySearch(filters);
       if (res) {
         setTotals({
           totalEntries: res.totalEntries,
@@ -151,22 +151,22 @@ const Inventory = () => {
           <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
             <div className="w-full">
               <Label
-                htmlFor="inventaryType"
+                htmlFor="inventoryType"
                 value="Tipo"
                 className="font-bold"
               />
             </div>
             <Select
-              id="inventaryType"
+              id="inventoryType"
               icon={MdOutlineCategory}
               required={true}
-              value={filters.inventaryType}
+              value={filters.inventoryType}
               onChange={(e) =>
-                setFilters({ ...filters, inventaryType: e.target.value })
+                setFilters({ ...filters, inventoryType: e.target.value })
               }
             >
               <option value="">Todos</option>
-              {inventaryTypes.map((item) => {
+              {inventoryTypes.map((item) => {
                 return (
                   <option key={item.id} value={item.id}>
                     {item.name}
@@ -189,7 +189,7 @@ const Inventory = () => {
               }
             >
               <option value="">Todos</option>
-              {inventaryBrands.map((item) => {
+              {inventoryBrands.map((item) => {
                 return (
                   <option key={item.id} value={item.id}>
                     {item.name}
@@ -240,7 +240,7 @@ const Inventory = () => {
                   search: "",
                   status: "",
                   brandType: "",
-                  inventaryType: "",
+                  inventoryType: "",
                   page: 1,
                   quantityResults: 5,
                 })
@@ -273,7 +273,7 @@ const Inventory = () => {
         ) : (
           <CustomeTable
             showImagen={true}
-            data={inventariesData}
+            data={inventoriesData}
             onShow={(id) => navigate(`/inventario/ver/${id}`)}
             onEdit={(id) => navigate(`/inventario/editar/${id}`)}
             onDelete={(id) => handleDelete(id)}
@@ -311,15 +311,15 @@ const Inventory = () => {
             <p className="text-gray-500">
               ¿Está seguro que desea eliminar el inventario{" "}
               <span className="font-bold">
-                {inventaryTypes.find(
-                  (item) => item.id === inventaryToDelete.inventaryTypeId
+                {inventoryTypes.find(
+                  (item) => item.id === inventaryToDelete.inventoryTypeId
                 )?.name +
                   " " +
-                  inventaryBrands.find(
+                  inventoryBrands.find(
                     (item) => item.id === inventaryToDelete.inventaryBrandId
                   )?.name +
                   " Modelo " +
-                  inventaryModels.find(
+                  inventoryModels.find(
                     (item) => item.id === inventaryToDelete.inventaryModelId
                   )?.name +
                   " SN - " +

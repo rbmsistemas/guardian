@@ -107,47 +107,47 @@ export default (state, action) => {
     case GET_INVENTORY:
       return {
         ...state,
-        inventaries: payload,
+        inventories: payload,
       };
     case GET_INVENTORY_BY_ID:
       return {
         ...state,
-        inventary: payload,
+        inventory: payload,
       };
     case GET_INVENTORIES_BY_SEARCH:
       return {
         ...state,
-        inventaries: payload,
+        inventories: payload,
       };
     case POST_INVENTORY:
       return {
         ...state,
-        inventary: payload,
+        inventory: payload,
       };
     case PATCH_INVENTORY:
       return {
         ...state,
-        inventary: payload,
+        inventory: payload,
       };
     case DELETE_INVENTORY:
       return {
         ...state,
-        inventaries: payload,
+        inventories: payload,
       };
     case GET_INVENTORY_TYPES:
       return {
         ...state,
-        inventaryTypes: payload,
+        inventoryTypes: payload,
       };
     case GET_INVENTORY_BRANDS:
       return {
         ...state,
-        inventaryBrands: payload,
+        inventoryBrands: payload,
       };
     case GET_INVENTORY_MODELS:
       return {
         ...state,
-        inventaryModels: payload,
+        inventoryModels: payload,
       };
     default:
       return state;

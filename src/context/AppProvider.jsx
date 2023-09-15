@@ -238,7 +238,7 @@ const AppProvider = (props) => {
       if (response?.status >= 300) {
         throw new Error("Error en la respuesta del servidor");
       } else {
-        const inventoryUpdated = state.inventaries.filter(
+        const inventoryUpdated = state.inventories.filter(
           (inventary) => inventary._id !== id
         );
         dispatch({
@@ -263,7 +263,6 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { inventories } = await response.data;
-
       dispatch({
         type: GET_INVENTORIES_BY_SEARCH,
         payload: inventories,
@@ -344,7 +343,7 @@ const AppProvider = (props) => {
       const { inventoryModels } = await response.data;
       dispatch({
         type: GET_INVENTORY_MODELS,
-        payload: inventaryModels,
+        payload: inventoryModels,
       });
     } catch (error) {
       console.log(error);

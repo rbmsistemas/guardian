@@ -28,16 +28,17 @@ import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import "../../Quill.css";
 import { toast } from "react-hot-toast";
 import ModalImageViewer from "../../components/modals/ModalImageViewer";
+import { Base_Inventory } from "../../context/Models";
 
-const ShowInventario = () => {
+const ShowInventory = () => {
   const { id } = useParams();
   const {
-    inventary,
-    getInventaryById,
-    inventaryTypes,
-    inventaryBrands,
-    inventaryModels,
-    deleteInventary,
+    inventory,
+    getInventoryById,
+    inventoryTypes,
+    inventoryBrands,
+    inventoryModels,
+    deleteInventory,
   } = useContext(Context);
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
@@ -51,63 +52,47 @@ const ShowInventario = () => {
     setModal2(true);
   };
 
-  const [inventario, setInventario] = useState({
-    id: "",
-    inventaryTypeId: "",
-    inventaryBrandId: "",
-    inventaryModelId: "",
-    serialNumber: "",
-    activo: "",
-    comments: "",
-    status: false,
-    images: [],
-    altaDate: "",
-    asignacionDate: null,
-    isAsigned: false,
-    bajaDate: null,
-    createdAt: "",
-    updatedAt: "",
-  });
+  const [inventario, setInventario] = useState(Base_Inventory());
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     getInventaryById(id);
   }, [id]);
 
   useEffect(() => {
-    if (inventary.id) {
+    if (inventory.id) {
       setInventario({
-        id: inventary.id ?? "",
-        inventaryTypeId:
-          inventaryTypes.find((item) => item.id === inventary.inventaryTypeId)
+        id: inventory.id ?? "",
+        inventoryTypeId:
+          inventoryTypes.find((item) => item.id === inventory.inventoryTypeId)
             ?.name ?? "",
-        inventaryBrandId:
-          inventaryBrands.find((item) => item.id === inventary.inventaryBrandId)
+        inventoryBrandId:
+          inventoryBrands.find((item) => item.id === inventory.inventoryBrandId)
             ?.name ?? "",
-        inventaryModelId:
-          inventaryModels.find((item) => item.id === inventary.inventaryModelId)
+        inventoryModelId:
+          inventoryModels.find((item) => item.id === inventory.inventoryModelId)
             ?.name ?? "",
-        serialNumber: inventary.serialNumber ?? "",
-        activo: inventary.activo ?? "",
-        comments: inventary.comments ?? "",
-        status: inventary.status ?? false,
-        images: Object.entries(inventary?.images) ?? [],
-        altaDate: inventary.altaDate ?? "",
-        asignacionDate: inventary.asignacionDate ?? null,
-        isAsigned: inventary.isAsigned ?? false,
-        bajaDate: inventary.bajaDate ?? null,
-        createdAt: inventary.createdAt ?? "",
-        updatedAt: inventary.updatedAt ?? "",
+        serialNumber: inventory.serialNumber ?? "",
+        activo: inventory.activo ?? "",
+        comments: inventory.comments ?? "",
+        status: inventory.status ?? false,
+        images: Object.entries(inventory?.images) ?? [],
+        altaDate: inventory.altaDate ?? "",
+        asignacionDate: inventory.asignacionDate ?? null,
+        isAsigned: inventory.isAsigned ?? false,
+        bajaDate: inventory.bajaDate ?? null,
+        createdAt: inventory.createdAt ?? "",
+        updatedAt: inventory.updatedAt ?? "",
       });
     }
     setLoading(false);
-  }, [inventary]);
+  }, [inventory]);
 
   const imageElements = inventario.images?.map(([, link]) => link) ?? [];
 
   const onDelete = async () => {
     setLoading(true);
     console.log("inventario", inventario);
-    const data = await deleteInventary(inventario.id);
+    const data = await deleteInventory(inventario.id);
     if (!data) {
       errorNotify("Error al eliminar el inventario");
       setModal(false);
@@ -124,31 +109,15 @@ const ShowInventario = () => {
     setLoading(false);
   };
   const clearInventary = () => {
-    setInventario({
-      id: "",
-      inventaryTypeId: "",
-      inventaryBrandId: "",
-      inventaryModelId: "",
-      serialNumber: "",
-      activo: "",
-      comments: "",
-      status: false,
-      images: [],
-      altaDate: "",
-      asignacionDate: null,
-      isAsigned: false,
-      bajaDate: null,
-      createdAt: "",
-      updatedAt: "",
-    });
+    setInventario(Base_Inventory());
   };
 
   let inventarioTitle =
-    inventario.inventaryTypeId +
+    inventario.inventoryTypeId +
     " " +
-    inventario.inventaryBrandId +
+    inventario.inventoryBrandId +
     " Modelo " +
-    inventario.inventaryModelId;
+    inventario.inventoryModelId;
 
   return (
     <div className="min-h-full w-full p-5 flex flex-col gap-4">
@@ -490,4 +459,4 @@ const ShowInventario = () => {
     </div>
   );
 };
-export default ShowInventario;
+export default ShowInventory;

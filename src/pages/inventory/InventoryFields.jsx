@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox, Label, TextInput, Select } from "flowbite-react";
 import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 import CameraComponent from "../../utils/CameraComponent";
@@ -10,13 +10,13 @@ import "react-quill/dist/quill.snow.css";
 import { FaUserCheck } from "react-icons/fa";
 import InputSelect from "react-select";
 
-const CreateInventory = ({
+const InventoryFields = ({
   body = {
-    inventaryTypeId: "",
-    otherInventary: "",
-    inventaryBrandId: "",
+    inventoryTypeId: "",
+    otherInventory: "",
+    inventoryBrandId: "",
     otherBrand: "",
-    inventaryModelId: "",
+    inventoryModelId: "",
     otherModel: "",
     serialNumber: "",
     activo: "",
@@ -30,17 +30,22 @@ const CreateInventory = ({
   setBody,
   images = [],
   setImages,
-  inventaryTypes = [],
-  inventaryBrands = [],
-  inventaryModels = [],
+  inventoryTypes = [],
+  inventoryBrands = [],
+  inventoryModels = [],
   titleForm,
 }) => {
   useEffect(() => {
-    if (body.inventaryTypeId !== "otro")
-      setBody({ ...body, otherInventary: "" });
-    if (body.inventaryBrandId !== "otro") setBody({ ...body, otherBrand: "" });
-    if (body.inventaryModelId !== "otro") setBody({ ...body, otherModel: "" });
-  }, [body.inventaryTypeId, body.inventaryBrandId, body.inventaryModelId]);
+    if (body.inventoryTypeId !== "otro")
+      setBody({ ...body, otherInventory: "" });
+    if (body.inventoryBrandId !== "otro") setBody({ ...body, otherBrand: "" });
+    if (body.inventoryModelId !== "otro") setBody({ ...body, otherModel: "" });
+  }, [body.inventoryTypeId, body.inventoryBrandId, body.inventoryModelId]);
+
+  const onSelectInventoryModel = (e) => {
+    console.log(e);
+    setBody({ ...body, inventoryModelId: e.value });
+  };
 
   return (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
@@ -54,48 +59,62 @@ const CreateInventory = ({
       <div className="col-span-12 md:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
-          <Label
-            htmlFor="inventaryTypeId"
-            value="Selecciona el tipo de equipo"
-          />
+          <Label htmlFor="inventoryModelId" value="Modelo" />
         </div>
-        <Select
-          id="inventaryTypeId"
-          icon={BiDevices}
-          required={true}
-          value={body.inventaryTypeId}
-          onChange={(e) =>
-            setBody({ ...body, inventaryTypeId: e.target.value })
-          }
-        >
-          <option value="">-- Selecciona una opción --</option>
-          {inventaryTypes.map((item) => {
-            return (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            );
+        <InputSelect
+          id="inventoryModelId"
+          placeholder="Modelo"
+          isClearable
+          classNames={{
+            control: () => "p-1 border-2",
+            input: () => "text-lg",
+            option: () => "text-lg",
+          }}
+          theme={(theme) => ({
+            ...theme,
+            borderRadius: 6,
+            colors: {
+              ...theme.colors,
+              primary: "black",
+              primary25: "#FFC62C",
+            },
           })}
-          <option value="0">Otro</option>
-        </Select>
+          value={body.inventoryModelId}
+          onChange={onSelectInventoryModel}
+          options={[
+            ...inventoryModels.map((item) => {
+              return {
+                value: item.id,
+                label: item.name,
+              };
+            }),
+            { value: "0", label: "Otro" },
+          ]}
+          formatOptionLabel={(option) => (
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500">
+                <Tb3DCubeSphere />
+              </span>
+              <span>{option.label}</span>
+            </div>
+          )}
+        />
       </div>
       <div className="col-span-12 md:col-span-6">
-        {body.inventaryTypeId == "0" && (
+        {body.inventoryModelId == "0" && (
           <div>
             <div className="w-full flex gap-1">
               <span className="text-red-500">*</span>
-              <Label htmlFor="otherType" value="Otro tipo" />
+              <Label htmlFor="otherModel" value="Especifique el Modelo" />
             </div>
             <TextInput
-              id="otherType"
+              id="otherModel"
               type="text"
-              icon={BiDevices}
-              placeholder="Especifique el tipo de equipo"
+              icon={Tb3DCubeSphere}
+              placeholder="Especicar modelo"
               required={true}
-              value={body.otherInventary}
-              onChange={(e) =>
-                setBody({ ...body, otherInventary: e.target.value })
-              }
+              value={body.otherModel}
+              onChange={(e) => setBody({ ...body, otherModel: e.target.value })}
             />
           </div>
         )}
@@ -104,21 +123,21 @@ const CreateInventory = ({
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
           <Label
-            htmlFor="inventaryBrandId"
+            htmlFor="inventoryBrandId"
             value="Selecciona la marca del equipo"
           />
         </div>
         <Select
-          id="inventaryBrandId"
+          id="inventoryBrandId"
           icon={MdNewReleases}
           required={true}
-          value={body.inventaryBrandId}
+          value={body.inventoryBrandId}
           onChange={(e) =>
-            setBody({ ...body, inventaryBrandId: e.target.value })
+            setBody({ ...body, inventoryBrandId: e.target.value })
           }
         >
           <option value="">-- Selecciona una opción --</option>
-          {inventaryBrands.map((item) => {
+          {inventoryBrands.map((item) => {
             return (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -129,7 +148,7 @@ const CreateInventory = ({
         </Select>
       </div>
       <div className="col-span-12 md:col-span-6">
-        {body.inventaryBrandId == "0" && (
+        {body.inventoryBrandId == "0" && (
           <div>
             <div className="w-full flex gap-1">
               <span className="text-red-500">*</span>
@@ -150,41 +169,22 @@ const CreateInventory = ({
       <div className="col-span-12 md:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
-          <Label htmlFor="inventaryModelId" value="Modelo" />
+          <Label
+            htmlFor="inventoryTypeId"
+            value="Selecciona el tipo de equipo"
+          />
         </div>
-        <InputSelect
-          placeholder="Modelo"
-          isClearable
-          value={body.inventaryModelId}
-          onChange={(e) =>
-            setBody({ ...body, inventaryModelId: e ? e.value : "" })
-          }
-          options={inventaryModels.map((item) => {
-            return {
-              value: item.id,
-              label: item.name,
-            };
-          })}
-          formatOptionLabel={(option) => (
-            <div className="flex items-center gap-2">
-              <span className="text-gray-500">
-                <Tb3DCubeSphere />
-              </span>
-              <span>{option.label}</span>
-            </div>
-          )}
-        />
-        {/* <Select
-          id="inventaryModelId"
-          icon={Tb3DCubeSphere}
+        <Select
+          id="inventoryTypeId"
+          icon={BiDevices}
           required={true}
-          value={body.inventaryModelId}
+          value={body.inventoryTypeId}
           onChange={(e) =>
-            setBody({ ...body, inventaryModelId: e.target.value })
+            setBody({ ...body, inventoryTypeId: e.target.value })
           }
         >
           <option value="">-- Selecciona una opción --</option>
-          {inventaryModels.map((item) => {
+          {inventoryTypes.map((item) => {
             return (
               <option key={item.id} value={item.id}>
                 {item.name}
@@ -192,23 +192,23 @@ const CreateInventory = ({
             );
           })}
           <option value="0">Otro</option>
-        </Select> */}
+        </Select>
       </div>
       <div className="col-span-12 md:col-span-6">
-        {body.inventaryModelId == "0" && (
+        {body.inventoryTypeId == "0" && (
           <div>
             <div className="w-full flex gap-1">
               <span className="text-red-500">*</span>
-              <Label htmlFor="inventaryModelId" value="Especifique el Modelo" />
+              <Label htmlFor="otherType" value="Otro tipo" />
             </div>
             <TextInput
-              id="inventaryModelId"
+              id="otherType"
               type="text"
-              icon={Tb3DCubeSphere}
-              placeholder="Especicar modelo"
+              icon={BiDevices}
+              placeholder="Especifique el tipo de equipo"
               required={true}
-              value={body.otherModel}
-              onChange={(e) => setBody({ ...body, otherModel: e.target.value })}
+              value={body.otherType}
+              onChange={(e) => setBody({ ...body, otherType: e.target.value })}
             />
           </div>
         )}
@@ -315,4 +315,4 @@ const CreateInventory = ({
   );
 };
 
-export default CreateInventory;
+export default InventoryFields;

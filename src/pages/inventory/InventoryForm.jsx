@@ -3,7 +3,7 @@ import Context from "../../context/Context";
 import { FaEye, FaHome } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
-import CreateInventory from "./CreateInventory";
+import InventoryFields from "./InventoryFields";
 import { FiChevronRight } from "react-icons/fi";
 import { MdSaveAlt } from "react-icons/md";
 import { toast } from "react-hot-toast";
@@ -37,6 +37,7 @@ const InventoryForm = () => {
   const [data, setData] = useState(Base_Inventory());
   const [images, setImages] = useState([]);
 
+  console.log(data);
   useEffect(() => {
     if (id) {
       getInventoryById(id);
@@ -336,7 +337,7 @@ const InventoryForm = () => {
           className="flex h-full flex-col gap-5 mt-5"
         >
           {id ? (
-            <CreateInventory
+            <InventoryFields
               body={data}
               setBody={setData}
               images={images}
@@ -347,7 +348,7 @@ const InventoryForm = () => {
               titleForm={"Editar inventario"}
             />
           ) : (
-            <CreateInventory
+            <InventoryFields
               body={data}
               setBody={setData}
               images={images}

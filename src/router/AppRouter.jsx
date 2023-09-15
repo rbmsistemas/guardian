@@ -13,7 +13,7 @@ const Inventory = lazy(() => import("../pages/inventory/Inventory"));
 const Actividad = lazy(() => import("../pages/actividad/Actividad"));
 const ActividadForm = lazy(() => import("../pages/actividad/ActividadForm"));
 const InventoryForm = lazy(() => import("../pages/inventory/InventoryForm"));
-const ShowInventario = lazy(() => import("../pages/inventory/ShowInventario"));
+const ShowInventory = lazy(() => import("../pages/inventory/ShowInventory"));
 const Nav = lazy(() => import("../components/navbar/Navbar"));
 
 const LoginRouter = () => {
@@ -41,11 +41,11 @@ const AuthRouter = () => {
             <Route path="/inventario" element={<Inventory />} />
             <Route path="/inventario/crear" element={<InventoryForm />} />
             <Route path="/inventario/editar/:id" element={<InventoryForm />} />
-            <Route path="/inventario/ver/:id" element={<ShowInventario />} />
+            <Route path="/inventario/ver/:id" element={<ShowInventory />} />
             <Route path="/actividades" element={<Actividad />} />
             <Route path="/actividades/crear" element={<ActividadForm />} />
             <Route path="/actividades/editar/:id" element={<ActividadForm />} />
-            <Route path="/actividades/ver/:id" element={<ShowInventario />} />
+            <Route path="/actividades/ver/:id" element={<ShowInventory />} />
             <Route path="/company" element={<Company />} />
             <Route path="/company/crear" element={<CompanyForm />} />
             <Route path="/company/editar/:id" element={<CompanyForm />} />
