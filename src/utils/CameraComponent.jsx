@@ -93,7 +93,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const onClose = () => setShowModal(false);
 
   const toggleFlash = async () => {
-    const track = mediaStreamRef.current.getVideoTracks()[0];
+    const track = mediaStreamRef?.current?.getVideoTracks()[0];
     if (track) {
       try {
         await track.applyConstraints({
@@ -104,6 +104,8 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         notifyError("El dispositivo no soporta flash");
         console.error("Flash control not supported:", error);
       }
+    } else {
+      notifyError("El dispositivo no soporta flash");
     }
   };
 
@@ -168,21 +170,13 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             type="file"
             id="upload"
             className="hidden"
-            multiple={false}
+            multiple={true}
             accept={
               ".png, .jpg, .jpeg, .webp, avif, .gif, .jfif, .svg, .bmp, .tiff"
             }
             onChange={(e) =>
-              setCapturedImage([...capturedImage, e.target.files[0]])
+              setCapturedImage([...capturedImage, ...e.target.files])
             }
-            // onChange={(e) => {
-            //   const file = e.target.files[0];
-            //   const reader = new FileReader();
-            //   reader.readAsDataURL(file);
-            //   reader.onloadend = () => {
-            //     setCapturedImage([...capturedImage, reader.result]);
-            //   };
-            // }}
           />
         </div>
         {capturedImage.length > 0 &&
@@ -217,22 +211,6 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             );
           })}
       </div>
-      {/* <Modal dismissible={true} show={showModal} onClose={onClose} size="3xl">
-        <Modal.Header>Imagenes</Modal.Header>
-        <Modal.Body>
-          {image && (
-            <img
-              src={
-                image instanceof File
-                  ? URL.createObjectURL(image)
-                  : ImageUrlGenerator(image)
-              }
-              alt="imagen-selected"
-              className="w-full rounded-lg "
-            />
-          )}
-        </Modal.Body>
-      </Modal> */}
       {showModal && (
         <ModalImageViewer
           images={capturedImage}

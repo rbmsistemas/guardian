@@ -36,8 +36,28 @@ const InventoryForm = () => {
 
   const [data, setData] = useState(Base_Inventory());
   const [images, setImages] = useState([]);
+  const newInvetoryModels = [
+    ...inventoryModels?.map((model) => ({
+      value: model.id,
+      label: model.name,
+    })),
+    { value: 0, label: "Otro" },
+  ];
+  const newInventoryBrands = [
+    ...inventoryBrands?.map((brand) => ({
+      value: brand.id,
+      label: brand.name,
+    })),
+    { value: 0, label: "Otro" },
+  ];
+  const newInventoryTypes = [
+    ...inventoryTypes?.map((type) => ({
+      value: type.id,
+      label: type.name,
+    })),
+    { value: 0, label: "Otro" },
+  ];
 
-  console.log(data);
   useEffect(() => {
     if (id) {
       getInventoryById(id);
@@ -77,6 +97,9 @@ const InventoryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(data);
+    console.log(images);
+    return;
     setLoading(true);
     if (id) {
       try {
@@ -287,6 +310,25 @@ const InventoryForm = () => {
     }
   };
 
+  const handleSelectInput = (e, type) => {
+    if (e === null) {
+      return;
+    }
+    switch (type) {
+      case "inventoryModelId":
+        setData({ ...data, inventoryModelId: e.value });
+        break;
+      case "inventoryBrandId":
+        setData({ ...data, inventoryBrandId: e.value });
+        break;
+      case "inventoryTypeId":
+        setData({ ...data, inventoryTypeId: e.value });
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="min-h-full h-auto w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
@@ -330,7 +372,7 @@ const InventoryForm = () => {
           )}
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col pb-20">
         <h2 className="text-xl font-bold"></h2>
         <form
           onSubmit={handleSubmit}
@@ -342,9 +384,10 @@ const InventoryForm = () => {
               setBody={setData}
               images={images}
               setImages={setImages}
-              inventoryTypes={inventoryTypes}
-              inventoryBrands={inventoryBrands}
-              inventoryModels={inventoryModels}
+              inventoryTypes={newInventoryTypes}
+              inventoryBrands={newInventoryBrands}
+              inventoryModels={newInvetoryModels}
+              handleSelectInput={handleSelectInput}
               titleForm={"Editar inventario"}
             />
           ) : (
@@ -353,9 +396,10 @@ const InventoryForm = () => {
               setBody={setData}
               images={images}
               setImages={setImages}
-              inventoryTypes={inventoryTypes}
-              inventoryBrands={inventoryBrands}
-              inventoryModels={inventoryModels}
+              inventoryTypes={newInventoryTypes}
+              inventoryBrands={newInventoryBrands}
+              inventoryModels={newInvetoryModels}
+              handleSelectInput={handleSelectInput}
               titleForm={"Crear inventario"}
             />
           )}

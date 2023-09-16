@@ -614,7 +614,7 @@ const AppProvider = (props) => {
         company: state.company,
         inventoryTypes: state.inventoryTypes,
         inventoryBrands: state.inventoryBrands,
-        inventoryModels: state.inventaryModels,
+        inventoryModels: state.inventoryModels,
         inventories: state.inventories,
         inventory: state.inventory,
         handleLogin,

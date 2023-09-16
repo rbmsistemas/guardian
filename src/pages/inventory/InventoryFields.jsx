@@ -7,13 +7,12 @@ import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import { Tb3DCubeSphere } from "react-icons/tb";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { FaUserCheck } from "react-icons/fa";
 import InputSelect from "react-select";
 
 const InventoryFields = ({
   body = {
     inventoryTypeId: "",
-    otherInventory: "",
+    otherType: "",
     inventoryBrandId: "",
     otherBrand: "",
     inventoryModelId: "",
@@ -22,10 +21,8 @@ const InventoryFields = ({
     activo: "",
     comments: "",
     status: "",
-    isAsigned: false,
     altaDate: null,
     bajaDate: nunll,
-    asignacionDate: null,
   },
   setBody,
   images = [],
@@ -34,18 +31,13 @@ const InventoryFields = ({
   inventoryBrands = [],
   inventoryModels = [],
   titleForm,
+  handleSelectInput,
 }) => {
   useEffect(() => {
-    if (body.inventoryTypeId !== "otro")
-      setBody({ ...body, otherInventory: "" });
-    if (body.inventoryBrandId !== "otro") setBody({ ...body, otherBrand: "" });
-    if (body.inventoryModelId !== "otro") setBody({ ...body, otherModel: "" });
+    if (body.inventoryTypeId != "0") setBody({ ...body, otherType: "" });
+    if (body.inventoryBrandId != "0") setBody({ ...body, otherBrand: "" });
+    if (body.inventoryModelId != "0") setBody({ ...body, otherModel: "" });
   }, [body.inventoryTypeId, body.inventoryBrandId, body.inventoryModelId]);
-
-  const onSelectInventoryModel = (e) => {
-    console.log(e);
-    setBody({ ...body, inventoryModelId: e.value });
-  };
 
   return (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
@@ -61,44 +53,40 @@ const InventoryFields = ({
           <span className="text-red-500">*</span>
           <Label htmlFor="inventoryModelId" value="Modelo" />
         </div>
-        <InputSelect
-          id="inventoryModelId"
-          placeholder="Modelo"
-          isClearable
-          classNames={{
-            control: () => "p-1 border-2",
-            input: () => "text-lg",
-            option: () => "text-lg",
-          }}
-          theme={(theme) => ({
-            ...theme,
-            borderRadius: 6,
-            colors: {
-              ...theme.colors,
-              primary: "black",
-              primary25: "#FFC62C",
-            },
-          })}
-          value={body.inventoryModelId}
-          onChange={onSelectInventoryModel}
-          options={[
-            ...inventoryModels.map((item) => {
-              return {
-                value: item.id,
-                label: item.name,
-              };
-            }),
-            { value: "0", label: "Otro" },
-          ]}
-          formatOptionLabel={(option) => (
-            <div className="flex items-center gap-2">
-              <span className="text-gray-500">
-                <Tb3DCubeSphere />
-              </span>
-              <span>{option.label}</span>
-            </div>
-          )}
-        />
+        <div className="relative">
+          <InputSelect
+            placeholder="Modelo"
+            options={inventoryModels}
+            value={inventoryModels.find(
+              (item) => item.id == body.inventoryModelId
+            )}
+            onChange={(e) => handleSelectInput(e, "inventoryModelId")}
+            noOptionsMessage={() => "No hay coincidencias con tu busqueda"}
+            formatOptionLabel={(option) => (
+              <div className="flex items-center gap-2 text-neutral-500">
+                <span>{option.label}</span>
+              </div>
+            )}
+            classNames={{
+              control: () => "p-1 pl-10",
+              input: () => "text-md",
+              option: () => "text-md",
+            }}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 6,
+              colors: {
+                ...theme.colors,
+                primary: "black",
+                primary25: "#FFC62C",
+              },
+            })}
+          />
+          <Tb3DCubeSphere
+            size={20}
+            className="absolute top-3 left-3 text-gray-500"
+          />
+        </div>
       </div>
       <div className="col-span-12 md:col-span-6">
         {body.inventoryModelId == "0" && (
@@ -111,6 +99,14 @@ const InventoryFields = ({
               id="otherModel"
               type="text"
               icon={Tb3DCubeSphere}
+              color={"bg-white"}
+              style={{
+                borderColor: "#ccc",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                paddingTop: "13px",
+                paddingBottom: "13px",
+              }}
               placeholder="Especicar modelo"
               required={true}
               value={body.otherModel}
@@ -127,25 +123,45 @@ const InventoryFields = ({
             value="Selecciona la marca del equipo"
           />
         </div>
-        <Select
-          id="inventoryBrandId"
-          icon={MdNewReleases}
-          required={true}
-          value={body.inventoryBrandId}
-          onChange={(e) =>
-            setBody({ ...body, inventoryBrandId: e.target.value })
-          }
-        >
-          <option value="">-- Selecciona una opción --</option>
-          {inventoryBrands.map((item) => {
-            return (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            );
-          })}
-          <option value="0">Otro</option>
-        </Select>
+        <div className="relative">
+          <InputSelect
+            placeholder="Marca"
+            options={inventoryBrands}
+            value={inventoryBrands.find(
+              (item) => item.id == body.inventoryBrandId
+            )}
+            onChange={(e) => handleSelectInput(e, "inventoryBrandId")}
+            noOptionsMessage={() => "No hay coincidencias con tu busqueda"}
+            formatOptionLabel={(option) => (
+              <div className="flex items-center gap-2 text-neutral-500">
+                <span>{option.label}</span>
+              </div>
+            )}
+            classNames={{
+              control: () => "p-1 pl-10",
+              input: () => "text-md",
+              option: () => "text-md",
+            }}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 6,
+              colors: {
+                ...theme.colors,
+                primary: "black",
+                primary25: "#FFC62C",
+              },
+            })}
+            isDisabled={
+              body.otherModel == "" || body.inventoryModelId != "0"
+                ? true
+                : false
+            }
+          />
+          <MdNewReleases
+            size={19}
+            className="absolute top-3 left-3 text-gray-500"
+          />
+        </div>
       </div>
       <div className="col-span-12 md:col-span-6">
         {body.inventoryBrandId == "0" && (
@@ -158,6 +174,14 @@ const InventoryFields = ({
               id="otherBrand"
               type="text"
               icon={MdNewReleases}
+              color={"bg-white"}
+              style={{
+                borderColor: "#ccc",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                paddingTop: "13px",
+                paddingBottom: "13px",
+              }}
               placeholder="Especifique la marca"
               required={true}
               value={body.otherBrand}
@@ -174,25 +198,45 @@ const InventoryFields = ({
             value="Selecciona el tipo de equipo"
           />
         </div>
-        <Select
-          id="inventoryTypeId"
-          icon={BiDevices}
-          required={true}
-          value={body.inventoryTypeId}
-          onChange={(e) =>
-            setBody({ ...body, inventoryTypeId: e.target.value })
-          }
-        >
-          <option value="">-- Selecciona una opción --</option>
-          {inventoryTypes.map((item) => {
-            return (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            );
-          })}
-          <option value="0">Otro</option>
-        </Select>
+        <div className="relative">
+          <InputSelect
+            placeholder="Tipo de equipo"
+            options={inventoryTypes}
+            value={inventoryTypes.find(
+              (item) => item.id == body.inventoryTypeId
+            )}
+            onChange={(e) => handleSelectInput(e, "inventoryTypeId")}
+            noOptionsMessage={() => "No hay coincidencias con tu busqueda"}
+            formatOptionLabel={(option) => (
+              <div className="flex items-center gap-2 text-neutral-500">
+                <span>{option.label}</span>
+              </div>
+            )}
+            classNames={{
+              control: () => "p-1 pl-10",
+              input: () => "text-md",
+              option: () => "text-md",
+            }}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 6,
+              colors: {
+                ...theme.colors,
+                primary: "black",
+                primary25: "#FFC62C",
+              },
+            })}
+            isDisabled={
+              body.otherModel == "" || body.inventoryModelId != "0"
+                ? true
+                : false
+            }
+          />
+          <BiDevices
+            size={19}
+            className="absolute top-3 left-3 text-gray-500"
+          />
+        </div>
       </div>
       <div className="col-span-12 md:col-span-6">
         {body.inventoryTypeId == "0" && (
@@ -205,6 +249,14 @@ const InventoryFields = ({
               id="otherType"
               type="text"
               icon={BiDevices}
+              color={"bg-white"}
+              style={{
+                borderColor: "#ccc",
+                borderWidth: "1px",
+                borderStyle: "solid",
+                paddingTop: "13px",
+                paddingBottom: "13px",
+              }}
               placeholder="Especifique el tipo de equipo"
               required={true}
               value={body.otherType}
@@ -222,7 +274,15 @@ const InventoryFields = ({
           id="serialNumber"
           type="text"
           icon={AiOutlineFieldNumber}
-          placeholder="serialNumber"
+          color={"bg-white"}
+          style={{
+            borderColor: "#ccc",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            paddingTop: "13px",
+            paddingBottom: "13px",
+          }}
+          placeholder="Número de serie"
           required={false}
           value={body.serialNumber}
           onChange={(e) => setBody({ ...body, serialNumber: e.target.value })}
@@ -238,6 +298,14 @@ const InventoryFields = ({
           type="text"
           icon={AiOutlineNumber}
           placeholder="Activo"
+          color={"bg-white"}
+          style={{
+            borderColor: "#ccc",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            paddingTop: "13px",
+            paddingBottom: "13px",
+          }}
           required={false}
           value={body.activo}
           onChange={(e) => setBody({ ...body, activo: e.target.value })}
@@ -253,6 +321,14 @@ const InventoryFields = ({
           onChange={(e) => setBody({ ...body, status: e.target.value })}
           id="status"
           icon={MdOutlineCategory}
+          color={"bg-white"}
+          style={{
+            borderColor: "#ccc",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            paddingTop: "13px",
+            paddingBottom: "13px",
+          }}
           required={true}
         >
           <option value="">-- Selecciona una opción --</option>
@@ -260,20 +336,7 @@ const InventoryFields = ({
           <option value={false}>Baja</option>
         </Select>
       </div>
-      <div className="col-span-12 md:col-span-6">
-        <div className="w-full flex gap-1">
-          <span className="text-red-500"></span>
-          <Label htmlFor="isAsigned" value="¿El equipo ha sido asignado?" />
-        </div>
-        <div className="flex bg-gray-50 gap-4 items-center justify-start w-full p-3 py-2 rounded-md mt-1 border border-gray-300">
-          <FaUserCheck className="text-2xl text-gray-500" />
-          <Checkbox
-            checked={body.isAsigned}
-            onChange={(e) => setBody({ ...body, isAsigned: e.target.checked })}
-          />
-          <span className="text-gray-500">{body.isAsigned ? "Sí" : "No"}</span>
-        </div>
-      </div>
+
       <div className="col-span-12">
         <div className="w-full">
           <Label
