@@ -5,7 +5,8 @@ import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdCameraswitch, MdFlashOff, MdFlashOn } from "react-icons/md";
 import Webcam from "react-webcam";
-import ImageUrlGenerator from "./ImageUrlGenerator";
+import { FormatedUrlImage } from "./FormatedUrlImage";
+import ModalImageViewer from "../components/modals/ModalImageViewer";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
   const webcamRef = useRef(null);
@@ -192,21 +193,12 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
                 >
                   <FaRegTrashAlt />
                 </span>
-                {item instanceof File ? (
-                  <img
-                    className="object-fill p-1 h-32 w-32 rounded-lg cursor-pointer"
-                    onClick={() => selectImage(index)}
-                    src={URL.createObjectURL(item)}
-                    alt="image-captured"
-                  />
-                ) : (
-                  <img
-                    className="object-fill p-1 h-32 w-32 rounded-lg cursor-pointer"
-                    onClick={() => selectImage(index)}
-                    src={ImageUrlGenerator(item)}
-                    alt="image-captured"
-                  />
-                )}
+                <img
+                  className="object-contain p-1 h-full w-full rounded-lg cursor-pointer"
+                  onClick={() => selectImage(index)}
+                  src={FormatedUrlImage(item)}
+                  alt="image-captured"
+                />
               </div>
             );
           })}

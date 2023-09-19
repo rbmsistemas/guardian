@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Checkbox, Label, TextInput, Select } from "flowbite-react";
+import React, { useEffect } from "react";
+import { Label, Select } from "flowbite-react";
 import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 import CameraComponent from "../../utils/CameraComponent";
 import { BiDevices } from "react-icons/bi";
@@ -7,22 +7,26 @@ import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import { Tb3DCubeSphere } from "react-icons/tb";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import InputSelect from "react-select";
+import AutocompleteInput from "../../components/inputs/AutocompleteInput";
+import TextInput from "../../components/inputs/TextInput";
 
 const InventoryFields = ({
   body = {
-    inventoryTypeId: "",
-    otherType: "",
-    inventoryBrandId: "",
-    otherBrand: "",
     inventoryModelId: "",
     otherModel: "",
+    inventoryBrandId: "",
+    otherBrand: "",
+    inventoryTypeId: "",
+    otherType: "",
     serialNumber: "",
     activo: "",
     comments: "",
-    status: "",
-    altaDate: null,
-    bajaDate: nunll,
+    status: false,
+    images: [],
+    altaDate: Date.now(),
+    bajaDate: null,
+    recepcionDate: null,
+    createdBy: "",
   },
   setBody,
   images = [],
@@ -54,37 +58,13 @@ const InventoryFields = ({
           <Label htmlFor="inventoryModelId" value="Modelo" />
         </div>
         <div className="relative">
-          <InputSelect
-            placeholder="Modelo"
-            options={inventoryModels}
-            value={inventoryModels.find(
-              (item) => item.id == body.inventoryModelId
-            )}
+          <AutocompleteInput
+            data={inventoryModels}
+            value={body.inventoryModelId}
             onChange={(e) => handleSelectInput(e, "inventoryModelId")}
-            noOptionsMessage={() => "No hay coincidencias con tu busqueda"}
-            formatOptionLabel={(option) => (
-              <div className="flex items-center gap-2 text-neutral-500">
-                <span>{option.label}</span>
-              </div>
-            )}
-            classNames={{
-              control: () => "p-1 pl-10",
-              input: () => "text-md",
-              option: () => "text-md",
-            }}
-            theme={(theme) => ({
-              ...theme,
-              borderRadius: 6,
-              colors: {
-                ...theme.colors,
-                primary: "black",
-                primary25: "#FFC62C",
-              },
-            })}
-          />
-          <Tb3DCubeSphere
-            size={20}
-            className="absolute top-3 left-3 text-gray-500"
+            icon={Tb3DCubeSphere}
+            isClearable
+            isOtherOption
           />
         </div>
       </div>
@@ -123,45 +103,17 @@ const InventoryFields = ({
             value="Selecciona la marca del equipo"
           />
         </div>
-        <div className="relative">
-          <InputSelect
-            placeholder="Marca"
-            options={inventoryBrands}
-            value={inventoryBrands.find(
-              (item) => item.id == body.inventoryBrandId
-            )}
-            onChange={(e) => handleSelectInput(e, "inventoryBrandId")}
-            noOptionsMessage={() => "No hay coincidencias con tu busqueda"}
-            formatOptionLabel={(option) => (
-              <div className="flex items-center gap-2 text-neutral-500">
-                <span>{option.label}</span>
-              </div>
-            )}
-            classNames={{
-              control: () => "p-1 pl-10",
-              input: () => "text-md",
-              option: () => "text-md",
-            }}
-            theme={(theme) => ({
-              ...theme,
-              borderRadius: 6,
-              colors: {
-                ...theme.colors,
-                primary: "black",
-                primary25: "#FFC62C",
-              },
-            })}
-            isDisabled={
-              body.otherModel == "" || body.inventoryModelId != "0"
-                ? true
-                : false
-            }
-          />
-          <MdNewReleases
-            size={19}
-            className="absolute top-3 left-3 text-gray-500"
-          />
-        </div>
+        <AutocompleteInput
+          data={inventoryBrands}
+          value={body.inventoryBrandId}
+          onChange={(e) => handleSelectInput(e, "inventoryBrandId")}
+          icon={MdNewReleases}
+          isOtherOption
+          isClearable
+          disabled={
+            body.otherModel == "" || body.inventoryModelId != "0" ? true : false
+          }
+        />
       </div>
       <div className="col-span-12 md:col-span-6">
         {body.inventoryBrandId == "0" && (
@@ -198,45 +150,17 @@ const InventoryFields = ({
             value="Selecciona el tipo de equipo"
           />
         </div>
-        <div className="relative">
-          <InputSelect
-            placeholder="Tipo de equipo"
-            options={inventoryTypes}
-            value={inventoryTypes.find(
-              (item) => item.id == body.inventoryTypeId
-            )}
-            onChange={(e) => handleSelectInput(e, "inventoryTypeId")}
-            noOptionsMessage={() => "No hay coincidencias con tu busqueda"}
-            formatOptionLabel={(option) => (
-              <div className="flex items-center gap-2 text-neutral-500">
-                <span>{option.label}</span>
-              </div>
-            )}
-            classNames={{
-              control: () => "p-1 pl-10",
-              input: () => "text-md",
-              option: () => "text-md",
-            }}
-            theme={(theme) => ({
-              ...theme,
-              borderRadius: 6,
-              colors: {
-                ...theme.colors,
-                primary: "black",
-                primary25: "#FFC62C",
-              },
-            })}
-            isDisabled={
-              body.otherModel == "" || body.inventoryModelId != "0"
-                ? true
-                : false
-            }
-          />
-          <BiDevices
-            size={19}
-            className="absolute top-3 left-3 text-gray-500"
-          />
-        </div>
+        <AutocompleteInput
+          data={inventoryTypes}
+          value={body.inventoryTypeId}
+          onChange={(e) => handleSelectInput(e, "inventoryTypeId")}
+          icon={BiDevices}
+          isOtherOption
+          isClearable
+          disabled={
+            body.otherModel == "" || body.inventoryModelId != "0" ? true : false
+          }
+        />
       </div>
       <div className="col-span-12 md:col-span-6">
         {body.inventoryTypeId == "0" && (
@@ -271,19 +195,12 @@ const InventoryFields = ({
           <Label htmlFor="serialNumber" value="Número de Serie" />
         </div>
         <TextInput
-          id="serialNumber"
+          id={"serialNumber"}
           type="text"
           icon={AiOutlineFieldNumber}
-          color={"bg-white"}
-          style={{
-            borderColor: "#ccc",
-            borderWidth: "1px",
-            borderStyle: "solid",
-            paddingTop: "13px",
-            paddingBottom: "13px",
-          }}
           placeholder="Número de serie"
           required={false}
+          isClearable
           value={body.serialNumber}
           onChange={(e) => setBody({ ...body, serialNumber: e.target.value })}
         />
@@ -298,15 +215,8 @@ const InventoryFields = ({
           type="text"
           icon={AiOutlineNumber}
           placeholder="Activo"
-          color={"bg-white"}
-          style={{
-            borderColor: "#ccc",
-            borderWidth: "1px",
-            borderStyle: "solid",
-            paddingTop: "13px",
-            paddingBottom: "13px",
-          }}
           required={false}
+          isClearable
           value={body.activo}
           onChange={(e) => setBody({ ...body, activo: e.target.value })}
         />
@@ -314,7 +224,7 @@ const InventoryFields = ({
       <div className="col-span-12 md:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
-          <Label htmlFor="status" value="Selecciona el tipo de inventario" />
+          <Label htmlFor="status" value="¿Alta o Baja de equipo?" />
         </div>
         <Select
           value={body.status}
@@ -336,7 +246,19 @@ const InventoryFields = ({
           <option value={false}>Baja</option>
         </Select>
       </div>
-
+      <div className="col-span-12 md:col-span-6">
+        <div className="mb-1 w-full flex gap-1">
+          <span className="text-red-500"></span>
+          <Label htmlFor="recepcionDate" value="Fecha de recepción" />
+        </div>
+        <TextInput
+          type="date"
+          id="recepcionDate"
+          name="recepcionDate"
+          value={body.recepcionDate || ""}
+          onChange={(e) => setBody({ ...body, recepcionDate: e.target.value })}
+        />
+      </div>
       <div className="col-span-12">
         <div className="w-full">
           <Label

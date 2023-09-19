@@ -15,6 +15,7 @@ const CustomeTable = ({
   setPage,
   totalEntries = 0,
   totalPages = 0,
+  filters = {},
 }) => {
   const [imageSelected, setImageSelected] = useState("");
   const [modal, setModal] = useState(false);

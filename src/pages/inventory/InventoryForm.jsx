@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Context from "../../context/Context";
-import { FaEye, FaHome } from "react-icons/fa";
+import { FaEye, FaHome, FaSave } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import InventoryFields from "./InventoryFields";
@@ -41,21 +41,18 @@ const InventoryForm = () => {
       value: model.id,
       label: model.name,
     })),
-    { value: 0, label: "Otro" },
   ];
   const newInventoryBrands = [
     ...inventoryBrands?.map((brand) => ({
       value: brand.id,
       label: brand.name,
     })),
-    { value: 0, label: "Otro" },
   ];
   const newInventoryTypes = [
     ...inventoryTypes?.map((type) => ({
       value: type.id,
       label: type.name,
     })),
-    { value: 0, label: "Otro" },
   ];
 
   useEffect(() => {
@@ -71,12 +68,23 @@ const InventoryForm = () => {
 
   useEffect(() => {
     if (id && inventory.id) {
-      setData(Base_Inventory(inventory));
-      setImages(
-        Object.entries(inventory?.imagesSrc)?.map(([, link]) => link) ?? []
-      );
+      setData(Base_Inventory(inventory, inventoryModels));
+      setImages(inventory?.images || []);
     }
   }, [inventory]);
+
+  const compareChanges = (data, inventory) => {
+    let changes = false;
+    if (!id) {
+      return false;
+    }
+    Object.keys(inventory).forEach((key) => {
+      if (data[key] !== inventory[key]) {
+        changes = true;
+      }
+    });
+    return changes;
+  };
 
   const handleValidateSerialNumber = async (serialNumber, currentId = null) => {
     const res = await getValidatedSerialNumber({ serialNumber, currentId });
@@ -97,10 +105,8 @@ const InventoryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
-    console.log(images);
-    return;
     setLoading(true);
+
     if (id) {
       try {
         let newImagesJSON = {};
@@ -132,14 +138,13 @@ const InventoryForm = () => {
           });
         }
 
-        if (data.isAsigned === false) {
-          setData({ ...data, asignacionDate: null });
-        } else if (data.isAsigned === true) {
+        if (data.recepcionDate) {
           setData({
             ...data,
-            asignacionDate: getCurrentFormattedDate(),
+            recepcionDate: new Date(data.recepcionDate),
           });
         }
+
         if (
           data.serialNumber !== inventory.serialNumber &&
           data.activo !== inventory.activo
@@ -158,7 +163,11 @@ const InventoryForm = () => {
           if (existSN || existActivo) {
             const res = await updateInventory(
               id,
-              { ...data, images: imagesObject },
+              {
+                ...data,
+                images: imagesObject,
+                recepcionDate: data.recepcionDate ?? null,
+              },
               user.token
             );
             if (!res.id) {
@@ -201,18 +210,24 @@ const InventoryForm = () => {
           ...data,
           images: newImagesJSON,
         };
-        // if (data.status === false) {
-        //   sendData = {
-        //     ...sendData,
-        //     bajaDate: getCurrentFormattedDate(),
-        //   };
-        // } else if (data.status === true) {
         sendData = {
           ...sendData,
           bajaDate: getCurrentFormattedDate(),
           altaDate: getCurrentFormattedDate(),
         };
-        // }
+
+        if (data.recepcionDate) {
+          setData({
+            ...data,
+            recepcionDate: new Date(data.recepcionDate),
+          });
+        } else {
+          setData({
+            ...data,
+            recepcionDate: null,
+          });
+        }
+
         if (data.status === true) {
           sendData = {
             ...sendData,
@@ -220,22 +235,12 @@ const InventoryForm = () => {
           };
         }
 
-        if (data.isAsigned === false) {
-          sendData = { ...sendData, asignacionDate: null };
-        } else if (data.isAsigned === true) {
-          sendData = {
-            ...sendData,
-            asignacionDate: getCurrentFormattedDate(),
-          };
-        }
         let existSN = true;
         if (data.activo) {
-          console.log("entre a activo update");
           existSN = await handleValidateSerialNumber(data.serialNumber);
         }
         let existActivo = true;
         if (data.activo) {
-          console.log("entre a activo");
           existActivo = await handleValidateActivo(data.activo);
         }
         if (existSN || existActivo) {
@@ -316,7 +321,29 @@ const InventoryForm = () => {
     }
     switch (type) {
       case "inventoryModelId":
-        setData({ ...data, inventoryModelId: e.value });
+        if (e?.value === "" || e === "") {
+          setData({
+            ...data,
+            inventoryModelId: "",
+            inventoryBrandId: "",
+            inventoryTypeId: "",
+          });
+        } else if (e.value === 0) {
+          setData({
+            ...data,
+            inventoryModelId: e.value,
+            inventoryBrandId: "",
+            inventoryTypeId: "",
+          });
+        } else {
+          let model = inventoryModels.find((model) => model.id === e.value);
+          setData({
+            ...data,
+            inventoryModelId: e.value,
+            inventoryBrandId: model?.inventoryBrandId || "",
+            inventoryTypeId: model?.inventoryTypeId || "",
+          });
+        }
         break;
       case "inventoryBrandId":
         setData({ ...data, inventoryBrandId: e.value });
@@ -350,6 +377,16 @@ const InventoryForm = () => {
           </Link>
         </div>
         <div className="flex gap-2 justify-center md:justify-end">
+          <button
+            type="submit"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+          >
+            <span>
+              <FaSave className="text-white text-lg" />
+            </span>
+
+            {id ? "Actualizar" : "Guardar"}
+          </button>
           <Link
             to="/inventario"
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
@@ -357,7 +394,7 @@ const InventoryForm = () => {
             <span>
               <IoArrowBack className="text-white text-lg" />
             </span>
-            {voler ? "Cancelar" : "Volver"}
+            {voler && compareChanges(data, inventory) ? "Cancelar" : "Volver"}
           </Link>
           {id && (
             <Link
@@ -409,7 +446,7 @@ const InventoryForm = () => {
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
             >
               <span>
-                <MdSaveAlt className="text-white text-lg" />
+                <FaSave className="text-white text-lg" />
               </span>
 
               {id ? "Actualizar" : "Guardar"}

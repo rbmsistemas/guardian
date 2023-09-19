@@ -9,6 +9,7 @@ import {
   FaRegEdit,
   FaRegTrashAlt,
   FaTimes,
+  FaUser,
   FaUserCheck,
 } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
@@ -29,6 +30,7 @@ import "../../Quill.css";
 import { toast } from "react-hot-toast";
 import ModalImageViewer from "../../components/modals/ModalImageViewer";
 import { Base_Inventory } from "../../context/Models";
+import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 
 const ShowInventory = () => {
   const { id } = useParams();
@@ -55,7 +57,7 @@ const ShowInventory = () => {
   const [inventario, setInventario] = useState(Base_Inventory());
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getInventaryById(id);
+    getInventoryById(id);
   }, [id]);
 
   useEffect(() => {
@@ -63,11 +65,21 @@ const ShowInventory = () => {
       setInventario({
         id: inventory.id ?? "",
         inventoryTypeId:
-          inventoryTypes.find((item) => item.id === inventory.inventoryTypeId)
-            ?.name ?? "",
+          inventoryTypes.find(
+            (item) =>
+              item.id ===
+              (inventoryModels.find(
+                (item) => item.id === inventory.inventoryModelId
+              )?.inventoryTypeId ?? "")
+          )?.name ?? "",
         inventoryBrandId:
-          inventoryBrands.find((item) => item.id === inventory.inventoryBrandId)
-            ?.name ?? "",
+          inventoryBrands.find(
+            (item) =>
+              item.id ===
+              (inventoryModels.find(
+                (item) => item.id === inventory.inventoryModelId
+              )?.inventoryBrandId ?? "")
+          )?.name ?? "",
         inventoryModelId:
           inventoryModels.find((item) => item.id === inventory.inventoryModelId)
             ?.name ?? "",
@@ -75,19 +87,17 @@ const ShowInventory = () => {
         activo: inventory.activo ?? "",
         comments: inventory.comments ?? "",
         status: inventory.status ?? false,
-        images: Object.entries(inventory?.images) ?? [],
+        images: inventory?.images ?? [],
         altaDate: inventory.altaDate ?? "",
-        asignacionDate: inventory.asignacionDate ?? null,
-        isAsigned: inventory.isAsigned ?? false,
         bajaDate: inventory.bajaDate ?? null,
+        createdBy: inventory.createdBy ?? "",
+        recepcionDate: inventory.recepcionDate ?? null,
         createdAt: inventory.createdAt ?? "",
         updatedAt: inventory.updatedAt ?? "",
       });
     }
     setLoading(false);
   }, [inventory]);
-
-  const imageElements = inventario.images?.map(([, link]) => link) ?? [];
 
   const onDelete = async () => {
     setLoading(true);
@@ -101,14 +111,14 @@ const ShowInventory = () => {
     }
 
     successNotify("Inventario eliminado correctamente");
-    clearInventary();
+    clearInventory();
     setTimeout(() => {
       navigate("/inventario");
     }, 500);
     setModal(false);
     setLoading(false);
   };
-  const clearInventary = () => {
+  const clearInventory = () => {
     setInventario(Base_Inventory());
   };
 
@@ -136,7 +146,7 @@ const ShowInventory = () => {
             <FiChevronRight />
           </span>
           <Link to="#" className="text-gray-500 hover:text-gray-700 truncate">
-            {inventario.inventaryTypeId + " " + inventario.inventaryBrandId}
+            {inventario.inventoryTypeId + " " + inventario.inventoryBrandId}
           </Link>
         </div>
         <div className="flex flex-wrap gap-2 items-center justify-end">
@@ -183,44 +193,44 @@ const ShowInventory = () => {
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
-              <Label htmlFor="inventaryTipe" value="Tipo de inventario" />
+              <Label htmlFor="inventoryTipe" value="Tipo de inventario" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <BiDevices className="text-gray-500 text-xl" />
+                <BiDevices className="text-blue-500 text-xl" />
               </span>
-              {inventario.inventaryTypeId}
+              {inventario.inventoryTypeId}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
-              <Label htmlFor="inventaryBrand" value="Marca" />
+              <Label htmlFor="inventoryBrand" value="Marca" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <MdNewReleases className="text-gray-500 text-xl" />
+                <MdNewReleases className="text-blue-500 text-xl" />
               </span>
-              {inventario.inventaryBrandId}
+              {inventario.inventoryBrandId}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
-              <Label htmlFor="inventaryMode" value="Modelo" />
+              <Label htmlFor="inventoryMode" value="Modelo" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <Tb3DCubeSphere className="text-gray-500 text-xl" />
+                <Tb3DCubeSphere className="text-blue-500 text-xl" />
               </span>
-              {inventario.inventaryModelId}
+              {inventario.inventoryModelId}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
               <Label htmlFor="sn" value="Número Serial" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <AiOutlineFieldNumber className="text-gray-500 text-xl" />
+                <AiOutlineFieldNumber className="text-blue-500 text-xl" />
               </span>
               {inventario.serialNumber}
             </p>
@@ -229,9 +239,9 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="activo" value="Activo" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <AiOutlineNumber className="text-gray-500 text-xl" />
+                <AiOutlineNumber className="text-blue-500 text-xl" />
               </span>
               {inventario.activo}
             </p>
@@ -240,46 +250,42 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="" value="Activo" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <MdOutlineCategory className="text-gray-500 text-xl" />
+                <MdOutlineCategory className="text-blue-500 text-xl" />
               </span>
               {inventario.status ? "Alta" : "Baja"}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
-              <Label htmlFor="asignacionDate" value="Estado de asignación" />
+              <Label htmlFor="activo" value="Creado por" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <FaUserCheck className="text-gray-500 text-xl" />
+                <FaUser className="text-blue-500 text-xl" />
               </span>
-              {inventario.isAsigned ? "Asignado" : "Sin asignar"}
+              {inventario.createdBy}
             </p>
           </div>
-          {inventario.isAsigned && (
-            <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
-              <div className="w-full">
-                <Label htmlFor="asignacionDate" value="Fecha de asignación" />
-              </div>
-              <p className="text-gray-500 flex items-center gap-4">
-                <span>
-                  <MdCalendarMonth className="text-gray-500 text-xl" />
-                </span>
-                {inventario.asignacionDate
-                  ? formatLocalDate(inventario.asignacionDate)
-                  : "N/A"}
-              </p>
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+            <div className="w-full">
+              <Label htmlFor="recepcionDate" value="Fecha de recepción" />
             </div>
-          )}
+            <p className="text-gray-500 flex items-start gap-4">
+              <span>
+                <MdCalendarMonth className="text-blue-500 text-xl" />
+              </span>
+              {formatLocalDate(inventario.recepcionDate)}
+            </p>
+          </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
               <Label htmlFor="altaDate" value="Fecha de alta" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <MdCalendarMonth className="text-gray-500 text-xl" />
+                <MdCalendarMonth className="text-blue-500 text-xl" />
               </span>
               {formatLocalDate(inventario.altaDate)}
             </p>
@@ -288,9 +294,9 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="bajaDate" value="Fecha de baja" />
             </div>
-            <p className="text-gray-500 flex items-center gap-4">
+            <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <MdCalendarMonth className="text-gray-500 text-xl" />
+                <MdCalendarMonth className="text-blue-500 text-xl" />
               </span>
               {inventario.bajaDate
                 ? formatLocalDate(inventario.bajaDate)
@@ -300,9 +306,9 @@ const ShowInventory = () => {
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
               <Label htmlFor="createdAt" value="Fecha de creación" />
-              <p className="text-gray-500 flex items-center gap-4">
+              <p className="text-gray-500 flex items-start gap-4">
                 <span>
-                  <MdCalendarMonth className="text-gray-500 text-xl" />
+                  <MdCalendarMonth className="text-blue-500 text-xl" />
                 </span>
                 {formatLocalDate(inventario.createdAt)}
               </p>
@@ -311,9 +317,9 @@ const ShowInventory = () => {
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
               <Label htmlFor="updatedAt" value="Ultima modificación" />
-              <p className="text-gray-500 flex items-center gap-4">
+              <p className="text-gray-500 flex items-start gap-4">
                 <span>
-                  <MdCalendarMonth className="text-gray-500 text-xl" />
+                  <MdCalendarMonth className="text-blue-500 text-xl" />
                 </span>
                 {formatLocalDate(inventario.updatedAt)}
               </p>
@@ -336,17 +342,17 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="images" value="Imagenes" />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
-              {imageElements.map((image, index) => (
+            <div className="flex flex-wrap gap-4 w-full overflow-x-auto">
+              {inventario.images?.map((image, index) => (
                 <div
                   key={index}
-                  className="col-span-1 rounded-md flex items-center justify-center border border-gray-300 p-3 cursor-pointer"
+                  className="max-w-[9rem] max-h-36 col-span-1 rounded-md flex items-center justify-center border border-gray-300 p-3 cursor-pointer"
                 >
                   <img
                     onClick={() => handleShowImages(index)}
-                    src={image}
+                    src={FormatedUrlImage(image)}
                     alt="imagen"
-                    className="w-full h-full object-cover rounded-md"
+                    className="w-full h-full object-contain rounded-md"
                   />
                 </div>
               ))}
@@ -377,11 +383,11 @@ const ShowInventory = () => {
             <p className="text-gray-500">
               ¿Está seguro que desea eliminar el inventario{" "}
               <span className="font-bold">
-                {inventario.inventaryTypeId +
+                {inventario.inventoryTypeId +
                   " " +
-                  inventario.inventaryBrandId +
+                  inventario.inventoryBrandId +
                   " Modelo " +
-                  inventario.inventaryModelId +
+                  inventario.inventoryModelId +
                   " SN - " +
                   inventario.serialNumber}
               </span>
@@ -418,7 +424,7 @@ const ShowInventory = () => {
       )}
       {modal2 && (
         <ModalImageViewer
-          images={imageElements}
+          images={inventario.images}
           title={inventarioTitle}
           show={modal2}
           onClose={() => setModal2(false)}
@@ -426,35 +432,6 @@ const ShowInventory = () => {
           isDownloadImage={true}
         />
       )}
-      {/* {modal2 && (
-        <Modal
-          title="Ver imagen"
-          dismissible={true}
-          size={"4xl"}
-          onClose={() => {
-            setModal2(false);
-          }}
-          show={modal2}
-        >
-          <Modal.Header>
-            <div className="flex gap-2 items-center">
-              <span className="bg-blue-500 rounded-full p-2">
-                <FaImage className="text-white text-xl" />
-              </span>
-              <p className="text-xl font-bold text-blue-500">Ver imagen</p>
-            </div>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="flex justify-center items-center">
-              <img
-                src={imageSelected}
-                alt={imageSelected}
-                className="w-fit h-full max-h-[78vh] rounded-lg"
-              />
-            </div>
-          </Modal.Body>
-        </Modal>
-      )} */}
       {loading && <Loading />}
     </div>
   );

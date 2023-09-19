@@ -206,7 +206,7 @@ const AppProvider = (props) => {
         type: POST_INVENTORY,
         payload: inventory,
       });
-      return { inventary, status: true };
+      return { inventory, status: true };
     } catch (error) {
       console.log(error);
       return { status: false, error };

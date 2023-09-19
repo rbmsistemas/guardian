@@ -1,7 +1,6 @@
-export const Base_Inventory = (inventory = {}) => {
+export const Base_Inventory = (inventory = {}, models = []) => {
   if (Object.keys(inventory).length === 0) {
     return {
-      id: "",
       userId: "",
       inventoryModelId: "",
       otherModel: "",
@@ -12,18 +11,27 @@ export const Base_Inventory = (inventory = {}) => {
       serialNumber: "",
       activo: "",
       comments: "",
-      status: false,
+      status: true,
       images: [],
       altaDate: Date.now(),
       bajaDate: null,
-      recepcionDate: null,
+      recepcionDate: "",
       createdBy: "",
     };
   } else {
+    const model = models?.find(
+      (item) => item.id === inventory.inventoryModelId
+    );
+
     return {
       id: inventory.id || "",
       userId: inventory.userId || "",
       inventoryModelId: inventory.inventoryModelId || "",
+      otherModel: inventory.otherModel || "",
+      inventoryBrandId: model.inventoryBrandId || "",
+      otherBrand: inventory.otherBrand || "",
+      inventoryTypeId: model.inventoryTypeId || "",
+      otherType: inventory.otherType || "",
       serialNumber: inventory.serialNumber || "",
       activo: inventory.activo || "",
       comments: inventory.comments || "",

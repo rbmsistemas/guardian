@@ -17,6 +17,7 @@ const Nav = ({ children }) => {
       setShowMenu(true);
     } else setShowMenu(false);
   }, []);
+
   return (
     <div className="min-h-screen h-screen w-full max-h-screen overflow-hidden flex flex-col">
       <div
@@ -43,7 +44,7 @@ const Nav = ({ children }) => {
             !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static"
           } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen overflow-y-auto md:overflow-y-visible`}
         >
-          {user?.user?.user && (
+          {user?.user?.id && (
             <div className="flex justify-start items-center h-20 px-3 text-purple-600 gap-2 bg-white border-b border-gray-300">
               <span>
                 <MdAccountCircle className="h-10 w-10 text-purple-600" />

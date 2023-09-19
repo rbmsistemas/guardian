@@ -30,7 +30,7 @@ const Inventory = () => {
     search: "",
     status: "",
     page: 1,
-    quantityResults: 5,
+    quantityResults: 10,
   });
   const [totals, setTotals] = useState({ totalEntries: 0, totalPages: 0 });
   const [modal, setModal] = useState(false);
@@ -56,16 +56,17 @@ const Inventory = () => {
     return {
       no: index + 1,
       imagen: item.images[0],
-      tipo: inventoryTypes.find((type) => type.id === item.inventoryTypeId)
-        ?.name,
-      marca: inventoryBrands.find((brand) => brand.id === item.inventaryBrandId)
-        ?.name,
-      modelo: inventoryModels.find(
-        (model) => model.id === item.inventaryModelId
+      tipo: inventoryTypes.find(
+        (type) => type.id === item.inventoryModel.inventoryTypeId
       )?.name,
+      marca: inventoryBrands.find(
+        (brand) => brand.id === item.inventoryModel.inventoryBrandId
+      )?.name,
+      modelo: item.inventoryModel.name,
       SN: item.serialNumber,
       activo: item.activo,
       estado: item.status ? "Alta" : "Baja",
+      creacion: new Date(item.createdAt).toLocaleDateString(),
       id: item.id,
     };
   });
@@ -91,9 +92,7 @@ const Inventory = () => {
     clearTimeout(timer);
 
     if (filters.search.length > 0) {
-      const newTimer = setTimeout(() => {
-        console.log("Realizar solicitud al servidor:", filters.search);
-      }, 500);
+      const newTimer = setTimeout(() => {}, 500);
 
       setTimer(newTimer);
     }
@@ -242,7 +241,7 @@ const Inventory = () => {
                   brandType: "",
                   inventoryType: "",
                   page: 1,
-                  quantityResults: 5,
+                  quantityResults: 10,
                 })
               }
               className="bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded flex gap-2 items-center justify-center transition ease-in-out duration-200 hover:scale-105"
