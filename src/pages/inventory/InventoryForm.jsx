@@ -5,7 +5,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import InventoryFields from "./InventoryFields";
 import { FiChevronRight } from "react-icons/fi";
-import { MdSaveAlt } from "react-icons/md";
 import { toast } from "react-hot-toast";
 import Loading from "../../utils/Loading";
 import { uploadImagesInventory } from "../../api/inventory.api";
@@ -216,16 +215,16 @@ const InventoryForm = () => {
           altaDate: getCurrentFormattedDate(),
         };
 
-        if (data.recepcionDate) {
-          setData({
-            ...data,
+        if (data.recepcionDate.length > 0) {
+          sendData = {
+            ...sendData,
             recepcionDate: new Date(data.recepcionDate),
-          });
+          };
         } else {
-          setData({
-            ...data,
+          sendData = {
+            ...sendData,
             recepcionDate: null,
-          });
+          };
         }
 
         if (data.status === true) {
@@ -243,6 +242,7 @@ const InventoryForm = () => {
         if (data.activo) {
           existActivo = await handleValidateActivo(data.activo);
         }
+
         if (existSN || existActivo) {
           const res = await createInventory(sendData, user.token);
           if (!res.status) {

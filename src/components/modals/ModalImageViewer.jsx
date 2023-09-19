@@ -116,6 +116,8 @@ const ModalImageViewer = ({
     return null;
   }
 
+  let modalBodyHeight = scale ? "85vh" : "65vh";
+
   return (
     <div>
       <Modal
@@ -134,9 +136,9 @@ const ModalImageViewer = ({
             <p className="text-xl font-bold text-blue-500">Ver imagen</p>
           </div>
         </Modal.Header>
-        <Modal.Body style={{ padding: "10px", height: "70vh" }}>
-          <div className="w-full h-full grid grid-cols-1 grid-rows-12 justify-between items-center">
-            <div className="w-full h-full row-span-11 flex justify-center items-center relative overflow-hidden">
+        <Modal.Body style={{ padding: "10px", height: modalBodyHeight }}>
+          <div className="w-full h-full grid grid-cols-1 grid-rows-12 justify-between items-end">
+            <div className="w-full h-full min-h-max row-span-11 flex justify-center items-center relative overflow-hidden">
               <button
                 type="button"
                 className="absolute left-0 z-50 px-4 py-2 bg-white rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
@@ -152,7 +154,7 @@ const ModalImageViewer = ({
                   scale
                     ? "scale-150 cursor-zoom-out"
                     : "scale-100 cursor-zoom-in"
-                } w-auto max-w-full mx-auto`}
+                } w-auto h-full max-w-full mx-auto`}
                 style={{ maxHeight: "50vh" }}
               />
               <button
@@ -188,31 +190,36 @@ const ModalImageViewer = ({
                 )}
               </div>
             </div>
-            <div className="w-full row-span-1 h-auto flex flex-col md:flex-row gap-4 justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
-              <div className="font-semibold text-gray-700 text-sm truncate max-w-full w-full">
-                {title}
+
+            {!scale && (
+              <div className="w-full row-span-1 h-auto flex flex-col md:flex-row gap-4 justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
+                <div className="font-semibold text-gray-700 text-sm truncate max-w-full w-full">
+                  {title}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </Modal.Body>
-        <Modal.Footer style={{ padding: "10px" }}>
-          <div className="w-full px-4 py-2 flex justify-start items-center overflow-x-auto gap-2">
-            {images.map((img, index) => (
-              <div
-                className="bg-gray-200 rounded-md overflow-hidden border border-neutral-300 cursor-pointer w-24 h-24 min-h-fit min-w-fit max-h-24 max-w-[6rem]"
-                key={index}
-                onMouseOver={() => handleSelectImage(img, index)}
-                onClick={() => handleSelectImage(img, index)}
-              >
-                <img
-                  className="object-fill overflow-hidden w-full h-full max-w-[6rem] max-h-24"
-                  src={FormatedUrlImage(img)}
-                  alt={title}
-                />
-              </div>
-            ))}
-          </div>
-        </Modal.Footer>
+        {!scale && (
+          <Modal.Footer style={{ padding: "10px" }}>
+            <div className="w-full px-4 py-2 flex justify-start items-center overflow-x-auto gap-2">
+              {images.map((img, index) => (
+                <div
+                  className="bg-gray-200 rounded-md overflow-hidden border border-neutral-300 cursor-pointer w-24 h-24 min-h-fit min-w-fit max-h-24 max-w-[6rem]"
+                  key={index}
+                  onMouseOver={() => handleSelectImage(img, index)}
+                  onClick={() => handleSelectImage(img, index)}
+                >
+                  <img
+                    className="object-fill overflow-hidden w-full h-full max-w-[6rem] max-h-24"
+                    src={FormatedUrlImage(img)}
+                    alt={title}
+                  />
+                </div>
+              ))}
+            </div>
+          </Modal.Footer>
+        )}
       </Modal>
     </div>
   );

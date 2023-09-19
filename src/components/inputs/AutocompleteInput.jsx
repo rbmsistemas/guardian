@@ -113,7 +113,7 @@ const AutocompleteInput = ({
 
   return (
     <div className="relative">
-      <div className="relative flex items-center">
+      <div className="relative flex items-center group">
         {Icon && (
           <div
             className={`absolute text-lg left-3 top-1/2 transform ${

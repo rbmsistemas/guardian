@@ -1,6 +1,8 @@
-import { Modal, Table } from "flowbite-react";
+import { Table } from "flowbite-react";
 import React, { useState } from "react";
-import { FaEye, FaImage, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaEye, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
+import ModalImageViewer from "../modals/ModalImageViewer";
 
 const CustomeTable = ({
   data = [],
@@ -15,13 +17,14 @@ const CustomeTable = ({
   setPage,
   totalEntries = 0,
   totalPages = 0,
-  filters = {},
 }) => {
-  const [imageSelected, setImageSelected] = useState("");
+  const [itemSelected, setItemSelected] = useState({});
   const [modal, setModal] = useState(false);
+  const [itemName, setItemName] = useState("");
 
-  const handleShowImage = (image) => {
-    setImageSelected(image);
+  const handleShowItem = (item) => {
+    setItemSelected(item);
+    setItemName(item?.marca + " " + item?.modelo + " " + item?.tipo || "");
     setModal(true);
   };
 
@@ -60,10 +63,10 @@ const CustomeTable = ({
                       key === "imagen" ? (
                       <Table.Cell key={key}>
                         <img
-                          src={item[key]}
+                          src={FormatedUrlImage(item[key])}
                           alt={item[key]}
                           className="w-10 h-10 object-cover rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
-                          onClick={() => handleShowImage(item[key])}
+                          onClick={() => handleShowItem(item)}
                         />
                       </Table.Cell>
                     ) : (
@@ -153,33 +156,13 @@ const CustomeTable = ({
         </div>
       </div>
       {modal && (
-        <Modal
-          title="Ver imagen"
-          dismissible={true}
-          size={"4xl"}
-          onClose={() => {
-            setModal(false);
-          }}
+        <ModalImageViewer
+          images={[itemSelected?.imagen] || []}
+          title={itemName}
           show={modal}
-        >
-          <Modal.Header>
-            <div className="flex gap-2 items-center">
-              <span className="bg-blue-500 rounded-full p-2">
-                <FaImage className="text-white text-xl" />
-              </span>
-              <p className="text-xl font-bold text-blue-500">Ver imagen</p>
-            </div>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="grid place-content-center">
-              <img
-                src={imageSelected}
-                alt={"Imagen seleccionada"}
-                className="w-full h-96 rounded-lg"
-              />
-            </div>
-          </Modal.Body>
-        </Modal>
+          onClose={() => setModal(false)}
+          isDownloadImage={true}
+        />
       )}
     </>
   );
