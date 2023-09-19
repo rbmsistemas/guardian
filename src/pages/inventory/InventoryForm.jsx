@@ -379,6 +379,7 @@ const InventoryForm = () => {
         <div className="flex gap-2 justify-center md:justify-end">
           <button
             type="submit"
+            onClick={handleSubmit}
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
           >
             <span>
