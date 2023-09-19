@@ -56,10 +56,10 @@ const Inventory = () => {
     return {
       no: index + 1,
       imagen: item.images[0],
-      tipo: inventoryTypes.find(
+      tipo: inventoryTypes?.find(
         (type) => type.id === item.inventoryModel.inventoryTypeId
       )?.name,
-      marca: inventoryBrands.find(
+      marca: inventoryBrands?.find(
         (brand) => brand.id === item.inventoryModel.inventoryBrandId
       )?.name,
       modelo: item.inventoryModel.name,
