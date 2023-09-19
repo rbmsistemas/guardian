@@ -55,7 +55,7 @@ const Inventory = () => {
 
   useEffect(() => {
     let formatInventories = [];
-    if (inventoryModels || inventoryBrands || inventoryTypes) {
+    if ((inventories, inventoryModels || inventoryBrands || inventoryTypes)) {
       formatInventories = inventories?.map((item, index) => {
         return {
           no: index + 1,
