@@ -66,7 +66,7 @@ const Inventory = () => {
           marca: inventoryBrands?.find(
             (brand) => brand.id === item.inventoryModel?.inventoryBrandId
           )?.name,
-          modelo: item.inventoryModel.name,
+          modelo: item.inventoryModel?.name,
           SN: item.serialNumber,
           activo: item.activo,
           estado: item.status ? "Alta" : "Baja",
