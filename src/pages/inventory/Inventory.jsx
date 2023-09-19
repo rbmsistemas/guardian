@@ -32,6 +32,7 @@ const Inventory = () => {
     page: 1,
     quantityResults: 10,
   });
+  const [inventoriesData, setInventoriesData] = useState([]);
   const [totals, setTotals] = useState({ totalEntries: 0, totalPages: 0 });
   const [modal, setModal] = useState(false);
   const [inventaryToDelete, setinventaryToDelete] = useState({});
@@ -52,24 +53,30 @@ const Inventory = () => {
     res();
   }, [filters]);
 
-  const inventoriesData = inventories?.map((item, index) => {
-    return {
-      no: index + 1,
-      imagen: item.images[0],
-      tipo: inventoryTypes?.find(
-        (type) => type.id === item.inventoryModel.inventoryTypeId
-      )?.name,
-      marca: inventoryBrands?.find(
-        (brand) => brand.id === item.inventoryModel.inventoryBrandId
-      )?.name,
-      modelo: item.inventoryModel.name,
-      SN: item.serialNumber,
-      activo: item.activo,
-      estado: item.status ? "Alta" : "Baja",
-      creacion: new Date(item.createdAt).toLocaleDateString(),
-      id: item.id,
-    };
-  });
+  useEffect(() => {
+    let formatInventories = [];
+    if (inventoryModels || inventoryBrands || inventoryTypes) {
+      formatInventories = inventories?.map((item, index) => {
+        return {
+          no: index + 1,
+          imagen: item.images[0],
+          tipo: inventoryTypes?.find(
+            (type) => type.id === item.inventoryModel.inventoryTypeId
+          )?.name,
+          marca: inventoryBrands?.find(
+            (brand) => brand.id === item.inventoryModel.inventoryBrandId
+          )?.name,
+          modelo: item.inventoryModel.name,
+          SN: item.serialNumber,
+          activo: item.activo,
+          estado: item.status ? "Alta" : "Baja",
+          creacion: new Date(item.createdAt).toLocaleDateString(),
+          id: item.id,
+        };
+      });
+    }
+    setInventoriesData(formatInventories);
+  }, [inventories, inventoryModels, inventoryBrands, inventoryTypes]);
 
   const handleValidateSearch = (e) => {
     const inputValue = e.target.value;
