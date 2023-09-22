@@ -215,7 +215,7 @@ const Home = () => {
           />
         </div>
         <div className="p-4 h-60 col-span-2 sm:col-span-1 rounded-lg shadow-xl flex flex-col justify-center items-center">
-          <div className="text-sm pb-3 font-bold flex justify-between items-center gap-2">
+          <div className="w-full text-sm pb-3 font-bold flex justify-between items-center gap-2">
             <span className="text-neutral-600 truncate font-bold">
               Usuario / Tiempo
             </span>{" "}
