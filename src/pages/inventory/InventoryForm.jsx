@@ -30,6 +30,7 @@ const InventoryForm = () => {
 
   const [voler, setVoler] = useState(false);
   const [loading, setLoading] = useState(false);
+  const submitRef = React.useRef(null);
   const notificationError = (message) => toast.error(message);
   const successNotification = (message) => toast.success(message);
 
@@ -102,15 +103,19 @@ const InventoryForm = () => {
     }
   };
 
+  const handleSubmitButton = () => {
+    submitRef.current.click();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     if (id) {
       try {
-        let newImagesJSON = {};
-        let imagesObject = [];
-        newImagesJSON = await Promise.all(
+        let newImagesArray = [];
+        let arrayImages = [];
+        newImagesArray = await Promise.all(
           images.map(async (image) => {
             if (image instanceof File) {
               const imageUrl = await handleUploadFile(image);
@@ -121,9 +126,9 @@ const InventoryForm = () => {
           })
         );
 
-        newImagesJSON.forEach((imageUrl) => {
+        newImagesArray.forEach((imageUrl) => {
           if (imageUrl) {
-            imagesObject.push(imageUrl);
+            arrayImages.push(imageUrl);
           }
         });
 
@@ -164,7 +169,7 @@ const InventoryForm = () => {
               id,
               {
                 ...data,
-                images: imagesObject,
+                images: arrayImages,
                 recepcionDate: data.recepcionDate ?? null,
               },
               user.token
@@ -185,7 +190,7 @@ const InventoryForm = () => {
         } else {
           const res = await updateInventory(
             id,
-            { ...data, images: imagesObject },
+            { ...data, images: arrayImages },
             user.token
           );
           if (!res.id) {
@@ -203,11 +208,11 @@ const InventoryForm = () => {
       }
     } else {
       try {
-        let newImagesJSON = {};
+        let newArrayImages = [];
 
         let sendData = {
           ...data,
-          images: newImagesJSON,
+          images: newArrayImages,
         };
         sendData = {
           ...sendData,
@@ -257,16 +262,16 @@ const InventoryForm = () => {
                 })
               );
 
-              let imagesObject = [];
+              let imagesArray = [];
               newImages.forEach((imageUrl) => {
                 if (imageUrl) {
-                  imagesObject.push(imageUrl);
+                  imagesArray.push(imageUrl);
                 }
               });
 
               const response = await updateInventory(
                 res?.inventory?.id,
-                { images: imagesObject },
+                { images: imagesArray },
                 user.token
               );
               if (!response.id) {
@@ -379,7 +384,7 @@ const InventoryForm = () => {
         <div className="flex gap-2 justify-center md:justify-end">
           <button
             type="submit"
-            onClick={handleSubmit}
+            onClick={handleSubmitButton}
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
           >
             <span>
@@ -443,6 +448,7 @@ const InventoryForm = () => {
           )}
           <div className="flex justify-end">
             <button
+              ref={submitRef}
               type="submit"
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
             >

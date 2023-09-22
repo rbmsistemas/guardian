@@ -1,6 +1,8 @@
 export const POST_SIGNIN = "POST_SIGNIN";
 export const POST_SIGNUP = "POST_SIGNUP";
 export const POST_SIGNOUT = "POST_SIGNOUT";
+export const GET_PROFILE = "GET_PROFILE";
+export const GET_USERS = "GET_USERS";
 export const GET_COMPANIES = "GET_COMPANIES";
 export const GET_COMPANY = "GET_COMPANY";
 export const POST_COMPANY = "POST_COMPANY";

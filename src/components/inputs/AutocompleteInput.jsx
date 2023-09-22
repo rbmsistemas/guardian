@@ -27,6 +27,7 @@ const AutocompleteInput = ({
   data,
   value,
   onChange,
+  required,
   placeholder = "Escribe aquí...",
   icon: Icon,
   disabled = false,
@@ -136,6 +137,7 @@ const AutocompleteInput = ({
           onChange={handleInputChange}
           onClick={toggleDropdown}
           ref={inputRef}
+          required={required}
           disabled={disabled}
         />
         <div

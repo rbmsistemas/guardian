@@ -37,6 +37,7 @@ const Inventory = () => {
   const [modal, setModal] = useState(false);
   const [inventaryToDelete, setinventaryToDelete] = useState({});
   const [timer, setTimer] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
 
@@ -54,6 +55,7 @@ const Inventory = () => {
   }, [filters]);
 
   useEffect(() => {
+    setIsLoading(true);
     let formatInventories = [];
     if ((inventories, inventoryModels || inventoryBrands || inventoryTypes)) {
       formatInventories = inventories?.map((item, index) => {
@@ -76,6 +78,7 @@ const Inventory = () => {
       });
     }
     setInventoriesData(formatInventories);
+    setIsLoading(false);
   }, [inventories, inventoryModels, inventoryBrands, inventoryTypes]);
 
   const handleValidateSearch = (e) => {
@@ -130,7 +133,7 @@ const Inventory = () => {
   };
   return (
     <div className="min-h-full w-full p-5">
-      <div className="flex flex-col md:flex-row justify-between items-center pb-2">
+      <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center pb-2">
         <div className="flex gap-2 items-center">
           <Link to="/" className="text-gray-500 hover:text-gray-700">
             <FaHome className="text-xl" />
@@ -260,7 +263,12 @@ const Inventory = () => {
             </button>
           </div>
         </div>
-        {totals.totalEntries == 0 ? (
+        {isLoading && (
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h1 className="text-2xl font-semibold">Cargando...</h1>
+          </div>
+        )}
+        {!isLoading && totals.totalEntries == 0 ? (
           <div className="flex flex-col items-center justify-center gap-2">
             <h1 className="text-2xl font-semibold">No hay resultados</h1>
             <p className="text-gray-500">

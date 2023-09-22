@@ -13,9 +13,35 @@ import {
   AiOutlineUsergroupDelete,
 } from "react-icons/ai";
 import { BounceLoader } from "react-spinners";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  RadialLinearScale,
+} from "chart.js";
+import { Line, Doughnut } from "react-chartjs-2";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  RadialLinearScale
+);
 
 const Home = () => {
-  const { inventories, getInventories } = useContext(Context);
+  const { inventories, getInventories, users, getUsers } = useContext(Context);
   const [countInventories, setCountInventories] = useState({
     alta: 0,
     baja: 0,
@@ -23,6 +49,11 @@ const Home = () => {
     sinAsignar: 0,
   });
   const [loading, setLoading] = useState(false);
+  const [usersInventories, setUsersInventories] = useState({
+    labels: [],
+    data: [],
+  });
+  const [time, setTime] = useState(7);
 
   useEffect(() => {
     setLoading(true);
@@ -41,13 +72,30 @@ const Home = () => {
         .length,
       baja: inventories?.filter((inventary) => inventary.status === false)
         .length,
-      // asignados: inventories.filter((inventary) => inventary.isAsigned === true)
-      //   .length,
-      // sinAsignar: inventories.filter(
-      //   (inventary) => inventary.isAsigned === false
-      // ).length,
     });
   }, [inventories]);
+
+  useEffect(() => {
+    if (users.length > 0 || inventories.length > 0) {
+      const inventoriesByUser = users.map((user) => {
+        return {
+          id: user.id,
+          name: user.firstName + " " + user.lastName.charAt(0),
+          inventories: user.inventory,
+        };
+      });
+      const data = inventoriesByUser.map((user) => user.inventories);
+      const labels = inventoriesByUser.map((user) => user.name);
+      setUsersInventories({ labels, data });
+    }
+  }, [inventories, users]);
+
+  useEffect(() => {
+    const handleGetUsers = async () => {
+      await getUsers(time);
+    };
+    handleGetUsers();
+  }, [time]);
 
   return (
     <div className="flex flex-col min-h-full h-full p-2 md:p-4 gap-4">
@@ -60,7 +108,7 @@ const Home = () => {
         </p>
         <Link
           to={"/inventario"}
-          className="relative h-32 bg-gradient-to-br from-amber-400 to-orange-700 rounded-lg shadow-lg flex flex-col justify-center items-center"
+          className="relative h-32 bg-gradient-to-br from-green-400 to-teal-700 rounded-lg shadow-lg flex flex-col justify-center items-center"
         >
           <div className="absolute right-1 top-1">
             <BsDatabaseFillAdd className="text-6xl text-white opacity-50" />
@@ -94,6 +142,7 @@ const Home = () => {
             Equipos en baja
           </h3>
         </Link>
+
         {/* <Link
           to={"/inventario"}
           className="relative h-32 bg-gradient-to-br from-green-400 to-teal-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
@@ -131,17 +180,108 @@ const Home = () => {
           </h3>
         </Link> */}
       </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-4 bg-white p-2 md:p-4 rounded-lg">
+        <p className="col-span-2 md:col-span-4 4xl:col-span-5 text-base text-left font-bold text-purple-600">
+          Reportes
+        </p>
+        <div className="p-4 h-60 col-span-2 sm:col-span-1 rounded-lg shadow-xl flex flex-col justify-center items-center">
+          <p className="text-base text-center pb-3 font-bold">
+            <span className="text-neutral-600 font-bold">
+              Registros por estado
+            </span>{" "}
+          </p>
+          <Doughnut
+            data={{
+              labels: ["Alta", "Baja"],
+              datasets: [
+                {
+                  label: "Inventario",
+                  data: [countInventories.alta, countInventories.baja],
+                  backgroundColor: ["#7E3AF2", "#EF4444"],
+                  borderColor: ["#7E3AF2", "#EF4444"],
+                  borderWidth: 1,
+                },
+              ],
+            }}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                },
+              },
+            }}
+          />
+        </div>
+        <div className="p-4 h-60 col-span-2 sm:col-span-1 rounded-lg shadow-xl flex flex-col justify-center items-center">
+          <div className="text-sm pb-3 font-bold flex justify-between items-center gap-2">
+            <span className="text-neutral-600 truncate font-bold">
+              Usuario / Tiempo
+            </span>{" "}
+            <span className="grid grid-cols-4 items-center gap-1">
+              <p
+                onClick={() => setTime(7)}
+                className="text-xs text-center text-gray-400 shadow-lg p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+              >
+                7
+              </p>
+              <p
+                onClick={() => setTime(14)}
+                className="text-xs text-center text-gray-400 shadow-lg p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+              >
+                14
+              </p>
+              <p
+                onClick={() => setTime(21)}
+                className="text-xs text-center text-gray-400 shadow-lg p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+              >
+                21
+              </p>
+              <p
+                onClick={() => setTime(31)}
+                className="text-xs text-center text-gray-400 shadow-lg p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+              >
+                Mes
+              </p>
+            </span>
+          </div>
+          <Line
+            data={{
+              labels: usersInventories.labels,
+              datasets: [
+                {
+                  label: "Inventario",
+                  data: usersInventories.data,
+                  backgroundColor: "#7E3AF2",
+                  borderColor: "#7E3AF2",
+                  borderWidth: 1,
+                },
+              ],
+            }}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+            }}
+          />
+        </div>
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-4 4xl:grid-cols-5 gap-4 bg-white p-2 md:p-4 rounded-lg">
         <p className="col-span-2 md:col-span-4 4xl:col-span-5 text-base text-left font-bold text-purple-600">
           Accesos directos
         </p>
         <Link
           to={"/inventario"}
-          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
+          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 group overflow-hidden hover:shadow-xl transition ease-in-out duration-200"
         >
           <img
             src={Bodega}
-            className="w-full min-h-full h-auto rounded-lg"
+            className="hover:scale-125 transition ease-in-out duration-200 w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
           <h2 className="text-sm sm:text-lg xl:text-xl text-white text-right p-3 font-bold absolute bottom-0 right-0 bg-purple-700/60 w-full rounded-b-lg">
@@ -150,11 +290,11 @@ const Home = () => {
         </Link>
         <Link
           to={"/inventario"}
-          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
+          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 group overflow-hidden hover:shadow-xl transition ease-in-out duration-200"
         >
           <img
             src={Reports}
-            className="w-full min-h-full h-auto rounded-lg"
+            className="hover:scale-125 transition ease-in-out duration-200 w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
           <h2 className="text-sm sm:text-lg xl:text-xl text-white text-right p-3 font-bold absolute bottom-0 right-0 bg-purple-700/60 w-full rounded-b-lg">
@@ -163,11 +303,11 @@ const Home = () => {
         </Link>
         <Link
           to={"/users"}
-          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
+          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 group overflow-hidden hover:shadow-xl transition ease-in-out duration-200"
         >
           <img
             src={Users}
-            className="w-full min-h-full h-auto rounded-lg"
+            className="hover:scale-125 transition ease-in-out duration-200 w-full min-h-full h-auto rounded-lg"
             alt="Inventario"
           />
           <h2 className="text-sm sm:text-lg xl:text-xl text-white text-right p-3 font-bold absolute bottom-0 right-0 bg-purple-700/60 w-full rounded-b-lg">
@@ -176,11 +316,11 @@ const Home = () => {
         </Link>
         <Link
           to={"/proveedores"}
-          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 hover:scale-105 hover:shadow-xl transition ease-in-out duration-200"
+          className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 group overflow-hidden hover:shadow-xl transition ease-in-out duration-200"
         >
           <img
             src={Proveedores}
-            className="w-full min-h-full h-auto rounded-lg"
+            className="hover:scale-125 transition ease-in-out duration-200 w-full min-h-full h-auto rounded-lg"
             alt="Proveedores imagen"
           />
           <h2 className="text-sm sm:text-lg xl:text-xl text-white text-right p-3 font-bold absolute bottom-0 right-0 bg-purple-700/60 w-full rounded-b-lg">

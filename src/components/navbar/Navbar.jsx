@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import Side from "../sidebar/Sidebar";
 import Logo from ".././../assets/img/images.jfif";
 import LogoGuardian from ".././../assets/logo/sinabe.png";
@@ -11,16 +11,36 @@ const Nav = ({ children }) => {
   const { user } = useContext(Context);
 
   const [showMenu, setShowMenu] = useState(true);
+  const navRef = useRef(null);
+  const menuButtonRef = useRef(null);
 
   useEffect(() => {
     if (window.innerWidth > 768) {
       setShowMenu(true);
-    } else setShowMenu(false);
-  }, []);
+    } else {
+      setShowMenu(false);
+      const handleClickOutside = (event) => {
+        if (
+          navRef.current &&
+          menuButtonRef.current &&
+          !navRef.current.contains(event.target) &&
+          !menuButtonRef.current.contains(event.target)
+        ) {
+          setShowMenu(false);
+        }
+      };
+
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }
+  }, [window.innerWidth]);
 
   return (
     <div className="min-h-screen h-screen w-full max-h-screen overflow-hidden flex flex-col">
       <div
+        ref={menuButtonRef}
         id="navbar"
         className="sticky top-0 bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5 border-b border-gray-300"
       >
@@ -39,9 +59,10 @@ const Nav = ({ children }) => {
       </div>
       <div className="flex flex-1 min-h-0">
         <div
+          ref={navRef}
           id="sidebar"
           className={`${
-            !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:static"
+            !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:relative"
           } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen overflow-y-auto md:overflow-y-visible`}
         >
           {user?.user?.id && (

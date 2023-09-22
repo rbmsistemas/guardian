@@ -8,9 +8,10 @@ import {
   MdGavel,
   MdLan,
   MdOutlineInventory2,
+  MdOutlineKeyboardArrowDown,
   MdSupport,
 } from "react-icons/md";
-import { TbReportSearch } from "react-icons/tb";
+import { Tb3DCubeSphere, TbReportSearch } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import Context from "../../context/Context";
 
@@ -28,11 +29,17 @@ const Side = ({
   },
 }) => {
   const { postSignout } = useContext(Context);
+  const [showSubmenu, setShowSubmenu] = useState(false);
   const navigate = useNavigate();
   const closeSession = () => {
     postSignout();
     navigate("/");
   };
+
+  const handleSubmenu = () => {
+    setShowSubmenu(!showSubmenu);
+  };
+
   return (
     <div className={`h-full min-h-screen bg-white w-full`}>
       <Sidebar aria-label="Sidebar menu">
@@ -48,15 +55,35 @@ const Side = ({
                 </span>
                 <p>Dashboard</p>
               </Link>
-              <Link
-                to="/inventario"
-                className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
-              >
-                <span className="text-2xl">
-                  <MdOutlineInventory2 />
-                </span>
-                <p>Inventarios</p>
-              </Link>
+              <div className="w-full h-full relative">
+                <Link
+                  to="/inventario"
+                  className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                >
+                  <span className="text-2xl">
+                    <MdOutlineInventory2 />
+                  </span>
+                  <p>Inventarios</p>
+                </Link>
+                <MdOutlineKeyboardArrowDown
+                  size={24}
+                  onClick={handleSubmenu}
+                  className={`absolute right-2 top-1/2 text-purple-600 hover:text-purple-800 transform -translate-y-1/2 hover:bg-neutral-200 rounded-md cursor-pointer ${
+                    showSubmenu && "rotate-180 transform"
+                  }}`}
+                />
+              </div>
+              {showSubmenu && (
+                <Link
+                  to="/modelos"
+                  className="p-3 py-2 shadow-[inset_0px_12px_15px_-10px_rgba(126,58,254,0.5)] border border-purple-100 border-t-0 hover:bg-purple-300 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
+                >
+                  <span className="text-2xl">
+                    <Tb3DCubeSphere />
+                  </span>
+                  <p>Modelos</p>
+                </Link>
+              )}
               <Link
                 to="/inventario"
                 className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
@@ -76,13 +103,13 @@ const Side = ({
                 <p>Actividades</p>
               </Link>
               <Link
-                to="/proveedores"
+                to="/company"
                 className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
                   <MdLan />
                 </span>
-                <p>Proveedores</p>
+                <p>Compañias</p>
               </Link>
               <Link
                 to="/"

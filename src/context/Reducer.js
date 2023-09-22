@@ -2,6 +2,7 @@ import {
   POST_SIGNIN,
   POST_SIGNUP,
   POST_SIGNOUT,
+  GET_USERS,
   GET_COMPANIES,
   GET_COMPANY,
   POST_COMPANY,
@@ -43,6 +44,11 @@ export default (state, action) => {
       return {
         ...state,
         user: [],
+      };
+    case GET_USERS:
+      return {
+        ...state,
+        users: payload,
       };
     case GET_COMPANIES:
       return {

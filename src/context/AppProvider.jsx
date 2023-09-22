@@ -18,6 +18,7 @@ import {
   handleUpdateActivity,
   handleDeleteActivity,
   handleGetActivitiesByParams,
+  urlEnv,
 } from "../api/request.api";
 import {
   handleGetInventoryTypes,
@@ -57,6 +58,7 @@ import {
   PATCH_INVENTORY,
   DELETE_INVENTORY,
   GET_INVENTORIES_BY_SEARCH,
+  GET_USERS,
 } from "./Types";
 import {
   Base_Company,
@@ -66,10 +68,12 @@ import {
   Base_InventoryType,
   Base_User,
 } from "./Models";
+import { handleGetAllUsers } from "../api/users.api";
 
 const AppProvider = (props) => {
   const initialState = {
     user: { token: null, user: Base_User },
+    users: [Base_User],
     inventories: [Base_Inventory()],
     inventory: Base_Inventory(),
     inventoryTypes: [Base_InventoryType],
@@ -86,6 +90,12 @@ const AppProvider = (props) => {
   const handleLogin = async (data) => {
     try {
       const response = await getLogin(data);
+      if (response.data === undefined) {
+        // ask if you wannt to open the server
+        window.confirm(
+          "No se pudo conectar con el servidor, ¿Desea abrirlo?"
+        ) && window.open(urlEnv + "/api/ping", "_blank");
+      }
       if (response?.status !== 200) {
         return { status: false, error: response.data.message };
       }
@@ -153,6 +163,24 @@ const AppProvider = (props) => {
       type: POST_SIGNOUT,
     });
     localStorage.removeItem("user");
+  };
+
+  const getUsers = async (params) => {
+    try {
+      const response = await handleGetAllUsers(state.user.token, params);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { users } = await response.data;
+
+      dispatch({
+        type: GET_USERS,
+        payload: users,
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   };
 
   // end auth actions
@@ -596,6 +624,7 @@ const AppProvider = (props) => {
 
   useEffect(() => {
     if (state.user.token) {
+      getUsers();
       getCompanies(state.user.token);
       getInventories(state.user.token);
       getInventoryTypes(state.user.token);
@@ -608,6 +637,7 @@ const AppProvider = (props) => {
     <Context.Provider
       value={{
         user: state.user,
+        users: state.users,
         activities: state.activities,
         activity: state.activity,
         companies: state.companies,
@@ -617,6 +647,7 @@ const AppProvider = (props) => {
         inventoryModels: state.inventoryModels,
         inventories: state.inventories,
         inventory: state.inventory,
+        getUsers,
         handleLogin,
         postSignup,
         postSignout,

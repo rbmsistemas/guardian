@@ -52,7 +52,7 @@ const InventoryFields = ({
           con <span className="text-red-500">*</span> son obligatorios.
         </p>
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
           <Label htmlFor="inventoryModelId" value="Modelo" />
@@ -65,10 +65,11 @@ const InventoryFields = ({
             icon={Tb3DCubeSphere}
             isClearable
             isOtherOption
+            required
           />
         </div>
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         {body.inventoryModelId == "0" && (
           <div>
             <div className="w-full flex gap-1">
@@ -95,7 +96,7 @@ const InventoryFields = ({
           </div>
         )}
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
           <Label
@@ -115,7 +116,7 @@ const InventoryFields = ({
           }
         />
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         {body.inventoryBrandId == "0" && (
           <div>
             <div className="w-full flex gap-1">
@@ -142,7 +143,7 @@ const InventoryFields = ({
           </div>
         )}
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
           <Label
@@ -162,7 +163,7 @@ const InventoryFields = ({
           }
         />
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         {body.inventoryTypeId == "0" && (
           <div>
             <div className="w-full flex gap-1">
@@ -189,7 +190,7 @@ const InventoryFields = ({
           </div>
         )}
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         <div className="mb-1 w-full flex gap-1">
           <span className="pr-2"></span>
           <Label htmlFor="serialNumber" value="Número de Serie" />
@@ -205,7 +206,7 @@ const InventoryFields = ({
           onChange={(e) => setBody({ ...body, serialNumber: e.target.value })}
         />
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         <div className="mb-1 w-full flex gap-1">
           <span className="text-red-500 pr-2"></span>
           <Label htmlFor="activo" value="Número de activo" />
@@ -221,7 +222,7 @@ const InventoryFields = ({
           onChange={(e) => setBody({ ...body, activo: e.target.value })}
         />
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
           <Label htmlFor="status" value="¿Alta o Baja de equipo?" />
@@ -246,7 +247,7 @@ const InventoryFields = ({
           <option value={false}>Baja</option>
         </Select>
       </div>
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 sm:col-span-6">
         <div className="mb-1 w-full flex gap-1">
           <span className="text-red-500"></span>
           <Label htmlFor="recepcionDate" value="Fecha de recepción" />
