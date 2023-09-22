@@ -107,7 +107,7 @@ const Home = () => {
           Resumen de inventario
         </p>
         <Link
-          to={"/inventario"}
+          to={"/inventario?status=1"}
           className="relative h-32 bg-gradient-to-br from-green-400 to-teal-700 rounded-lg shadow-lg flex flex-col justify-center items-center"
         >
           <div className="absolute right-1 top-1">
@@ -125,7 +125,7 @@ const Home = () => {
           </h3>
         </Link>
         <Link
-          to={"/inventario"}
+          to={"/inventario?status=0"}
           className="relative h-32 bg-gradient-to-br from-purple-400 to-sky-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
         >
           <div className="absolute right-1 top-1">

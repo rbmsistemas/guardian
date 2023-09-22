@@ -4,7 +4,7 @@ import CustomeTable from "../../components/table/CustomeTable";
 import { Label, Modal, Select, TextInput } from "flowbite-react";
 import { FaCheck, FaHome, FaSearch, FaTimes } from "react-icons/fa";
 import { AiFillFileAdd, AiOutlineClear } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   MdNewReleases,
   MdOutlineCategory,
@@ -14,6 +14,7 @@ import { FiChevronRight } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 
 const Inventory = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const {
     inventoryTypes,
@@ -42,6 +43,25 @@ const Inventory = () => {
   const successNotify = (message) => toast.success(message);
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get("search") || "";
+    const status = params.get("status") || "";
+    const brandType = params.get("brandType") || "";
+    const inventoryType = params.get("inventoryType") || "";
+    const page = params.get("page") || 1;
+    const quantityResults = params.get("quantityResults") || 10;
+    setFilters({
+      ...filters,
+      search: search ?? filters.search,
+      status: status === "" ? "" : status,
+      brandType: brandType ?? filters.brandType,
+      inventoryType: inventoryType ?? filters.inventoryType,
+      page: parseInt(page) <= 0 ? 1 : page,
+      quantityResults: quantityResults ?? filters.quantityResults,
+    });
+  }, [location]);
+
+  useEffect(() => {
     const res = async () => {
       const data = await getInventoriesBySearch(filters);
       if (data) {
@@ -61,7 +81,6 @@ const Inventory = () => {
       formatInventories = inventories?.map((item, index) => {
         return {
           no: index + 1,
-          imagen: item.images[0],
           tipo: inventoryTypes?.find(
             (type) => type.id === item.inventoryModel?.inventoryTypeId
           )?.name,
@@ -71,7 +90,7 @@ const Inventory = () => {
           modelo: item.inventoryModel?.name,
           SN: item.serialNumber,
           activo: item.activo,
-          estado: item.status ? "Alta" : "Baja",
+          status: item.status,
           creacion: new Date(item.createdAt).toLocaleDateString(),
           id: item.id,
         };
@@ -84,17 +103,20 @@ const Inventory = () => {
   const handleValidateSearch = (e) => {
     const inputValue = e.target.value;
 
-    if (inputValue.length >= 4) {
-      const lastFourChars = inputValue.slice(-4);
+    if (inputValue.length >= 6) {
+      const lastFourChars = inputValue.slice(-6);
       if (
         lastFourChars[0] === lastFourChars[1] &&
         lastFourChars[1] === lastFourChars[2] &&
-        lastFourChars[2] === lastFourChars[3]
+        lastFourChars[2] === lastFourChars[3] &&
+        lastFourChars[3] === lastFourChars[4] &&
+        lastFourChars[4] === lastFourChars[5]
       ) {
         return;
       }
     }
 
+    // return { status: true, value: inputValue };
     setFilters({ ...filters, search: inputValue });
   };
 
@@ -131,6 +153,68 @@ const Inventory = () => {
       setModal(false);
     }
   };
+
+  const handleClearFilters = () => {
+    setFilters({
+      search: "",
+      status: "",
+      brandType: "",
+      inventoryType: "",
+      page: 1,
+      quantityResults: 10,
+    });
+    navigate("/inventario");
+  };
+
+  const handleFilterByParams = (value, type) => {
+    let params = filters;
+    if (type === "inventoryType") {
+      params["inventoryType"] = value;
+    }
+    if (type === "brandType") {
+      params["brandType"] = value;
+    }
+    if (type === "status") {
+      if (value === "") {
+        delete params["status"];
+      } else {
+        params["status"] = value;
+      }
+    }
+    // if (
+    //   type === "search" &&
+    //   handleValidateSearch({ target: { value } }).status &&
+    //   value?.trim() != ""
+    // ) {
+    //   params["search"] = value;
+    // } else {
+    //   return;
+    // }
+    if (type === "quantityResults" && value.length > 0) {
+      params["quantityResults"] = value;
+    }
+    if (type === "page") {
+      if (value == "") {
+        delete params["page"];
+      } else if (parseInt(value) <= 0) {
+        delete params["page"];
+      } else {
+        params["page"] = String(value);
+      }
+    }
+
+    let paramsString = "";
+    Object.keys(params).forEach((key) => {
+      if (params[key]?.length > 0) {
+        paramsString += `${key}=${params[key]}&`;
+      }
+    });
+
+    paramsString = paramsString.slice(0, -1);
+
+    navigate(`/inventario?${paramsString}`);
+  };
+
   return (
     <div className="min-h-full w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center pb-2">
@@ -171,7 +255,7 @@ const Inventory = () => {
               required={true}
               value={filters.inventoryType}
               onChange={(e) =>
-                setFilters({ ...filters, inventoryType: e.target.value })
+                handleFilterByParams(e.target.value, "inventoryType")
               }
             >
               <option value="">Todos</option>
@@ -194,7 +278,7 @@ const Inventory = () => {
               required={true}
               value={filters.brandType}
               onChange={(e) =>
-                setFilters({ ...filters, brandType: e.target.value })
+                handleFilterByParams(e.target.value, "brandType")
               }
             >
               <option value="">Todos</option>
@@ -216,9 +300,7 @@ const Inventory = () => {
               icon={MdNewReleases}
               required={true}
               value={filters.status}
-              onChange={(e) =>
-                setFilters({ ...filters, status: e.target.value })
-              }
+              onChange={(e) => handleFilterByParams(e.target.value, "status")}
             >
               <option value="">Todos</option>
               <option value={1}>Alta</option>
@@ -236,6 +318,7 @@ const Inventory = () => {
               placeholder="Modelo, serie, activo fijo"
               required={true}
               value={filters.search}
+              // onChange={(e) => handleFilterByParams(e.target.value, "search")}
               onChange={handleValidateSearch}
             />
           </div>
@@ -244,16 +327,7 @@ const Inventory = () => {
               <Label htmlFor="" value="&nbsp;" />
             </div>
             <button
-              onClick={() =>
-                setFilters({
-                  search: "",
-                  status: "",
-                  brandType: "",
-                  inventoryType: "",
-                  page: 1,
-                  quantityResults: 10,
-                })
-              }
+              onClick={handleClearFilters}
               className="bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded flex gap-2 items-center justify-center transition ease-in-out duration-200 hover:scale-105"
             >
               <span>
@@ -293,10 +367,10 @@ const Inventory = () => {
             onDelete={(id) => handleDelete(id)}
             quantityResults={filters.quantityResults}
             setQuantityResults={(quantityResults) =>
-              setFilters({ ...filters, quantityResults })
+              handleFilterByParams(quantityResults, "quantityResults")
             }
+            setPage={(page) => handleFilterByParams(page, "page")}
             page={filters.page}
-            setPage={(page) => setFilters({ ...filters, page })}
             totalEntries={totals.totalEntries}
             totalPages={totals.totalPages}
           />

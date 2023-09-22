@@ -69,6 +69,18 @@ const CustomeTable = ({
                           onClick={() => handleShowItem(item)}
                         />
                       </Table.Cell>
+                    ) : key === "status" ? (
+                      <Table.Cell key={key}>
+                        <div
+                          className={`text-center py-1 px-3 ${
+                            item[key]
+                              ? "bg-green-300 text-green-700"
+                              : "bg-red-300 text-red-700"
+                          } rounded-lg `}
+                        >
+                          {item[key] ? "Alta" : "Baja"}
+                        </div>
+                      </Table.Cell>
                     ) : (
                       <Table.Cell key={key}>{item[key]}</Table.Cell>
                     )
@@ -130,24 +142,24 @@ const CustomeTable = ({
           <div className="flex gap-3">
             <button
               className={`border border-gray-300 rounded-lg p-2 ${
-                page === 1
+                page == 1
                   ? ""
                   : "cursor-pointer hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110 active:bg-gray-500 active:text-white "
               }`}
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
+              onClick={() => setPage(parseInt(page) - 1)}
+              disabled={page == 1}
             >
               Anterior
             </button>
             <button
               className={`border border-gray-300 rounded-lg p-2 ${
-                page === totalPages || totalEntries === 0 || data.length === 0
+                page == totalPages || totalEntries == 0 || data.length == 0
                   ? " "
                   : "cursor-pointer hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110 active:bg-gray-500 active:text-white "
               }`}
-              onClick={() => setPage(page + 1)}
+              onClick={() => setPage(parseInt(page) + 1)}
               disabled={
-                page === totalPages || totalEntries === 0 || data.length === 0
+                page == totalPages || totalEntries == 0 || data.length == 0
               }
             >
               Siguiente
