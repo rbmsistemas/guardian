@@ -98,7 +98,7 @@ const Home = () => {
   }, [time]);
 
   return (
-    <div className="flex flex-col min-h-full h-full p-2 md:p-4 gap-4">
+    <div className="flex flex-col min-h-full p-2 md:p-4 gap-4">
       <h1 className="text-xl text-left font-bold text-purple-600">
         Bienvenido
       </h1>

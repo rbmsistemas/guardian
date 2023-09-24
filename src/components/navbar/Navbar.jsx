@@ -84,7 +84,7 @@ const Nav = ({ children }) => {
         </div>
         <div
           id="contenido"
-          className="flex-1 min-h-0 w-full overflow-y-auto pb-36 md:pb-28"
+          className="flex-1 min-h-0 w-full overflow-y-auto pb-28 md:pb-20"
         >
           {children}
         </div>

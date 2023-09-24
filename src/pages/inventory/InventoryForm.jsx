@@ -362,7 +362,7 @@ const InventoryForm = () => {
   };
 
   return (
-    <div className="min-h-full h-auto w-full p-5">
+    <div className="min-h-full w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
         <div className="flex gap-2 items-center">
           <Link to="/" className="text-gray-500 hover:text-gray-700">
