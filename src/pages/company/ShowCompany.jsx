@@ -70,7 +70,7 @@ const ShowCompany = () => {
     successNotify("Proveedor eliminado correctamente");
     clearProvider();
     setTimeout(() => {
-      navigate("/proveedores");
+      navigate("/companies");
     }, 500);
     setModal(false);
     setLoading(false);
@@ -86,7 +86,7 @@ const ShowCompany = () => {
             <FiChevronRight />
           </span>
           <Link to="/companies" className="text-gray-500 hover:text-gray-700">
-            Proveedores
+            Compañias
           </Link>
           <span className="text-gray-500 text-xl">
             <FiChevronRight />

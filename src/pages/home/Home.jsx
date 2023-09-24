@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Bodega from "../../assets/img/bodega.webp";
 import Users from "../../assets/img/users.webp";
 import Reports from "../../assets/img/reportes.jpg";
-import Proveedores from "../../assets/img/proveedores_01.jpg";
+import Companies from "../../assets/img/proveedores_01.jpg";
 import Context from "../../context/Context";
 import { BsDatabaseFillAdd, BsDatabaseFillDash } from "react-icons/bs";
 import {
@@ -324,16 +324,16 @@ const Home = () => {
           </h2>
         </Link>
         <Link
-          to={"/proveedores"}
+          to={"/companies"}
           className="bg-white min-h-[24vh] rounded-lg shadow-lg relative flex flex-col justify-center items-center gap-3 group overflow-hidden hover:shadow-xl transition ease-in-out duration-200"
         >
           <img
-            src={Proveedores}
+            src={Companies}
             className="hover:scale-125 transition ease-in-out duration-200 w-full min-h-full h-auto rounded-lg"
-            alt="Proveedores imagen"
+            alt="Companies imagen"
           />
           <h2 className="text-sm sm:text-lg xl:text-xl text-white text-right p-3 font-bold absolute bottom-0 right-0 bg-purple-700/60 w-full rounded-b-lg">
-            Control de Proveedores
+            Control de Compañias
           </h2>
         </Link>
       </div>
