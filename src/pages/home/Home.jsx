@@ -184,8 +184,8 @@ const Home = () => {
         <p className="col-span-2 md:col-span-4 4xl:col-span-5 pb-2 text-base text-left font-bold text-purple-600">
           Reportes
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 h-60 col-span-2 sm:col-span-1 border-b md:border-b-0 md:border-r border-gray-300 flex flex-col justify-center items-center">
+        <div className="grid grid-cols-2 gap-8 md:gap-4">
+          <div className="p-4 h-60 col-span-2 md:col-span-1 flex flex-col justify-center items-center md:border-r border-gray-300">
             <p className="text-base text-center pb-3 font-bold">
               <span className="text-neutral-600 font-bold">
                 Registros por estado
@@ -215,7 +215,8 @@ const Home = () => {
               }}
             />
           </div>
-          <div className="p-4 h-60 col-span-2 sm:col-span-1 flex flex-col justify-center items-center">
+          <div className="w-full col-span-2 border-b md:border-b-0 border-gray-300 md:hidden"></div>
+          <div className="p-4 h-60 col-span-2 md:col-span-1 flex flex-col justify-center items-center">
             <div className="w-full text-sm px-2 pb-4 font-bold flex justify-between items-center gap-2">
               <span className="text-neutral-600 truncate font-bold">
                 Usuario / Tiempo

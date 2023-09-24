@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MdClose, MdOutlineKeyboardArrowDown } from "react-icons/md";
 import classNames from "classnames";
+import { FaPlusCircle } from "react-icons/fa";
 
 const DropdownList = ({ options, selectedOption, onSelect }) => {
   return (
@@ -9,14 +10,26 @@ const DropdownList = ({ options, selectedOption, onSelect }) => {
         <li
           key={option.value}
           onClick={() => onSelect(option)}
-          className={classNames("py-2 px-3 cursor-pointer", {
-            "bg-blue-500 text-white":
-              selectedOption && selectedOption.value === option.value,
-            "hover:bg-yellow-300":
-              selectedOption && selectedOption.value !== option.value,
-          })}
+          className={classNames(
+            "py-2 px-3 cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
+            {
+              "text-green-500": "0" == option.value,
+              "bg-blue-500 text-white":
+                selectedOption && selectedOption.value === option.value,
+              "hover:bg-yellow-300": selectedOption?.value !== option.value,
+            }
+          )}
         >
           {option.label}
+          {option.value == "0" && (
+            <FaPlusCircle
+              className={`${
+                selectedOption?.value == option.value
+                  ? "text-white"
+                  : "text-green-500"
+              }`}
+            />
+          )}
         </li>
       ))}
     </ul>
@@ -32,7 +45,7 @@ const AutocompleteInput = ({
   icon: Icon,
   disabled = false,
   isClearable = false,
-  isOtherOption = false,
+  isOtherOption,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [filteredData, setFilteredData] = useState(data || []);
@@ -56,9 +69,18 @@ const AutocompleteInput = ({
     const value = e.target.value;
     setInputValue(value);
 
-    const filteredOptions = data.filter((option) =>
+    let filteredOptions = data.filter((option) =>
       option.label.toLowerCase().includes(value.toLowerCase())
     );
+
+    if (isOtherOption) {
+      const otherOption = {
+        label: "Otro",
+        value: "0",
+      };
+      filteredOptions = [...filteredOptions, otherOption];
+    }
+
     setFilteredData(filteredOptions);
     setSelectedOption(null);
     setShowDropdown(true);

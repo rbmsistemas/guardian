@@ -38,6 +38,7 @@ const InventoryFields = ({
   handleSelectInput,
 }) => {
   useEffect(() => {
+    console.log("entro");
     if (body.inventoryTypeId != "0") setBody({ ...body, otherType: "" });
     if (body.inventoryBrandId != "0") setBody({ ...body, otherBrand: "" });
     if (body.inventoryModelId != "0") setBody({ ...body, otherModel: "" });
@@ -121,7 +122,10 @@ const InventoryFields = ({
           <div>
             <div className="w-full flex gap-1">
               <span className="text-red-500">*</span>
-              <Label htmlFor="otherBrand" value="Marca del equipo" />
+              <Label
+                htmlFor="otherBrand"
+                value="Especifique la Marca del equipo"
+              />
             </div>
             <TextInput
               id="otherBrand"
@@ -168,7 +172,10 @@ const InventoryFields = ({
           <div>
             <div className="w-full flex gap-1">
               <span className="text-red-500">*</span>
-              <Label htmlFor="otherType" value="Otro tipo" />
+              <Label
+                htmlFor="otherType"
+                value="Especifique el tipo de inventario"
+              />
             </div>
             <TextInput
               id="otherType"

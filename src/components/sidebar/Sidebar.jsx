@@ -112,7 +112,7 @@ const Side = ({
                 <p>Compañias</p>
               </Link>
               <Link
-                to="/"
+                to="/usuarios"
                 className="p-3 py-2 hover:bg-gray-100 text-purple-600 hover:text-purple-800 transition ease-in-out duration-200 w-full flex justify-start gap-4 items-center text-base font-semibold rounded-lg"
               >
                 <span className="text-2xl">
