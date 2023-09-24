@@ -1,86 +1,65 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FaEye, FaHome } from "react-icons/fa";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { FaEye, FaHome, FaSave } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { FiChevronRight } from "react-icons/fi";
-import CrearProveedores from "./CreateCompany";
 import Loading from "../../utils/Loading";
 import { toast } from "react-hot-toast";
 import Context from "../../context/Context";
 import { uploadImageCompany } from "../../api/request.api";
+import CreateCompany from "./CreateCompany";
+import { Base_Company } from "../../context/Models";
 
 const CompanyForm = () => {
   const navigate = useNavigate();
+  const submitRef = useRef(null);
   const { id } = useParams();
-  const {
-    createProvider,
-    user,
-    updateProvider,
-    provider,
-    getProvider,
-    clearProvider,
-  } = useContext(Context);
-  const [proveedor, setProveedor] = useState({
-    proveedor: "",
-    encargado: "",
-    email: "",
-    phone: "",
-    address: "",
-    logo: "",
-    status: true,
-    comments: "",
-  });
-  const [voler, setVoler] = useState(false);
-
-  const [image, setImage] = useState("");
-  const [comments, setComments] = useState(proveedor.comments);
+  const { createCompany, user, updateCompany, company, getCompany } =
+    useContext(Context);
+  const [companyData, setCompanyData] = useState(Base_Company);
+  const [volver, setVolver] = useState(false);
   const [loading, setLoading] = useState(false);
   const notificationError = (message) => toast.error(message);
   const successNotification = (message) => toast.success(message);
 
   useEffect(() => {
     if (id) {
-      getProvider(id);
+      getCompany(id);
+      setVolver(true);
     } else {
-      clearProvider();
+      setCompanyData(Base_Company);
+      setVolver(false);
     }
   }, [id]);
 
   useEffect(() => {
-    if (provider) {
-      setProveedor({
-        proveedor: provider.proveedor || "",
-        encargado: provider.encargado || "",
-        email: provider.email || "",
-        phone: provider.phone || "",
-        address: provider.address || "",
-        logo: provider.logo || "",
-        status: provider.status || true,
-        comments: provider.comments || "",
+    if (id && company?.id) {
+      setCompanyData({
+        name: company.name || "",
+        manager: company.manager || "",
+        email: company.email || "",
+        phone: company.phone || "",
+        logo: company.logo || "",
+        status: company.status || true,
+        comments: company.comments || "",
       });
-      setComments(provider.comments);
     }
-  }, [provider]);
+  }, [company]);
 
-  //  check if the proveedor has changes
-  useEffect(() => {
-    if (id) {
-      if (
-        proveedor.proveedor !== provider.proveedor ||
-        proveedor.encargado !== provider.encargado ||
-        proveedor.email !== provider.email ||
-        proveedor.phone !== provider.phone ||
-        proveedor.address !== provider.address ||
-        proveedor.logo !== provider.logo ||
-        proveedor.status !== provider.status ||
-        proveedor.comments !== provider.comments
-      ) {
-        setVoler(true);
-      } else {
-        setVoler(false);
-      }
+  const compareChanges = (data, company) => {
+    let changes = false;
+    if (!id || !company || !data) {
+      return false;
     }
-  }, [proveedor]);
+    Object.keys(data).forEach((key) => {
+      if (company[key] !== data[key]) {
+        changes = true;
+      }
+    });
+    return changes;
+  };
+
+  console.log(id);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -89,23 +68,22 @@ const CompanyForm = () => {
     if (id) {
       try {
         let newImage = null;
-        if (image) {
+        if (companyData.logo !== company.logo) {
           newImage = await handleUploadFile();
         }
-        const newProvider = {
-          ...proveedor,
-          logo: newImage ?? provider.logo,
-          comments,
+        const newCompany = {
+          ...companyData,
+          logo: newImage ?? company.logo,
         };
 
-        const res = await updateProvider(id, newProvider, user.token);
+        const res = await updateCompany(id, newCompany, user.token);
         if (res?.status > 299) {
-          notificationError("Error al actualizar al proveedor");
+          notificationError("Error al actualizar al companyData");
           return console.log(res);
         }
-        successNotification("Proveedor actualizado correctamente");
+        successNotification("Compañia actualizado correctamente");
         setTimeout(() => {
-          navigate(`/proveedores/editar/${id}`);
+          navigate(`/companies/editar/${id}`);
         }, 2000);
         setLoading(false);
       } catch (error) {
@@ -114,24 +92,25 @@ const CompanyForm = () => {
       }
     } else {
       let newImage = null;
-      if (image) {
+      if (companyData.logo !== company.logo) {
         newImage = await handleUploadFile();
       }
-      const newProvider = {
-        ...proveedor,
-        logo: newImage ?? provider.logo,
-        comments,
+      const newCompany = {
+        ...companyData,
+        logo: newImage ?? company.logo,
       };
 
-      const res = await createProvider(newProvider);
+      const res = await createCompany(newCompany);
 
       if (res?.status > 299) {
-        notificationError("Error al crear al proveedor");
+        notificationError("Error al crear al companyData");
         return console.log(res.data.message);
       }
-      successNotification("Proveedor creado correctamente");
+      successNotification("Compañia creado correctamente");
+
+      console.log(res);
       setTimeout(() => {
-        navigate(`/proveedores/editar/${res.id}`);
+        navigate(`/companies/editar/${res.id}`);
       }, 2000);
       setLoading(false);
     }
@@ -140,7 +119,7 @@ const CompanyForm = () => {
   const handleUploadFile = async () => {
     try {
       const formData = new FormData();
-      formData.append("image", image);
+      formData.append("image", companyData.logo);
 
       const imageRes = await uploadImageCompany(formData, user.token);
       if (imageRes?.status > 299) {
@@ -155,6 +134,19 @@ const CompanyForm = () => {
     }
   };
 
+  const onChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setCompanyData({ ...companyData, [name]: files[0] });
+    } else {
+      setCompanyData({ ...companyData, [name]: value });
+    }
+  };
+
+  const handleSubmitButton = () => {
+    submitRef.current.click();
+  };
+
   return (
     <div className="min-h-full h-auto w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
@@ -165,35 +157,48 @@ const CompanyForm = () => {
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="/proveedores" className="text-gray-500 hover:text-gray-700">
-            Proveedores
+          <Link to="/companies" className="text-gray-500 hover:text-gray-700">
+            Compañias
           </Link>
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
           <Link to="#" className="text-gray-500 hover:text-gray-700">
-            Nuevo proveedor
+            Nuevo compañia
           </Link>
         </div>
         <div className="flex gap-2 items-center">
           <Link
-            to="/proveedores"
+            to="/companies"
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
           >
             <span>
               <IoArrowBack className="text-white text-lg" />
             </span>
-            {voler ? "Cancelar" : "Volver"}
+            {volver && compareChanges(companyData, company)
+              ? "Cancelar"
+              : "Volver"}
           </Link>
+          <button
+            type="submit"
+            onClick={handleSubmitButton}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+          >
+            <span>
+              <FaSave className="text-white text-lg" />
+            </span>
+
+            {id ? "Actualizar" : "Guardar"}
+          </button>
           {id && (
             <Link
-              to={`/proveedores/ver/${id}`}
+              to={`/companies/ver/${id}`}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
             >
               <span>
                 <FaEye className="text-white text-lg" />
               </span>
-              Ver proveedor
+              Ver
             </Link>
           )}
         </div>
@@ -204,14 +209,20 @@ const CompanyForm = () => {
           onSubmit={onSubmit}
           className="flex flex-col gap-5 mt-5 bg-white p-5 rounded-lg"
         >
-          <CrearProveedores
-            proveedor={proveedor}
-            setProveedor={setProveedor}
-            image={image}
-            setImage={setImage}
-            comments={comments}
-            setComments={setComments}
-          />
+          <CreateCompany company={companyData} onChange={onChange} />
+          <div className="flex justify-end">
+            <button
+              ref={submitRef}
+              type="submit"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            >
+              <span>
+                <FaSave className="text-white text-lg" />
+              </span>
+
+              {id ? "Actualizar" : "Guardar"}
+            </button>
+          </div>
         </form>
       </div>
       {loading && <Loading />}

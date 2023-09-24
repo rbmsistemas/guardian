@@ -3,7 +3,11 @@ import Context from "../../context/Context";
 import CustomeTable from "../../components/table/CustomeTable";
 import { Label, Modal, Select, TextInput } from "flowbite-react";
 import { FaCheck, FaHome, FaSearch, FaTimes } from "react-icons/fa";
-import { AiFillFileAdd, AiOutlineClear } from "react-icons/ai";
+import {
+  AiFillFileAdd,
+  AiOutlineClear,
+  AiOutlinePoweroff,
+} from "react-icons/ai";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   MdNewReleases,
@@ -12,6 +16,7 @@ import {
 } from "react-icons/md";
 import { FiChevronRight } from "react-icons/fi";
 import { toast } from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
 
 const Inventory = () => {
   const location = useLocation();
@@ -43,6 +48,21 @@ const Inventory = () => {
   const successNotify = (message) => toast.success(message);
 
   useEffect(() => {
+    setIsLoading(true);
+    const res = async () => {
+      const data = await getInventoriesBySearch(filters);
+      if (data) {
+        setTotals({
+          totalEntries: data.totalEntries,
+          totalPages: data.totalPages,
+        });
+      }
+    };
+    res();
+    setIsLoading(false);
+  }, [filters]);
+
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const search = params.get("search") || "";
     const status = params.get("status") || "";
@@ -62,20 +82,6 @@ const Inventory = () => {
   }, [location]);
 
   useEffect(() => {
-    const res = async () => {
-      const data = await getInventoriesBySearch(filters);
-      if (data) {
-        setTotals({
-          totalEntries: data.totalEntries,
-          totalPages: data.totalPages,
-        });
-      }
-    };
-    res();
-  }, [filters]);
-
-  useEffect(() => {
-    setIsLoading(true);
     let formatInventories = [];
     if ((inventories, inventoryModels || inventoryBrands || inventoryTypes)) {
       formatInventories = inventories?.map((item, index) => {
@@ -97,7 +103,6 @@ const Inventory = () => {
       });
     }
     setInventoriesData(formatInventories);
-    setIsLoading(false);
   }, [inventories, inventoryModels, inventoryBrands, inventoryTypes]);
 
   const handleValidateSearch = (e) => {
@@ -297,7 +302,7 @@ const Inventory = () => {
             </div>
             <Select
               id="status"
-              icon={MdNewReleases}
+              icon={AiOutlinePoweroff}
               required={true}
               value={filters.status}
               onChange={(e) => handleFilterByParams(e.target.value, "status")}
@@ -337,12 +342,11 @@ const Inventory = () => {
             </button>
           </div>
         </div>
-        {isLoading && (
+        {isLoading ? (
           <div className="flex flex-col items-center justify-center gap-2">
-            <h1 className="text-2xl font-semibold">Cargando...</h1>
+            <ClipLoader color="#7E3AF2" size={100} loading={isLoading} />
           </div>
-        )}
-        {!isLoading && totals.totalEntries == 0 ? (
+        ) : !isLoading && totals.totalEntries == 0 ? (
           <div className="flex flex-col items-center justify-center gap-2">
             <h1 className="text-2xl font-semibold">No hay resultados</h1>
             <p className="text-gray-500">

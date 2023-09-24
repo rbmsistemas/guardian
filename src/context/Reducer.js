@@ -53,32 +53,32 @@ export default (state, action) => {
     case GET_COMPANIES:
       return {
         ...state,
-        providers: payload,
+        companies: payload,
       };
     case GET_COMPANY:
       return {
         ...state,
-        provider: payload,
+        company: payload,
       };
     case POST_COMPANY:
       return {
         ...state,
-        provider: payload,
+        company: payload,
       };
     case PATCH_COMPANY:
       return {
         ...state,
-        provider: payload,
+        company: payload,
       };
     case DELETE_COMPANY:
       return {
         ...state,
-        providers: payload,
+        companies: payload,
       };
     case GET_COMPANIES_BY_SEARCH:
       return {
         ...state,
-        providers: payload,
+        companies: payload,
       };
     case GET_ACTIVITIES:
       return {

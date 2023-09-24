@@ -24,7 +24,7 @@ const CustomeTable = ({
 
   const handleShowItem = (item) => {
     setItemSelected(item);
-    setItemName(item?.marca + " " + item?.modelo + " " + item?.tipo || "");
+    setItemName(item?.modelo ?? item?.compañia ?? item?.nombre ?? "");
     setModal(true);
   };
 

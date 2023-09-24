@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../../context/Context";
 import { FaEye, FaHome, FaSave } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -28,9 +28,9 @@ const InventoryForm = () => {
     user,
   } = useContext(Context);
 
-  const [voler, setVoler] = useState(false);
+  const [volver, setVolver] = useState(false);
   const [loading, setLoading] = useState(false);
-  const submitRef = React.useRef(null);
+  const submitRef = useRef(null);
   const notificationError = (message) => toast.error(message);
   const successNotification = (message) => toast.success(message);
 
@@ -58,10 +58,10 @@ const InventoryForm = () => {
   useEffect(() => {
     if (id) {
       getInventoryById(id);
-      setVoler(true);
+      setVolver(true);
     } else {
-      setVoler(false);
       setData(Base_Inventory());
+      setVolver(false);
     }
     setLoading(false);
   }, [id]);
@@ -382,6 +382,15 @@ const InventoryForm = () => {
           </Link>
         </div>
         <div className="flex gap-2 justify-center md:justify-end">
+          <Link
+            to="/inventario"
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+          >
+            <span>
+              <IoArrowBack className="text-white text-lg" />
+            </span>
+            {volver && compareChanges(data, inventory) ? "Cancelar" : "Volver"}
+          </Link>
           <button
             type="submit"
             onClick={handleSubmitButton}
@@ -393,15 +402,6 @@ const InventoryForm = () => {
 
             {id ? "Actualizar" : "Guardar"}
           </button>
-          <Link
-            to="/inventario"
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
-          >
-            <span>
-              <IoArrowBack className="text-white text-lg" />
-            </span>
-            {voler && compareChanges(data, inventory) ? "Cancelar" : "Volver"}
-          </Link>
           {id && (
             <Link
               to={`/inventario/ver/${id}`}

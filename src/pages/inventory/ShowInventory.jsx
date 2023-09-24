@@ -25,7 +25,11 @@ import Loading from "../../utils/Loading";
 import { formatLocalDate } from "../../utils/getFormatedDate";
 import { BiDevices } from "react-icons/bi";
 import { Tb3DCubeSphere } from "react-icons/tb";
-import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
+import {
+  AiOutlineFieldNumber,
+  AiOutlineNumber,
+  AiOutlinePoweroff,
+} from "react-icons/ai";
 import "../../Quill.css";
 import { toast } from "react-hot-toast";
 import ModalImageViewer from "../../components/modals/ModalImageViewer";
@@ -248,11 +252,11 @@ const ShowInventory = () => {
           </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
-              <Label htmlFor="" value="Activo" />
+              <Label htmlFor="" value="Status" />
             </div>
             <p className="text-gray-500 flex items-start gap-4">
               <span>
-                <MdOutlineCategory className="text-blue-500 text-xl" />
+                <AiOutlinePoweroff className="text-blue-500 text-xl" />
               </span>
               {inventario.status ? "Alta" : "Baja"}
             </p>

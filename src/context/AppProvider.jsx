@@ -81,7 +81,7 @@ const AppProvider = (props) => {
     inventoryModels: [Base_InventoryModel],
     activities: [],
     activity: {},
-    compnanies: [Base_Company],
+    companies: [Base_Company],
     company: Base_Company,
   };
   const [state, dispatch] = useReducer(Reducer, initialState);
@@ -492,13 +492,6 @@ const AppProvider = (props) => {
     }
   };
 
-  const clearActivity = () => {
-    dispatch({
-      type: GET_ACTIVITY,
-      payload: {},
-    });
-  };
-
   // useEffect(() => {
   //   if (state.user.token) {
   //     getActivities(state.user.token);
@@ -604,6 +597,7 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       }
       const { companies } = await response.data;
+
       dispatch({
         type: GET_COMPANIES_BY_SEARCH,
         payload: companies,
@@ -613,13 +607,6 @@ const AppProvider = (props) => {
       console.log(error);
       return false;
     }
-  };
-
-  const clearCompany = () => {
-    dispatch({
-      type: GET_COMPANY,
-      payload: {},
-    });
   };
 
   useEffect(() => {
@@ -657,14 +644,12 @@ const AppProvider = (props) => {
         updateCompany,
         deleteCompany,
         getCompanyBySearch,
-        clearCompany,
         getActivities,
         getActivity,
         createActivity,
         updateActivity,
         deleteActivity,
         getActivitiesBySearch,
-        clearActivity,
         getInventoryTypes,
         getInventoryBrands,
         getInventoryModels,

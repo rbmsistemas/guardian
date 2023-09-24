@@ -46,10 +46,10 @@ const AuthRouter = () => {
             <Route path="/actividades/crear" element={<ActividadForm />} />
             <Route path="/actividades/editar/:id" element={<ActividadForm />} />
             <Route path="/actividades/ver/:id" element={<ShowInventory />} />
-            <Route path="/company" element={<Company />} />
-            <Route path="/company/crear" element={<CompanyForm />} />
-            <Route path="/company/editar/:id" element={<CompanyForm />} />
-            <Route path="/company/ver/:id" element={<ShowCompany />} />
+            <Route path="/companies" element={<Company />} />
+            <Route path="/companies/crear" element={<CompanyForm />} />
+            <Route path="/companies/editar/:id" element={<CompanyForm />} />
+            <Route path="/companies/ver/:id" element={<ShowCompany />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Nav>

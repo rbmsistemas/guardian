@@ -180,95 +180,103 @@ const Home = () => {
           </h3>
         </Link> */}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-4 bg-white p-2 md:p-4 rounded-lg">
-        <p className="col-span-2 md:col-span-4 4xl:col-span-5 text-base text-left font-bold text-purple-600">
+      <div className="bg-white p-2 md:p-4 rounded-lg">
+        <p className="col-span-2 md:col-span-4 4xl:col-span-5 pb-2 text-base text-left font-bold text-purple-600">
           Reportes
         </p>
-        <div className="p-4 h-60 col-span-2 sm:col-span-1 rounded-lg shadow-xl flex flex-col justify-center items-center">
-          <p className="text-base text-center pb-3 font-bold">
-            <span className="text-neutral-600 font-bold">
-              Registros por estado
-            </span>{" "}
-          </p>
-          <Doughnut
-            data={{
-              labels: ["Alta", "Baja"],
-              datasets: [
-                {
-                  label: "Inventario",
-                  data: [countInventories.alta, countInventories.baja],
-                  backgroundColor: ["#7E3AF2", "#EF4444"],
-                  borderColor: ["#7E3AF2", "#EF4444"],
-                  borderWidth: 1,
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-4 h-60 col-span-2 sm:col-span-1 border-b md:border-b-0 md:border-r border-gray-300 flex flex-col justify-center items-center">
+            <p className="text-base text-center pb-3 font-bold">
+              <span className="text-neutral-600 font-bold">
+                Registros por estado
+              </span>{" "}
+            </p>
+            <Doughnut
+              data={{
+                labels: ["Alta", "Baja"],
+                datasets: [
+                  {
+                    label: "Inventario",
+                    data: [countInventories.alta, countInventories.baja],
+                    backgroundColor: ["#7E3AF2", "#EF4444"],
+                    borderColor: ["#7E3AF2", "#EF4444"],
+                    borderWidth: 1,
+                  },
+                ],
+              }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: true,
+                  },
                 },
-              ],
-            }}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: true,
-                },
-              },
-            }}
-          />
-        </div>
-        <div className="p-4 h-60 col-span-2 sm:col-span-1 rounded-lg shadow-xl flex flex-col justify-center items-center">
-          <div className="w-full text-sm px-2 pb-3 font-bold flex justify-between items-center gap-2">
-            <span className="text-neutral-600 truncate font-bold">
-              Usuario / Tiempo
-            </span>{" "}
-            <span className="grid grid-cols-4 items-center gap-1">
-              <p
-                onClick={() => setTime(7)}
-                className="text-xs text-center text-gray-400 shadow-lg p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
-              >
-                7
-              </p>
-              <p
-                onClick={() => setTime(14)}
-                className="text-xs text-center text-gray-400 shadow-lg p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
-              >
-                14
-              </p>
-              <p
-                onClick={() => setTime(21)}
-                className="text-xs text-center text-gray-400 shadow-lg p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
-              >
-                21
-              </p>
-              <p
-                onClick={() => setTime(31)}
-                className="text-xs text-center text-gray-400 shadow-lg p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
-              >
-                Mes
-              </p>
-            </span>
+              }}
+            />
           </div>
-          <Line
-            data={{
-              labels: usersInventories.labels,
-              datasets: [
-                {
-                  label: "Inventario",
-                  data: usersInventories.data,
-                  backgroundColor: "#7E3AF2",
-                  borderColor: "#7E3AF2",
-                  borderWidth: 1,
+          <div className="p-4 h-60 col-span-2 sm:col-span-1 flex flex-col justify-center items-center">
+            <div className="w-full text-sm px-2 pb-4 font-bold flex justify-between items-center gap-2">
+              <span className="text-neutral-600 truncate font-bold">
+                Usuario / Tiempo
+              </span>{" "}
+              <span className="grid grid-cols-5 items-center gap-1">
+                <p
+                  onClick={() => setTime(1)}
+                  className="text-xs text-center text-gray-400 shadow-md p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+                >
+                  1
+                </p>
+                <p
+                  onClick={() => setTime(7)}
+                  className="text-xs text-center text-gray-400 shadow-md p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+                >
+                  7
+                </p>
+                <p
+                  onClick={() => setTime(14)}
+                  className="text-xs text-center text-gray-400 shadow-md p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+                >
+                  14
+                </p>
+                <p
+                  onClick={() => setTime(21)}
+                  className="text-xs text-center text-gray-400 shadow-md p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+                >
+                  21
+                </p>
+                <p
+                  onClick={() => setTime(31)}
+                  className="text-xs text-center text-gray-400 shadow-md p-2 cursor-pointer border border-neutral-100 rounded-md hover:bg-purple-600 hover:text-white ease-in-out duration-100 transition"
+                >
+                  Mes
+                </p>
+              </span>
+            </div>
+            <Line
+              data={{
+                labels: usersInventories.labels,
+                datasets: [
+                  {
+                    label: "Inventario",
+                    data: usersInventories.data,
+                    backgroundColor: "#7E3AF2",
+                    borderColor: "#7E3AF2",
+                    borderWidth: 1,
+                  },
+                ],
+              }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
                 },
-              ],
-            }}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: false,
-                },
-              },
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 4xl:grid-cols-5 gap-4 bg-white p-2 md:p-4 rounded-lg">

@@ -88,7 +88,6 @@ export const Base_User = {
 };
 
 export const Base_Company = {
-  id: "",
   name: "",
   manager: "",
   email: "",

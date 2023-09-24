@@ -11,45 +11,33 @@ import CustomeTable from "../../components/table/CustomeTable";
 import { Label, Modal, Select, TextInput } from "flowbite-react";
 import Context from "../../context/Context";
 import { toast } from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
 
 const Company = () => {
-  const { providers, getProvidersBySearch, deleteProvider } =
-    useContext(Context);
+  const { companies, getCompanyBySearch, deleteCompany } = useContext(Context);
   const navigate = useNavigate();
 
   const [filters, setFilters] = useState({
     search: "",
     status: "",
     page: 1,
-    quantityResults: 5,
+    quantityResults: 10,
   });
   const [totals, setTotals] = useState({ totalEntries: 0, totalPages: 0 });
   const [modal, setModal] = useState(false);
-  const [providerToDelete, setProviderToDelete] = useState({});
+  const [companiesData, setCompaniesData] = useState([]);
+  const [companyToDelete, setCompanyToDelete] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
 
-  const Proveedores = providers?.map((provider, index) => {
-    return {
-      no: index + 1,
-      imagen: provider.logo,
-      proveedor: provider.proveedor,
-      encargado: provider.encargado,
-      "correo electronico": provider.email,
-      teléfono: provider.phone,
-      dirección:
-        provider.address.length > 50
-          ? provider.address.slice(0, 50) + "..."
-          : provider.address,
-      estado: provider.status ? "Activo" : "Inactivo",
-      id: provider.id,
-    };
-  });
-
   useEffect(() => {
+    setLoading(true);
+
     const res = async () => {
-      const data = await getProvidersBySearch(filters);
+      const data = await getCompanyBySearch(filters);
+
       if (data) {
         setTotals({
           totalEntries: data.totalEntries,
@@ -58,28 +46,49 @@ const Company = () => {
       }
     };
     res();
+    setLoading(false);
   }, [filters]);
+
+  useEffect(() => {
+    let formatedCompany = [];
+    if (companies) {
+      formatedCompany = companies?.map((company, index) => {
+        return {
+          no: index + 1,
+          imagen: company.logo,
+          compañia: company.name,
+          encargado: company.manager,
+          "correo electronico": company.email,
+          teléfono: company.phone,
+          estado: company.status ? "Activo" : "Inactivo",
+          id: company.id,
+        };
+      });
+    }
+    setCompaniesData(formatedCompany);
+    setLoading(false);
+  }, [companies]);
 
   const handleDelete = async (id) => {
     setModal(true);
-    setProviderToDelete(providers.find((provider) => provider.id === id));
+    setCompanyToDelete(companies.find((company) => company.id === id));
   };
 
   const onDelete = async () => {
-    const data = await deleteProvider(providerToDelete.id);
+    const data = await deleteCompany(companyToDelete.id);
     if (!data) {
-      errorNotify("Error al eliminar el proveedor");
+      errorNotify("Error al eliminar la compañia");
       setModal(false);
       return;
     }
     if (data) {
-      const res = await getProvidersBySearch(filters);
+      const res = await getCompanyBySearch(filters);
       if (res) {
         setTotals({
           totalEntries: res.totalEntries,
           totalPages: res.totalPages,
         });
-        successNotify("Proveedor eliminado correctamente");
+        successNotify("Compañia eliminado correctamente");
       }
       setModal(false);
     }
@@ -95,18 +104,18 @@ const Company = () => {
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="/proveedores" className="text-gray-500 hover:text-gray-700">
-            Proveedores
+          <Link to="/companies" className="text-gray-500 hover:text-gray-700">
+            Compañias
           </Link>
         </div>
         <Link
-          to="/proveedores/crear"
+          to="/companies/crear"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
         >
           <span>
             <AiFillFileAdd className="text-white text-lg" />
           </span>
-          Nuevo Proveedor
+          Nueva compañia
         </Link>
       </div>
       <div className="flex flex-col gap-2">
@@ -119,7 +128,7 @@ const Company = () => {
               id="search"
               type="text"
               icon={FaSearch}
-              placeholder="Proveedor, Nombre, teléfono,"
+              placeholder="Compañia, encargado, teléfono, correo electrónico..."
               required={true}
               value={filters.search}
               onChange={(e) =>
@@ -145,9 +154,9 @@ const Company = () => {
             </Select>
           </div>
 
-          <div className="col-span-4 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-4 md:col-span-1 flex flex-col gap-2 pt-2 md:pt-0">
             <div className="w-full hidden md:block">
-              <Label htmlFor="status" value="&nbsp;" />
+              <Label htmlFor="clean" value="&nbsp;" />
             </div>
             <button
               onClick={() =>
@@ -155,10 +164,10 @@ const Company = () => {
                   search: "",
                   status: "",
                   page: 1,
-                  quantityResults: 5,
+                  quantityResults: 10,
                 })
               }
-              className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+              className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded flex gap-2 items-center justify-center transition ease-in-out duration-200 hover:scale-105"
             >
               <span>
                 <AiOutlineClear className="text-white text-lg" />
@@ -167,7 +176,11 @@ const Company = () => {
             </button>
           </div>
         </div>
-        {totals.totalEntries == 0 ? (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center gap-2">
+            <ClipLoader color="#7E3AF2" size={100} loading={loading} />
+          </div>
+        ) : !loading && totals.totalEntries == 0 ? (
           <div className="flex flex-col items-center justify-center gap-2">
             <h1 className="text-2xl font-semibold">No hay resultados</h1>
             <p className="text-gray-500">
@@ -187,9 +200,9 @@ const Company = () => {
           <CustomeTable
             showId={false}
             showImagen={true}
-            data={Proveedores}
-            onShow={(id) => navigate(`/proveedores/ver/${id}`)}
-            onEdit={(id) => navigate(`/proveedores/editar/${id}`)}
+            data={companiesData}
+            onShow={(id) => navigate(`/companies/ver/${id}`)}
+            onEdit={(id) => navigate(`/companies/editar/${id}`)}
             onDelete={(id) => handleDelete(id)}
             quantityResults={filters.quantityResults}
             setQuantityResults={(quantityResults) =>
@@ -204,7 +217,7 @@ const Company = () => {
       </div>
       {modal && (
         <Modal
-          title="Eliminar proveedor"
+          title="Eliminar compañia"
           dismissible={true}
           onClose={() => {
             setModal(false);
@@ -217,14 +230,14 @@ const Company = () => {
                 <FaStore className="text-white text-xl" />
               </span>
               <p className="text-xl font-bold text-red-500">
-                Eliminar proveedor
+                Eliminar compañia
               </p>
             </div>
           </Modal.Header>
           <Modal.Body>
             <p className="text-gray-500">
-              ¿Está seguro que desea eliminar el proveedor{" "}
-              <span className="font-bold">{providerToDelete.proveedor}</span>?
+              ¿Está seguro que desea eliminar la compañia{" "}
+              <span className="font-bold">{companyToDelete.name}</span>?
             </p>
           </Modal.Body>
           <Modal.Footer>

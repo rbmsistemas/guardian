@@ -5,7 +5,6 @@ import {
   FaEnvelope,
   FaHome,
   FaList,
-  FaMapMarkerAlt,
   FaPhone,
   FaRegEdit,
   FaRegTrashAlt,
@@ -20,56 +19,49 @@ import { AiOutlinePoweroff } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import Loading from "../../utils/Loading";
 import "../../utils/Wyswyg.css";
+import { Base_Company } from "../../context/Models";
+import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
+import ModalImageViewer from "../../components/modals/ModalImageViewer";
 
 const ShowCompany = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { provider, getProvider, deleteProvider, clearProvider } =
+  const { company, getCompany, deleteProvider, clearProvider } =
     useContext(Context);
   const [modal, setModal] = useState(false);
+  const [modal2, setModal2] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [proveedor, setProveedor] = useState({
-    proveedor: "",
-    encargado: "",
-    email: "",
-    phone: "",
-    address: "",
-    logo: "",
-    status: "",
-    comments: "",
-  });
+  const [companyData, setCompanyData] = useState(Base_Company);
 
   useEffect(() => {
     if (id) {
-      getProvider(id);
+      getCompany(id);
     }
   }, [id]);
 
   useEffect(() => {
-    if (provider) {
-      setProveedor({
-        id: provider.id || "",
-        proveedor: provider.proveedor || "",
-        encargado: provider.encargado || "",
-        email: provider.email || "",
-        phone: provider.phone || "",
-        address: provider.address || "",
-        logo: provider.logo || "",
-        status: provider.status || true,
-        comments: provider.comments || "",
+    if (company) {
+      setCompanyData({
+        id: company.id || "",
+        name: company.name || "",
+        manager: company.manager || "",
+        email: company.email || "",
+        phone: company.phone || "",
+        logo: company.logo || "",
+        status: company.status || true,
+        comments: company.comments || "",
       });
     }
-  }, [provider]);
+  }, [company]);
 
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
 
   const onDelete = async () => {
     setLoading(true);
-    console.log("proveedor", proveedor);
-    const data = await deleteProvider(proveedor.id);
+    const data = await deleteProvider(companyData.id);
     if (!data) {
-      errorNotify("Error al eliminar el proveedor");
+      errorNotify("Error al eliminar el companyData");
       setModal(false);
       setLoading(false);
       return;
@@ -93,20 +85,20 @@ const ShowCompany = () => {
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="/proveedores" className="text-gray-500 hover:text-gray-700">
+          <Link to="/companies" className="text-gray-500 hover:text-gray-700">
             Proveedores
           </Link>
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
           <Link to="#" className="text-gray-500 hover:text-gray-700">
-            {proveedor.proveedor}
+            {companyData.companyData}
           </Link>
         </div>
         <div className="flex flex-wrap gap-2 items-center">
           {/* volver al listado */}
           <Link
-            to="/proveedores"
+            to="/companies"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
           >
             <span>
@@ -116,7 +108,7 @@ const ShowCompany = () => {
           </Link>
 
           <Link
-            to={`/proveedores/editar/${id}`}
+            to={`/companies/editar/${id}`}
             className="bg-yellow-300 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
           >
             <span>
@@ -141,33 +133,34 @@ const ShowCompany = () => {
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
           <div className="col-span-4 flex justify-center items-center">
             <img
-              src={proveedor.logo}
-              alt={proveedor.proveedor}
-              className="w-44 h-auto border border-gray-300 "
+              src={FormatedUrlImage(companyData.logo)}
+              alt={companyData.name}
+              className="w-44 h-auto border border-gray-300 cursor-zoom-in"
+              onClick={() => setModal2(true)}
             />
           </div>
         </div>
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
           <div className="col-span-4 md:col-span-2 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
-              <Label htmlFor="proveedor" value="Proveedor" />
+              <Label htmlFor="nombre" value="Comañia" />
             </div>
             <p className="text-gray-500 flex items-center gap-4">
               <span>
                 <FaStore className="text-gray-500 text-xl" />
               </span>
-              {proveedor.proveedor}
+              {companyData.name}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
-              <Label htmlFor="encargado" value="Encargado" />
+              <Label htmlFor="manager" value="Encargado" />
             </div>
             <p className="text-gray-500 flex items-center gap-4">
               <span>
                 <FaUser className="text-gray-500 text-xl" />
               </span>
-              {proveedor.encargado}
+              {companyData.manager}
             </p>
           </div>
         </div>
@@ -180,7 +173,7 @@ const ShowCompany = () => {
               <span>
                 <FaEnvelope className="text-gray-500 text-xl" />
               </span>
-              {proveedor.email}
+              {companyData.email}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 flex flex-col gap-2 border-b border-b-gray-300">
@@ -191,22 +184,11 @@ const ShowCompany = () => {
               <span>
                 <FaPhone className="text-gray-500 text-xl" />
               </span>
-              {proveedor.phone}
+              {companyData.phone}
             </p>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
-          <div className="col-span-4 md:col-span-2 flex flex-col gap-2 border-b border-b-gray-300">
-            <div className="w-full">
-              <Label htmlFor="address" value="Dirección" />
-            </div>
-            <p className="text-gray-500 flex items-center gap-4">
-              <span>
-                <FaMapMarkerAlt className="text-gray-500 text-xl" />
-              </span>
-              {proveedor.address}
-            </p>
-          </div>
           <div className="col-span-4 md:col-span-2 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
               <Label htmlFor="status" value="Estado" />
@@ -215,7 +197,7 @@ const ShowCompany = () => {
               <span>
                 <AiOutlinePoweroff className="text-gray-500 text-xl" />
               </span>
-              {proveedor.status ? "Activo" : "Inactivo"}
+              {companyData.status ? "Activo" : "Inactivo"}
             </p>
           </div>
         </div>
@@ -226,14 +208,14 @@ const ShowCompany = () => {
             </div>
             <div
               className="text-gray-500 min-h-[15vh]"
-              dangerouslySetInnerHTML={{ __html: proveedor.comments }}
+              dangerouslySetInnerHTML={{ __html: companyData.comments }}
             ></div>
           </div>
         </div>
       </div>
       {modal && (
         <Modal
-          title="Eliminar proveedor"
+          title="Eliminar companyData"
           dismissible={true}
           onClose={() => {
             setModal(false);
@@ -246,14 +228,14 @@ const ShowCompany = () => {
                 <FaStore className="text-white text-xl" />
               </span>
               <p className="text-xl font-bold text-red-500">
-                Eliminar proveedor
+                Eliminar companyData
               </p>
             </div>
           </Modal.Header>
           <Modal.Body>
             <p className="text-gray-500">
-              ¿Está seguro que desea eliminar el proveedor{" "}
-              <span className="font-bold">{proveedor.proveedor}</span>?
+              ¿Está seguro que desea eliminar el companyData{" "}
+              <span className="font-bold">{companyData.companyData}</span>?
             </p>
           </Modal.Body>
           <Modal.Footer>
@@ -283,6 +265,15 @@ const ShowCompany = () => {
             </div>
           </Modal.Footer>
         </Modal>
+      )}
+      {modal2 && (
+        <ModalImageViewer
+          images={[companyData.logo]}
+          isDownloadImage
+          show={modal2}
+          title={companyData.name}
+          onClose={() => setModal2(false)}
+        />
       )}
       {loading && <Loading />}
     </div>
