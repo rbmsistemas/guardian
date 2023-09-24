@@ -280,7 +280,7 @@ const ShowInventory = () => {
               <span>
                 <MdCalendarMonth className="text-blue-500 text-xl" />
               </span>
-              {formatLocalDate(inventario.recepcionDate)}
+              {formatLocalDate(inventario.recepcionDate) ?? "N/A"}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
@@ -302,9 +302,7 @@ const ShowInventory = () => {
               <span>
                 <MdCalendarMonth className="text-blue-500 text-xl" />
               </span>
-              {inventario.bajaDate
-                ? formatLocalDate(inventario.bajaDate)
-                : "N/A"}
+              {formatLocalDate(inventario.bajaDate) ?? "N/A"}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">

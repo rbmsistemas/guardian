@@ -54,14 +54,17 @@ const Company = () => {
     if (companies) {
       formatedCompany = companies?.map((company, index) => {
         return {
-          no: index + 1,
-          imagen: company.logo,
-          compañia: company.name,
-          encargado: company.manager,
-          "correo electronico": company.email,
-          teléfono: company.phone,
-          estado: company.status ? "Activo" : "Inactivo",
-          id: company.id,
+          no: { key: "id", value: index + 1 },
+          imagen: { key: "logo", value: company.logo, name: company.name },
+          compañia: { key: "name", value: company.name },
+          encargado: { key: "manager", value: company.manager },
+          "correo electronico": { key: "email", value: company.email },
+          teléfono: { key: "phone", value: company.phone },
+          estado: {
+            key: "status",
+            value: company.status ? "Activo" : "Inactivo",
+          },
+          id: { key: "id", value: company.id },
         };
       });
     }

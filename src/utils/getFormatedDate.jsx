@@ -11,6 +11,7 @@ export const getCurrentFormattedDate = () => {
 };
 
 export const formatLocalDate = (dateString) => {
+  if (!dateString || dateString == null || dateString == undefined) return null;
   const options = {
     year: "numeric",
     month: "long",

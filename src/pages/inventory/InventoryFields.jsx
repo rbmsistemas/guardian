@@ -38,7 +38,6 @@ const InventoryFields = ({
   handleSelectInput,
 }) => {
   useEffect(() => {
-    console.log("entro");
     if (body.inventoryTypeId != "0") setBody({ ...body, otherType: "" });
     if (body.inventoryBrandId != "0") setBody({ ...body, otherBrand: "" });
     if (body.inventoryModelId != "0") setBody({ ...body, otherModel: "" });

@@ -59,8 +59,6 @@ const CompanyForm = () => {
     return changes;
   };
 
-  console.log(id);
-
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

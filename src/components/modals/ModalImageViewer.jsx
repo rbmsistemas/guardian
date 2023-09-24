@@ -154,7 +154,7 @@ const ModalImageViewer = ({
                   scale
                     ? "scale-150 cursor-zoom-out"
                     : "scale-100 cursor-zoom-in"
-                } w-auto h-full max-w-full mx-auto`}
+                } max-w-full max-h-full object-cover overflow-hidden transition ease-in-out duration-200`}
                 style={{ maxHeight: "50vh" }}
               />
               <button

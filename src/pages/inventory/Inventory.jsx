@@ -17,6 +17,7 @@ import {
 import { FiChevronRight } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
+import { formatLocalDate } from "../../utils/getFormatedDate";
 
 const Inventory = () => {
   const location = useLocation();
@@ -86,19 +87,28 @@ const Inventory = () => {
     if ((inventories, inventoryModels || inventoryBrands || inventoryTypes)) {
       formatInventories = inventories?.map((item, index) => {
         return {
-          no: index + 1,
-          tipo: inventoryTypes?.find(
-            (type) => type.id === item.inventoryModel?.inventoryTypeId
-          )?.name,
-          marca: inventoryBrands?.find(
-            (brand) => brand.id === item.inventoryModel?.inventoryBrandId
-          )?.name,
-          modelo: item.inventoryModel?.name,
-          SN: item.serialNumber,
-          activo: item.activo,
-          status: item.status,
-          creacion: new Date(item.createdAt).toLocaleDateString(),
-          id: item.id,
+          no: { key: "id", value: index + 1 },
+          tipo: {
+            key: "inventoryType",
+            value: inventoryTypes?.find(
+              (type) => type.id === item.inventoryModel?.inventoryTypeId
+            )?.name,
+          },
+          marca: {
+            key: "inventoryBrand",
+            value: inventoryBrands?.find(
+              (brand) => brand.id === item.inventoryModel?.inventoryBrandId
+            )?.name,
+          },
+          modelo: { key: "model", value: item.inventoryModel?.name },
+          SN: { key: "serialNumber", value: item.serialNumber },
+          activo: { key: "activo", value: item.activo },
+          status: { key: "status", value: item.status },
+          creacion: {
+            key: "createdAt",
+            value: formatLocalDate(item.createdAt),
+          },
+          id: { key: "id", value: item.id },
         };
       });
     }
@@ -137,6 +147,7 @@ const Inventory = () => {
 
   const handleDelete = async (id) => {
     setModal(true);
+    console.log(id);
     setinventaryToDelete(inventories.find((inventary) => inventary.id === id));
   };
 
@@ -186,15 +197,6 @@ const Inventory = () => {
         params["status"] = value;
       }
     }
-    // if (
-    //   type === "search" &&
-    //   handleValidateSearch({ target: { value } }).status &&
-    //   value?.trim() != ""
-    // ) {
-    //   params["search"] = value;
-    // } else {
-    //   return;
-    // }
     if (type === "quantityResults" && value.length > 0) {
       params["quantityResults"] = value;
     }
@@ -404,18 +406,22 @@ const Inventory = () => {
               ¿Está seguro que desea eliminar el inventario{" "}
               <span className="font-bold">
                 {inventoryTypes.find(
-                  (item) => item.id === inventaryToDelete.inventoryTypeId
+                  (item) =>
+                    item.id === inventaryToDelete.inventoryModel.inventoryTypeId
                 )?.name +
                   " " +
                   inventoryBrands.find(
-                    (item) => item.id === inventaryToDelete.inventaryBrandId
+                    (item) =>
+                      item.id ===
+                      inventaryToDelete.inventoryModel.inventoryBrandId
                   )?.name +
                   " Modelo " +
                   inventoryModels.find(
-                    (item) => item.id === inventaryToDelete.inventaryModelId
+                    (item) => item.id === inventaryToDelete.inventoryModel.id
                   )?.name +
-                  " SN - " +
-                  inventaryToDelete.serialNumber}
+                  (inventaryToDelete.serialNumber?.length > 0
+                    ? " SN - " + inventaryToDelete.serialNumber
+                    : "")}
               </span>
               ?
             </p>

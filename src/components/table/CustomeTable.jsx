@@ -17,6 +17,7 @@ const CustomeTable = ({
   setPage,
   totalEntries = 0,
   totalPages = 0,
+  onSortFilters = () => {},
 }) => {
   const [itemSelected, setItemSelected] = useState({});
   const [modal, setModal] = useState(false);
@@ -24,7 +25,8 @@ const CustomeTable = ({
 
   const handleShowItem = (item) => {
     setItemSelected(item);
-    setItemName(item?.modelo ?? item?.compañia ?? item?.nombre ?? "");
+    let name = item?.imagen?.name || item?.imagen?.value || "";
+    setItemName(name ?? "");
     setModal(true);
   };
 
@@ -50,11 +52,11 @@ const CustomeTable = ({
             {data.length >= 1 &&
               data.map((item) => (
                 <Table.Row
-                  key={item.id}
-                  onDoubleClick={() => onShow(item.id)}
+                  key={item.id.value}
+                  onDoubleClick={() => onShow(item.id.value)}
                   onDrag={(e) => {
                     e.preventDefault();
-                    onEdit(item.id);
+                    onEdit(item.id.value);
                   }}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
@@ -63,8 +65,8 @@ const CustomeTable = ({
                       key === "imagen" ? (
                       <Table.Cell key={key}>
                         <img
-                          src={FormatedUrlImage(item[key])}
-                          alt={item[key]}
+                          src={FormatedUrlImage(item[key].value)}
+                          alt={item[key].value}
                           className="w-10 h-10 object-cover rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
                           onClick={() => handleShowItem(item)}
                         />
@@ -73,16 +75,16 @@ const CustomeTable = ({
                       <Table.Cell key={key}>
                         <div
                           className={`text-center py-1 px-3 ${
-                            item[key]
+                            item[key].value
                               ? "bg-green-300 text-green-700"
                               : "bg-red-300 text-red-700"
                           } rounded-lg `}
                         >
-                          {item[key] ? "Alta" : "Baja"}
+                          {item[key].value ? "Alta" : "Baja"}
                         </div>
                       </Table.Cell>
                     ) : (
-                      <Table.Cell key={key}>{item[key]}</Table.Cell>
+                      <Table.Cell key={key}>{item[key].value}</Table.Cell>
                     )
                   )}
                   {onShow || onEdit || onDelete ? (
@@ -90,7 +92,7 @@ const CustomeTable = ({
                       {onShow && (
                         <div
                           className="cursor-pointer border border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
-                          onClick={() => onShow(item.id)}
+                          onClick={() => onShow(item.id.value)}
                         >
                           <FaEye className="text-xl" />
                         </div>
@@ -98,7 +100,7 @@ const CustomeTable = ({
                       {onEdit && (
                         <div
                           className="cursor-pointer border border-gap-primary text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
-                          onClick={() => onEdit(item.id)}
+                          onClick={() => onEdit(item.id.value)}
                         >
                           <FaRegEdit className="text-xl" />
                         </div>
@@ -107,7 +109,7 @@ const CustomeTable = ({
                         item?.id !== "00000000-0000-0000-0000-000000000000" && (
                           <div
                             className="cursor-pointer border border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
-                            onClick={() => onDelete(item.id)}
+                            onClick={() => onDelete(item.id.value)}
                           >
                             <FaRegTrashAlt className="text-xl" />
                           </div>
@@ -169,7 +171,7 @@ const CustomeTable = ({
       </div>
       {modal && (
         <ModalImageViewer
-          images={[itemSelected?.imagen] || []}
+          images={[itemSelected?.imagen?.value] || []}
           title={itemName}
           show={modal}
           onClose={() => setModal(false)}
