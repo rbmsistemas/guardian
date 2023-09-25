@@ -56,7 +56,7 @@ const CustomeTable = ({
                   <Table.HeadCell key={item}>Imagen</Table.HeadCell>
                 ) : (
                   <Table.HeadCell
-                    className={`${
+                    className={`bg-neutral-200 ${
                       order.orderBy === data[0][item]?.key &&
                       " border-b-2 border-purple-600 text-purple-600 dark:text-gray-400"
                     } ${sortByHeader ? "cursor-pointer" : "cursor-default"} ${
