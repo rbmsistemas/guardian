@@ -137,7 +137,6 @@ const Inventory = () => {
       }
     }
 
-    // return { status: true, value: inputValue };
     setFilters({ ...filters, search: inputValue });
   };
 
@@ -153,7 +152,6 @@ const Inventory = () => {
 
   const handleDelete = async (id) => {
     setModal(true);
-    console.log(id);
     setinventaryToDelete(inventories.find((inventary) => inventary.id === id));
   };
 
@@ -217,19 +215,30 @@ const Inventory = () => {
     }
     if (type === "orderBy") {
       if (
-        (params["sort"] === "ASC" && params["orderBy"] == value) ||
+        (params["sort"] === "ASC" && params["orderBy"] === value) ||
         params["sort"] === "" ||
         !params["sort"] ||
         params["sort"] === undefined
       ) {
-        params["sort"] = "DESC";
+        if (params["orderBy"] === "" || params["orderBy"] === undefined) {
+          delete params["orderBy"];
+          delete params["sort"];
+        } else {
+          params["sort"] = "DESC";
+        }
       } else {
-        params["sort"] = "ASC";
+        if (value === "") {
+          delete params["orderBy"];
+          delete params["sort"];
+        } else {
+          params["sort"] = "ASC";
+          params["orderBy"] = value;
+        }
       }
-      params["orderBy"] = value;
     }
 
     let paramsString = "";
+
     Object.keys(params).forEach((key) => {
       if (params[key]?.length > 0) {
         paramsString += `${key}=${params[key]}&`;
@@ -237,7 +246,6 @@ const Inventory = () => {
     });
 
     paramsString = paramsString.slice(0, -1);
-
     navigate(`/inventario?${paramsString}`);
   };
 
@@ -344,7 +352,6 @@ const Inventory = () => {
               placeholder="Modelo, serie, activo fijo"
               required={true}
               value={filters.search}
-              // onChange={(e) => handleFilterByParams(e.target.value, "search")}
               onChange={handleValidateSearch}
             />
           </div>

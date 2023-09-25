@@ -6,9 +6,12 @@ import {
   FaEye,
   FaRegEdit,
   FaRegTrashAlt,
+  FaSortAlphaDown,
+  FaSortAlphaUp,
 } from "react-icons/fa";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import ModalImageViewer from "../modals/ModalImageViewer";
+import { MdPlaylistRemove, MdRemoveCircleOutline } from "react-icons/md";
 
 const CustomeTable = ({
   data = [],
@@ -58,9 +61,9 @@ const CustomeTable = ({
                   </Table.HeadCell>
                 ) : (
                   <Table.HeadCell
-                    className={`bg-neutral-200 ${
+                    className={`relative bg-neutral-200 border-r border-white ${
                       order.orderBy === data[0][item]?.key &&
-                      " border-b-2 border-purple-600 text-purple-600 dark:text-gray-400"
+                      "bg-purple-500 border-b-2 text-white dark:text-gray-400"
                     } ${sortByHeader ? "cursor-pointer" : "cursor-default"} ${
                       sortByHeader &&
                       onSortFilters &&
@@ -71,12 +74,26 @@ const CustomeTable = ({
                     onClick={() => handleSortByHeader(data[0][item]?.key ?? "")}
                     key={item}
                   >
-                    <span className="flex gap-2 items-center ">
-                      {item}
-                      {order.sort === "ASC" &&
-                        order.orderBy === data[0][item]?.key && <FaArrowDown />}
-                      {order.sort === "DESC" &&
-                        order.orderBy === data[0][item]?.key && <FaArrowUp />}
+                    <span className="relative flex gap-2 items-center justify-between">
+                      <span className="flex gap-2 items-center justify-start">
+                        {item}
+                        {order.sort === "ASC" &&
+                          order.orderBy === data[0][item]?.key && (
+                            <FaSortAlphaUp />
+                          )}
+                        {order.sort === "DESC" &&
+                          order.orderBy === data[0][item]?.key && (
+                            <FaSortAlphaDown />
+                          )}
+                      </span>
+                      <span className="text-transparent">____</span>
+                      {order.orderBy === data[0][item]?.key && (
+                        <MdPlaylistRemove
+                          onClick={() => onSortFilters("")}
+                          size={20}
+                          className="text-white hover:text-red-300 rounded-full transition ease-in-out duration-100 absolute right-0 cursor-pointer top-1/2 transform -translate-y-1/2"
+                        />
+                      )}
                     </span>
                   </Table.HeadCell>
                 )
