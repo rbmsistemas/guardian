@@ -130,10 +130,10 @@ const CustomeTable = ({
                     ) : key === "status" ? (
                       <Table.Cell key={key}>
                         <div
-                          className={`text-center py-1 px-3 ${
+                          className={`text-center font-bold py-1 px-3 ${
                             item[key].value
-                              ? "bg-green-300 text-green-700"
-                              : "bg-red-300 text-red-700"
+                              ? "bg-green-200 text-green-700"
+                              : "bg-red-200 text-red-700"
                           } rounded-lg `}
                         >
                           {item[key].value ? "Alta" : "Baja"}
