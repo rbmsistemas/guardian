@@ -58,12 +58,14 @@ const CustomeTable = ({
                   <Table.HeadCell
                     className={`${
                       order.orderBy === data[0][item]?.key &&
-                      "bg-gray-600 text-white"
+                      "bg-gray-500 border-b-2 border-amber-400 text-amber-400 dark:text-gray-400"
                     } ${sortByHeader ? "cursor-pointer" : "cursor-default"} ${
-                      onSortFilters && order.orderBy !== data[0][item]?.key
-                        ? "hover:bg-gray-200 dark:hover:bg-gray-700"
+                      sortByHeader &&
+                      onSortFilters &&
+                      order.orderBy !== data[0][item]?.key
+                        ? "hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-105"
                         : ""
-                    }`}
+                    } transition ease-in-out duration-200`}
                     onClick={() => handleSortByHeader(data[0][item]?.key ?? "")}
                     key={item}
                   >
