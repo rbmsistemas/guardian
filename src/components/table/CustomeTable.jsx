@@ -79,11 +79,11 @@ const CustomeTable = ({
                         {item}
                         {order.sort === "ASC" &&
                           order.orderBy === data[0][item]?.key && (
-                            <FaSortAlphaUp />
+                            <FaSortAlphaDown />
                           )}
                         {order.sort === "DESC" &&
                           order.orderBy === data[0][item]?.key && (
-                            <FaSortAlphaDown />
+                            <FaSortAlphaUp />
                           )}
                       </span>
                       <span className="text-transparent">____</span>
