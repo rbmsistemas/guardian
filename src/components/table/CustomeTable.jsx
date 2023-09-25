@@ -1,6 +1,12 @@
 import { Table } from "flowbite-react";
 import React, { useState } from "react";
-import { FaEye, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import {
+  FaArrowDown,
+  FaArrowUp,
+  FaEye,
+  FaRegEdit,
+  FaRegTrashAlt,
+} from "react-icons/fa";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import ModalImageViewer from "../modals/ModalImageViewer";
 
@@ -17,7 +23,9 @@ const CustomeTable = ({
   setPage,
   totalEntries = 0,
   totalPages = 0,
+  sortByHeader,
   onSortFilters = () => {},
+  order = { orderBy: "", sort: "" },
 }) => {
   const [itemSelected, setItemSelected] = useState({});
   const [modal, setModal] = useState(false);
@@ -28,6 +36,12 @@ const CustomeTable = ({
     let name = item?.imagen?.name || item?.imagen?.value || "";
     setItemName(name ?? "");
     setModal(true);
+  };
+
+  const handleSortByHeader = (header) => {
+    if (sortByHeader) {
+      onSortFilters(header);
+    }
   };
 
   return (
@@ -41,7 +55,26 @@ const CustomeTable = ({
                   item === "imagen" ? (
                   <Table.HeadCell key={item}>Imagen</Table.HeadCell>
                 ) : (
-                  <Table.HeadCell key={item}>{item}</Table.HeadCell>
+                  <Table.HeadCell
+                    className={`${
+                      order.orderBy === data[0][item]?.key &&
+                      "bg-gray-600 text-white"
+                    } ${sortByHeader ? "cursor-pointer" : "cursor-default"} ${
+                      onSortFilters && order.orderBy !== data[0][item]?.key
+                        ? "hover:bg-gray-200 dark:hover:bg-gray-700"
+                        : ""
+                    }`}
+                    onClick={() => handleSortByHeader(data[0][item]?.key ?? "")}
+                    key={item}
+                  >
+                    <span className="flex gap-2 items-center ">
+                      {item}
+                      {order.sort === "ASC" &&
+                        order.orderBy === data[0][item]?.key && <FaArrowDown />}
+                      {order.sort === "DESC" &&
+                        order.orderBy === data[0][item]?.key && <FaArrowUp />}
+                    </span>
+                  </Table.HeadCell>
                 )
               )}
             {onShow || onEdit || onDelete ? (

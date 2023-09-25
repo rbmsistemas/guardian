@@ -38,6 +38,8 @@ const Inventory = () => {
     status: "",
     page: 1,
     quantityResults: 10,
+    orderBy: "createdAt",
+    sort: "ASC",
   });
   const [inventoriesData, setInventoriesData] = useState([]);
   const [totals, setTotals] = useState({ totalEntries: 0, totalPages: 0 });
@@ -71,6 +73,8 @@ const Inventory = () => {
     const inventoryType = params.get("inventoryType") || "";
     const page = params.get("page") || 1;
     const quantityResults = params.get("quantityResults") || 10;
+    const orderBy = params.get("orderBy") || "createdAt";
+    const sort = params.get("sort") || "ASC";
     setFilters({
       ...filters,
       search: search ?? filters.search,
@@ -79,6 +83,8 @@ const Inventory = () => {
       inventoryType: inventoryType ?? filters.inventoryType,
       page: parseInt(page) <= 0 ? 1 : page,
       quantityResults: quantityResults ?? filters.quantityResults,
+      orderBy: orderBy ?? filters.orderBy,
+      sort: sort ?? filters.sort,
     });
   }, [location]);
 
@@ -89,18 +95,18 @@ const Inventory = () => {
         return {
           no: { key: "id", value: index + 1 },
           tipo: {
-            key: "inventoryType",
+            key: "inventoryTypeId",
             value: inventoryTypes?.find(
               (type) => type.id === item.inventoryModel?.inventoryTypeId
             )?.name,
           },
           marca: {
-            key: "inventoryBrand",
+            key: "inventoryBrandId",
             value: inventoryBrands?.find(
               (brand) => brand.id === item.inventoryModel?.inventoryBrandId
             )?.name,
           },
-          modelo: { key: "model", value: item.inventoryModel?.name },
+          modelo: { key: "inventoryModelId", value: item.inventoryModel?.name },
           SN: { key: "serialNumber", value: item.serialNumber },
           activo: { key: "activo", value: item.activo },
           status: { key: "status", value: item.status },
@@ -208,6 +214,19 @@ const Inventory = () => {
       } else {
         params["page"] = String(value);
       }
+    }
+    if (type === "orderBy") {
+      if (
+        (params["sort"] === "ASC" && params["orderBy"] == value) ||
+        params["sort"] === "" ||
+        !params["sort"] ||
+        params["sort"] === undefined
+      ) {
+        params["sort"] = "DESC";
+      } else {
+        params["sort"] = "ASC";
+      }
+      params["orderBy"] = value;
     }
 
     let paramsString = "";
@@ -372,6 +391,7 @@ const Inventory = () => {
             onEdit={(id) => navigate(`/inventario/editar/${id}`)}
             onDelete={(id) => handleDelete(id)}
             quantityResults={filters.quantityResults}
+            sortByHeader
             setQuantityResults={(quantityResults) =>
               handleFilterByParams(quantityResults, "quantityResults")
             }
@@ -379,6 +399,8 @@ const Inventory = () => {
             page={filters.page}
             totalEntries={totals.totalEntries}
             totalPages={totals.totalPages}
+            onSortFilters={(sort) => handleFilterByParams(sort, "orderBy")}
+            order={{ orderBy: filters.orderBy, sort: filters.sort }}
           />
         )}
       </div>
