@@ -58,7 +58,7 @@ const CustomeTable = ({
                   <Table.HeadCell
                     className={`${
                       order.orderBy === data[0][item]?.key &&
-                      "bg-gray-500 border-b-2 border-amber-400 text-amber-400 dark:text-gray-400"
+                      " border-b-2 border-purple-600 text-purple-600 dark:text-gray-400"
                     } ${sortByHeader ? "cursor-pointer" : "cursor-default"} ${
                       sortByHeader &&
                       onSortFilters &&
