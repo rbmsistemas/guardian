@@ -38,7 +38,7 @@ const Inventory = () => {
     status: "",
     page: 1,
     quantityResults: 10,
-    orderBy: "createdAt",
+    orderBy: "updatedAt",
     sort: "ASC",
   });
   const [inventoriesData, setInventoriesData] = useState([]);
@@ -73,7 +73,7 @@ const Inventory = () => {
     const inventoryType = params.get("inventoryType") || "";
     const page = params.get("page") || 1;
     const quantityResults = params.get("quantityResults") || 10;
-    const orderBy = params.get("orderBy") || "createdAt";
+    const orderBy = params.get("orderBy") || "updatedAt";
     const sort = params.get("sort") || "ASC";
     setFilters({
       ...filters,
@@ -265,7 +265,7 @@ const Inventory = () => {
           Nuevo inventario
         </Link>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 rounded-lg">
         <div className="grid grid-cols-6 gap-2 md:gap-5 pb-2">
           <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
             <div className="w-full">

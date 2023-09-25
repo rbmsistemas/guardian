@@ -53,7 +53,9 @@ const CustomeTable = ({
               Object.keys(data[0]).map((item) =>
                 item === "id" && !showId ? null : showImagen &&
                   item === "imagen" ? (
-                  <Table.HeadCell key={item}>Imagen</Table.HeadCell>
+                  <Table.HeadCell className="bg-neutral-200 " key={item}>
+                    Imagen
+                  </Table.HeadCell>
                 ) : (
                   <Table.HeadCell
                     className={`bg-neutral-200 ${
@@ -80,7 +82,9 @@ const CustomeTable = ({
                 )
               )}
             {onShow || onEdit || onDelete ? (
-              <Table.HeadCell className="text-center">Acciones</Table.HeadCell>
+              <Table.HeadCell className="text-center bg-neutral-200">
+                Acciones
+              </Table.HeadCell>
             ) : null}
           </Table.Head>
           <Table.Body className="divide-y">
