@@ -1,8 +1,6 @@
-import { Table } from "flowbite-react";
+import { Table, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import {
-  FaArrowDown,
-  FaArrowUp,
   FaEye,
   FaRegEdit,
   FaRegTrashAlt,
@@ -11,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import ModalImageViewer from "../modals/ModalImageViewer";
-import { MdPlaylistRemove, MdRemoveCircleOutline } from "react-icons/md";
+import { MdPlaylistRemove } from "react-icons/md";
 
 const CustomeTable = ({
   data = [],
@@ -29,6 +27,9 @@ const CustomeTable = ({
   sortByHeader,
   onSortFilters = () => {},
   order = { orderBy: "", sort: "" },
+  exportResults,
+  resultsToExport = [],
+  setResultsToExport = () => {},
 }) => {
   const [itemSelected, setItemSelected] = useState({});
   const [modal, setModal] = useState(false);
@@ -52,6 +53,14 @@ const CustomeTable = ({
       <div className="overflow-x-auto">
         <Table hoverable={true} className="w-full rounded-lg whitespace-nowrap">
           <Table.Head className="uppercase">
+            {exportResults && (
+              <Table.HeadCell className="bg-neutral-200 border-r border-white">
+                <TextInput
+                  type="checkbox"
+                  className="text-purple-500 dark:text-purple-400"
+                />
+              </Table.HeadCell>
+            )}
             {data.length >= 1 &&
               Object.keys(data[0]).map((item) =>
                 item === "id" && !showId ? null : showImagen &&
@@ -116,6 +125,14 @@ const CustomeTable = ({
                   }}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
+                  {exportResults && (
+                    <Table.Cell className="">
+                      <TextInput
+                        type="checkbox"
+                        className="text-purple-500 dark:text-purple-400"
+                      />
+                    </Table.Cell>
+                  )}
                   {Object.keys(item).map((key) =>
                     key === "id" && !showId ? null : showImagen &&
                       key === "imagen" ? (
@@ -130,7 +147,7 @@ const CustomeTable = ({
                     ) : key === "status" ? (
                       <Table.Cell key={key}>
                         <div
-                          className={`text-center font-bold py-1 px-3 ${
+                          className={`text-center font-semibold py-1 px-3 ${
                             item[key].value
                               ? "bg-green-200 text-green-700"
                               : "bg-red-200 text-red-700"

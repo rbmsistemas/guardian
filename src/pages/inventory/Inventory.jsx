@@ -47,6 +47,7 @@ const Inventory = () => {
   const [inventaryToDelete, setinventaryToDelete] = useState({});
   const [timer, setTimer] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [resultsToExport, setresultsToExport] = useState([]);
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
 
@@ -408,6 +409,9 @@ const Inventory = () => {
             totalPages={totals.totalPages}
             onSortFilters={(sort) => handleFilterByParams(sort, "orderBy")}
             order={{ orderBy: filters.orderBy, sort: filters.sort }}
+            exportResults
+            resultsToExport={resultsToExport}
+            setResultsToExport={setresultsToExport}
           />
         )}
       </div>
