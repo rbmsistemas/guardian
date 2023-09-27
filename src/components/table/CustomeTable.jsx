@@ -39,6 +39,11 @@ const CustomeTable = ({
   const [modal, setModal] = useState(false);
   const [itemName, setItemName] = useState("");
   const [selectAll, setSelectAll] = useState(false);
+  // const [contextMenuVisible, setContextMenuVisible] = useState(false);
+  // const [contextMenuPosition, setContextMenuPosition] = useState({
+  //   top: 0,
+  //   left: 0,
+  // });
 
   const handleShowItem = (item) => {
     setItemSelected(item);
@@ -177,11 +182,19 @@ const CustomeTable = ({
                 <Table.Row
                   key={item.id.value}
                   onDoubleClick={() => onShow(item.id.value)}
-                  onAuxClick={(e) => {
-                    e.preventDefault();
-                    onEdit(item.id.value);
-                  }}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  // onContextMenu={(e) => {
+                  //   e.preventDefault();
+                  //   setContextMenuVisible(true);
+                  //   setContextMenuPosition({ top: e.clientY, left: e.clientX });
+                  //   DisplayAux({
+                  //     item,
+                  //     onShow,
+                  //     onEdit,
+                  //     onDelete,
+                  //     visible: contextMenuVisible,
+                  //   });
+                  // }}
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800 relative"
                 >
                   {exportResults && (
                     <Table.Cell
@@ -349,3 +362,38 @@ const CustomeTable = ({
 };
 
 export default CustomeTable;
+
+// const DisplayAux = ({ item, onShow, onEdit, onDelete, visible }) => {
+//   return (
+//     visible && (
+//       <div
+//         className={` absolute z-10 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-1 px-2`}
+//       >
+//         {onShow && (
+//           <div
+//             className="cursor-pointer border border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
+//             onClick={() => onShow(item.id.value)}
+//           >
+//             <FaEye className="text-xl" />
+//           </div>
+//         )}
+//         {onEdit && (
+//           <div
+//             className="cursor-pointer border border-gap-primary text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
+//             onClick={() => onEdit(item.id.value)}
+//           >
+//             <FaRegEdit className="text-xl" />
+//           </div>
+//         )}
+//         {onDelete && item?.id !== "00000000-0000-0000-0000-000000000000" && (
+//           <div
+//             className="cursor-pointer border border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
+//             onClick={() => onDelete(item.id.value)}
+//           >
+//             <FaRegTrashAlt className="text-xl" />
+//           </div>
+//         )}
+//       </div>
+//     )
+//   );
+// };

@@ -7,7 +7,11 @@ import Users from "../../assets/img/users.webp";
 import Reports from "../../assets/img/reportes.jpg";
 import Companies from "../../assets/img/proveedores_01.jpg";
 import Context from "../../context/Context";
-import { BsDatabaseFillAdd, BsDatabaseFillDash } from "react-icons/bs";
+import {
+  BsDatabaseFill,
+  BsDatabaseFillAdd,
+  BsDatabaseFillDash,
+} from "react-icons/bs";
 import {
   AiOutlineUsergroupAdd,
   AiOutlineUsergroupDelete,
@@ -106,9 +110,28 @@ const Home = () => {
         <p className="col-span-2 md:col-span-4 4xl:col-span-5 text-base text-left font-bold text-purple-600">
           Resumen de inventario
         </p>
+        {/* Link to inventories */}
+        <Link
+          to={"/inventario"}
+          className="relative h-32 bg-gradient-to-br from-green-400 to-teal-700 rounded-lg shadow-lg flex flex-col justify-center items-center"
+        >
+          <div className="absolute right-1 top-1">
+            <BsDatabaseFill className="text-6xl text-white opacity-50" />
+          </div>
+          <p className="text-6xl text-white font-bold">
+            {!loading ? (
+              inventories.length
+            ) : (
+              <BounceLoader color={"#ffffff"} loading={loading} />
+            )}
+          </p>
+          <h3 className="text-sm text-center lg:text-base text-white font-bold">
+            Equipos en inventario
+          </h3>
+        </Link>
         <Link
           to={"/inventario?status=1"}
-          className="relative h-32 bg-gradient-to-br from-green-400 to-teal-700 rounded-lg shadow-lg flex flex-col justify-center items-center"
+          className="relative h-32 bg-gradient-to-br from-purple-400 to-purple-800 rounded-lg shadow-lg flex flex-col justify-center items-center"
         >
           <div className="absolute right-1 top-1">
             <BsDatabaseFillAdd className="text-6xl text-white opacity-50" />
@@ -126,7 +149,7 @@ const Home = () => {
         </Link>
         <Link
           to={"/inventario?status=0"}
-          className="relative h-32 bg-gradient-to-br from-purple-400 to-sky-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
+          className="relative h-32 bg-gradient-to-br from-red-400 to-red-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
         >
           <div className="absolute right-1 top-1">
             <BsDatabaseFillDash className="text-6xl text-white opacity-50" />
