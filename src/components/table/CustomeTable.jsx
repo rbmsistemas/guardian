@@ -1,11 +1,14 @@
 import { Table, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import {
+  FaCheckSquare,
   FaEye,
   FaRegEdit,
+  FaRegSquare,
   FaRegTrashAlt,
+  FaShare,
   FaSortAlphaDown,
-  FaSortAlphaUp,
+  FaSortAlphaDownAlt,
 } from "react-icons/fa";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import ModalImageViewer from "../modals/ModalImageViewer";
@@ -14,6 +17,7 @@ import { MdPlaylistRemove } from "react-icons/md";
 const CustomeTable = ({
   data = [],
   showId = false,
+  onShare = false,
   onShow = false,
   onEdit = false,
   onDelete = false,
@@ -34,6 +38,7 @@ const CustomeTable = ({
   const [itemSelected, setItemSelected] = useState({});
   const [modal, setModal] = useState(false);
   const [itemName, setItemName] = useState("");
+  const [selectAll, setSelectAll] = useState(false);
 
   const handleShowItem = (item) => {
     setItemSelected(item);
@@ -48,28 +53,78 @@ const CustomeTable = ({
     }
   };
 
+  const handleSelectElement = (item) => {
+    let newSelectedElements = [...resultsToExport];
+    if (newSelectedElements.includes(item)) {
+      newSelectedElements = newSelectedElements.filter(
+        (element) => element !== item
+      );
+    } else {
+      newSelectedElements.push(item);
+    }
+    setResultsToExport(newSelectedElements);
+  };
+
+  const handleHeaderCheckboxChange = () => {
+    setSelectAll(!selectAll);
+
+    if (!selectAll) {
+      setResultsToExport(data.map((item) => item.id.value));
+    } else {
+      setResultsToExport([]);
+    }
+  };
+
+  // const handleRowCheckboxChange = (itemId) => {
+  //   const newSelectedElements = [...resultsToExport];
+  //   if (newSelectedElements.includes(itemId)) {
+  //     newSelectedElements.splice(newSelectedElements.indexOf(itemId), 1);
+  //   } else {
+  //     newSelectedElements.push(itemId);
+  //   }
+  //   setResultsToExport(newSelectedElements);
+  // };
+
   return (
     <>
       <div className="overflow-x-auto">
         <Table hoverable={true} className="w-full rounded-lg whitespace-nowrap">
           <Table.Head className="uppercase">
             {exportResults && (
-              <Table.HeadCell className="bg-neutral-200 border-r border-white">
-                <TextInput
-                  type="checkbox"
-                  className="text-purple-500 dark:text-purple-400"
-                />
+              <Table.HeadCell
+                style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                className="bg-neutral-200 border-r border-white"
+              >
+                <div
+                  className={`cursor-pointer border-2 border-gray-300 rounded-lg p-1 ${
+                    resultsToExport.length === data.length
+                      ? "text-purple-500 border-purple-500"
+                      : "text-gray-500"
+                  }hover:scale-110 transition ease-in-out duration-200 flex items-center justify-center `}
+                  onClick={handleHeaderCheckboxChange}
+                >
+                  {resultsToExport.length === data.length ? (
+                    <FaCheckSquare className="text-xl" />
+                  ) : (
+                    <FaRegSquare className="text-xl" />
+                  )}
+                </div>
               </Table.HeadCell>
             )}
             {data.length >= 1 &&
               Object.keys(data[0]).map((item) =>
                 item === "id" && !showId ? null : showImagen &&
                   item === "imagen" ? (
-                  <Table.HeadCell className="bg-neutral-200 " key={item}>
+                  <Table.HeadCell
+                    style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                    className="bg-neutral-200"
+                    key={item}
+                  >
                     Imagen
                   </Table.HeadCell>
                 ) : (
                   <Table.HeadCell
+                    style={{ paddingTop: "10px", paddingBottom: "10px" }}
                     className={`relative bg-neutral-200 border-r border-white ${
                       order.orderBy === data[0][item]?.key &&
                       "bg-purple-500 border-b-2 text-white dark:text-gray-400"
@@ -92,7 +147,7 @@ const CustomeTable = ({
                           )}
                         {order.sort === "DESC" &&
                           order.orderBy === data[0][item]?.key && (
-                            <FaSortAlphaUp />
+                            <FaSortAlphaDownAlt />
                           )}
                       </span>
                       <span className="text-transparent">____</span>
@@ -108,7 +163,10 @@ const CustomeTable = ({
                 )
               )}
             {onShow || onEdit || onDelete ? (
-              <Table.HeadCell className="text-center bg-neutral-200">
+              <Table.HeadCell
+                style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                className="text-center bg-neutral-200"
+              >
                 Acciones
               </Table.HeadCell>
             ) : null}
@@ -119,24 +177,39 @@ const CustomeTable = ({
                 <Table.Row
                   key={item.id.value}
                   onDoubleClick={() => onShow(item.id.value)}
-                  onDrag={(e) => {
+                  onAuxClick={(e) => {
                     e.preventDefault();
                     onEdit(item.id.value);
                   }}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                 >
                   {exportResults && (
-                    <Table.Cell className="">
-                      <TextInput
-                        type="checkbox"
-                        className="text-purple-500 dark:text-purple-400"
-                      />
+                    <Table.Cell
+                      style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                    >
+                      <div
+                        className={`cursor-pointer border-gray-300 rounded-lg p-1 ${
+                          resultsToExport.includes(item.id.value)
+                            ? "text-purple-500 border-purple-500 border-2"
+                            : "text-gray-500 border"
+                        } hover:scale-110 transition ease-in-out duration-200 flex items-center justify-center `}
+                        onClick={() => handleSelectElement(item.id.value)}
+                      >
+                        {resultsToExport.includes(item.id.value) ? (
+                          <FaCheckSquare className="text-xl" />
+                        ) : (
+                          <FaRegSquare className="text-xl" />
+                        )}
+                      </div>
                     </Table.Cell>
                   )}
                   {Object.keys(item).map((key) =>
                     key === "id" && !showId ? null : showImagen &&
                       key === "imagen" ? (
-                      <Table.Cell key={key}>
+                      <Table.Cell
+                        style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                        key={key}
+                      >
                         <img
                           src={FormatedUrlImage(item[key].value)}
                           alt={item[key].value}
@@ -145,7 +218,10 @@ const CustomeTable = ({
                         />
                       </Table.Cell>
                     ) : key === "status" ? (
-                      <Table.Cell key={key}>
+                      <Table.Cell
+                        style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                        key={key}
+                      >
                         <div
                           className={`text-center font-semibold py-1 px-3 ${
                             item[key].value
@@ -157,11 +233,27 @@ const CustomeTable = ({
                         </div>
                       </Table.Cell>
                     ) : (
-                      <Table.Cell key={key}>{item[key].value}</Table.Cell>
+                      <Table.Cell
+                        style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                        key={key}
+                      >
+                        {item[key].value}
+                      </Table.Cell>
                     )
                   )}
                   {onShow || onEdit || onDelete ? (
-                    <Table.Cell className="flex gap-2 justify-center">
+                    <Table.Cell
+                      style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                      className="flex gap-2 justify-center"
+                    >
+                      {onShare && (
+                        <div
+                          className="cursor-pointer border border-gap-orange text-gap-orange p-2 rounded-lg hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          onClick={() => onShare(item.id.value)}
+                        >
+                          <FaShare className="text-xl" />
+                        </div>
+                      )}
                       {onShow && (
                         <div
                           className="cursor-pointer border border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
@@ -210,6 +302,7 @@ const CustomeTable = ({
             <option value={30}>30 resultados</option>
             <option value={40}>40 resultados</option>
             <option value={50}>50 resultados</option>
+            <option value={totalEntries}>Todos los resultados</option>
           </select>
           <p className="text-gray-500">
             en la página {page} de {totalPages} páginas
