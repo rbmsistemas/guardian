@@ -39,7 +39,7 @@ const Inventory = () => {
     page: 1,
     quantityResults: 10,
     orderBy: "updatedAt",
-    sort: "ASC",
+    sort: "DESC",
   });
   const [inventoriesData, setInventoriesData] = useState([]);
   const [totals, setTotals] = useState({ totalEntries: 0, totalPages: 0 });
@@ -75,7 +75,7 @@ const Inventory = () => {
     const page = params.get("page") || 1;
     const quantityResults = params.get("quantityResults") || 10;
     const orderBy = params.get("orderBy") || "updatedAt";
-    const sort = params.get("sort") || "ASC";
+    const sort = params.get("sort") || "DESC";
     setFilters({
       ...filters,
       search: search ?? filters.search,
