@@ -19,8 +19,7 @@ import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { formatLocalDate } from "../../utils/getFormatedDate";
 import { AppUrl } from "../../api/inventory.api";
-// import ExportExcel from "../../exports/ExportExcel"; convert to lazy loading
-const ExportExcel = React.lazy(() => import("../../exports/ExportExcel"));
+import ExportExcel from "../../exports/ExportExcel";
 import { urlEnv } from "../../api/request.api";
 
 const Inventory = () => {
@@ -432,7 +431,7 @@ const Inventory = () => {
               <span>
                 <AiOutlineClear className="inline-block mr-2 text-lg" />
               </span>
-              <span className="hidden md:block text-sm">Limpiar</span>
+              <span className="hidden md:block text-sm truncate">Limpiar</span>
             </button>
           </div>
           <div className="col-span-3 md:col-span-2 flex flex-col justify-end pb-1 gap-2">

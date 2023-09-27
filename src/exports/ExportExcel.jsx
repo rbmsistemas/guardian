@@ -1,7 +1,53 @@
+// import { FaFileExcel } from "react-icons/fa";
+// import * as XLSX from "xlsx";
+
+// const exportTableToExcel = (headers, data, filename) => {
+//   const tableData = [];
+//   const rows = headers;
+//   tableData.push(rows);
+
+//   data.forEach((row) => {
+//     const rowData = [];
+//     headers.forEach((column) => {
+//       // Si la columna es la columna de la imagen, asegúrate de que contenga el enlace a la imagen.
+//       if (column === "Imagen") {
+//         // Agrega el enlace a la celda de la hoja de cálculo.
+//         rowData.push({ t: "s", v: row[column], l: { Target: row[column] } });
+//       } else {
+//         // Para otras columnas, simplemente agrega el valor.
+//         rowData.push(row[column]);
+//       }
+//     });
+//     tableData.push(rowData);
+//   });
+
+//   try {
+//     const ws = XLSX.utils.aoa_to_sheet(tableData);
+//     const wb = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(wb, ws, "Registros");
+//     XLSX.writeFile(wb, filename);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// const ExportExcel = ({ headers, data, filename }) => {
+//   return (
+//     <button
+//       className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex justify-center items-center"
+//       onClick={() => exportTableToExcel(headers, data, filename)}
+//     >
+//       <FaFileExcel className="inline-block mr-2" />
+//       Exportar
+//     </button>
+//   );
+// };
+
+// export default ExportExcel;
+
 import React from "react";
 import { FaFileExcel } from "react-icons/fa";
 import ExcelJS from "exceljs";
-import imageSize from "image-size"; // Importa la biblioteca de compresión de imágenes
 
 const exportTableToExcel = async (headers, data, filename) => {
   const workbook = new ExcelJS.Workbook();
@@ -16,7 +62,7 @@ const exportTableToExcel = async (headers, data, filename) => {
     for (const column of headers) {
       if (column === "Imagen") {
         // Agrega una imagen usando addImage
-        const imageBase64 = await getCompressedBase64FromUrl(row[column]); // Función para obtener el base64 de la imagen comprimida desde la URL
+        const imageBase64 = await getBase64FromUrl(row[column]); // Función para obtener el base64 de la imagen desde la URL
         const imageId = workbook.addImage({
           base64: imageBase64,
           extension: "png", // Cambia esto según el formato de tus imágenes
@@ -51,39 +97,29 @@ const exportTableToExcel = async (headers, data, filename) => {
   a.click();
 };
 
-const getCompressedBase64FromUrl = async (url) => {
-  const response = await fetch(url);
-  const blob = await response.blob();
-
-  // Obtiene las dimensiones originales de la imagen
-  const dimensions = imageSize(Buffer.from(await blob.arrayBuffer()));
-
-  // Calcula la calidad de compresión deseada (puedes ajustar este valor según tus necesidades)
-  const quality = 0.7; // Por ejemplo, usa 0.7 para una calidad del 70%
-
-  // Convierte la imagen a base64 con la calidad especificada
-  const compressedBase64 = await new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
+const getBase64FromUrl = async (url) => {
+  return new Promise((resolve, reject) => {
     const img = new Image();
-    img.src = URL.createObjectURL(blob);
+    img.crossOrigin = "Anonymous";
     img.onload = () => {
       const canvas = document.createElement("canvas");
-      canvas.width = dimensions.width;
-      canvas.height = dimensions.height;
       const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, dimensions.width, dimensions.height);
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
       canvas.toBlob(
-        (compressedBlob) => {
-          reader.readAsDataURL(compressedBlob);
+        (blob) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            resolve(reader.result.split(",")[1]);
+          };
         },
-        "image/jpeg", // Cambia esto según el formato de tus imágenes
-        quality // Ajusta la calidad de compresión aquí
+        "image/png" // Cambia esto según el formato de tus imágenes
       );
     };
+    img.src = url;
   });
-
-  return compressedBase64.split(",")[1];
 };
 
 const ExportExcel = ({ headers, data, filename }) => {
