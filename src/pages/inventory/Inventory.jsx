@@ -18,6 +18,8 @@ import { FiChevronRight } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { formatLocalDate } from "../../utils/getFormatedDate";
+import { AppUrl } from "../../api/inventory.api";
+import ExportExcel from "../../exports/ExportExcel";
 
 const Inventory = () => {
   const location = useLocation();
@@ -94,7 +96,14 @@ const Inventory = () => {
     if ((inventories, inventoryModels || inventoryBrands || inventoryTypes)) {
       formatInventories = inventories?.map((item, index) => {
         return {
-          no: { key: "id", value: index + 1 },
+          no: {
+            key: "id",
+            value:
+              filters.page * filters.quantityResults -
+              filters.quantityResults +
+              1 +
+              index,
+          },
           tipo: {
             key: "inventoryTypeId",
             value: inventoryTypes?.find(
@@ -250,6 +259,59 @@ const Inventory = () => {
     navigate(`/inventario?${paramsString}`);
   };
 
+  const handleCopyToClipboard = (id) => {
+    const inventory = inventories.find((item) => item.id === id);
+    const inventoryType = inventoryTypes.find(
+      (item) => item.id === inventory.inventoryModel.inventoryTypeId
+    )?.name;
+    const inventoryBrand = inventoryBrands.find(
+      (item) => item.id === inventory.inventoryModel.inventoryBrandId
+    )?.name;
+    const inventoryModel = inventoryModels.find(
+      (item) => item.id === inventory.inventoryModel.id
+    )?.name;
+    const serialNumber = inventory.serialNumber;
+    const activo = inventory.activo;
+    const status = inventory.status;
+    const createdAt = formatLocalDate(inventory.createdAt);
+    const updatedAt = formatLocalDate(inventory.updatedAt);
+
+    const stringToCopy = `Tipo: ${inventoryType}\nMarca: ${inventoryBrand}\nModelo: ${inventoryModel}\nSN: ${serialNumber}\nActivo: ${activo}\nStatus: ${
+      status ? "Alta" : "Baja"
+    }\nCreado: ${createdAt}\nActualizado: ${updatedAt}\n\n ${AppUrl}/inventario/ver/${id}`;
+    navigator.clipboard.writeText(stringToCopy);
+    successNotify("Inventario copiado al portapapeles");
+  };
+
+  const handleDataToExport = (data, idsToExport) => {
+    const inventoriesToExport = data.filter((item) =>
+      idsToExport.includes(item.id)
+    );
+    const dataToExport = inventoriesToExport.map((item, index) => {
+      return {
+        no:
+          filters.page * filters.quantityResults -
+          filters.quantityResults +
+          1 +
+          index,
+        tipo: inventoryTypes?.find(
+          (type) => type.id === item.inventoryModel?.inventoryTypeId
+        )?.name,
+        marca: inventoryBrands?.find(
+          (brand) => brand.id === item.inventoryModel?.inventoryBrandId
+        )?.name,
+        modelo: item.inventoryModel?.name,
+        SN: item.serialNumber,
+        activo: item.activo,
+        status: item.status ? "Alta" : "Baja",
+        creacion: formatLocalDate(item.createdAt),
+        actualizacion: item?.updatedAt ? formatLocalDate(item?.updatedAt) : "",
+        id: item.id,
+      };
+    });
+    return dataToExport;
+  };
+
   return (
     <div className="min-h-full w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center pb-2">
@@ -275,8 +337,8 @@ const Inventory = () => {
         </Link>
       </div>
       <div className="flex flex-col gap-2 rounded-lg">
-        <div className="grid grid-cols-6 gap-2 md:gap-5 pb-2">
-          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-3 pb-2">
+          <div className="col-span-2 flex flex-col gap-2">
             <div className="w-full">
               <Label
                 htmlFor="inventoryType"
@@ -303,7 +365,7 @@ const Inventory = () => {
               })}
             </Select>
           </div>
-          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-2 flex flex-col gap-2">
             <div className="w-full">
               <Label htmlFor="brandType" value="Marca" className="font-bold" />
             </div>
@@ -326,7 +388,7 @@ const Inventory = () => {
               })}
             </Select>
           </div>
-          <div className="col-span-2 md:col-span-1 flex flex-col gap-2">
+          <div className="col-span-2 flex flex-col gap-2">
             <div className="w-full">
               <Label htmlFor="status" value="Status" className="font-bold" />
             </div>
@@ -342,7 +404,7 @@ const Inventory = () => {
               <option value={0}>Baja</option>
             </Select>
           </div>
-          <div className="col-span-4 md:col-span-2 flex flex-col gap-2">
+          <div className="col-span-6 md:col-span-3 flex flex-col gap-2">
             <div className="w-full">
               <Label htmlFor="search" value="Buscar" />
             </div>
@@ -356,19 +418,37 @@ const Inventory = () => {
               onChange={handleValidateSearch}
             />
           </div>
-          <div className="col-span-2 md:col-span-1 flex flex-col justify-end pb-1 gap-2">
+          <div className="col-span-3 md:col-span-1 flex flex-col justify-end pb-1 gap-2">
             <div className="w-full hidden md:block">
               <Label htmlFor="" value="&nbsp;" />
             </div>
             <button
               onClick={handleClearFilters}
-              className="bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded flex gap-2 items-center justify-center transition ease-in-out duration-200 hover:scale-105"
+              className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded flex justify-center items-center"
             >
               <span>
-                <AiOutlineClear className="text-white text-lg" />
+                <AiOutlineClear className="inline-block mr-2 text-lg" />
               </span>
               <span className="hidden md:block text-sm">Limpiar</span>
             </button>
+          </div>
+          <div className="col-span-3 md:col-span-2 flex flex-col justify-end pb-1 gap-2">
+            <ExportExcel
+              headers={[
+                "no",
+                "tipo",
+                "marca",
+                "modelo",
+                "SN",
+                "activo",
+                "status",
+                "creacion",
+                "actualizacion",
+                "id",
+              ]}
+              data={handleDataToExport(inventories, resultsToExport)}
+              filename={"inventarios" + new Date().getTime() + ".xlsx"}
+            />
           </div>
         </div>
         {isLoading ? (
@@ -395,6 +475,8 @@ const Inventory = () => {
           <CustomeTable
             showImagen={true}
             data={inventoriesData}
+            // on share copy link to clipboard
+            onShare={(id) => handleCopyToClipboard(id)}
             onShow={(id) => navigate(`/inventario/ver/${id}`)}
             onEdit={(id) => navigate(`/inventario/editar/${id}`)}
             onDelete={(id) => handleDelete(id)}

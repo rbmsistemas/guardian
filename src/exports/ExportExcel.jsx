@@ -1,19 +1,18 @@
+import { FaFileExcel } from "react-icons/fa";
 import * as XLSX from "xlsx";
 
-const exportTableToExcel = (table, filename) => {
+const exportTableToExcel = (headers, data, filename) => {
   const tableData = [];
-  const rows = table.querySelectorAll("tr");
+  const rows = headers;
+  tableData.push(rows);
 
-  for (const row of rows) {
+  data.forEach((row) => {
     const rowData = [];
-    const cells = row.querySelectorAll("th,td");
-
-    for (const cell of cells) {
-      rowData.push(cell.innerText);
-    }
-
+    headers.forEach((column) => {
+      rowData.push(row[column]);
+    });
     tableData.push(rowData);
-  }
+  });
 
   try {
     const ws = XLSX.utils.aoa_to_sheet(tableData);
@@ -25,12 +24,13 @@ const exportTableToExcel = (table, filename) => {
   }
 };
 
-const ExportExcel = ({ tableRef, filename }) => {
+const ExportExcel = ({ headers, data, filename }) => {
   return (
     <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      onClick={() => exportTableToExcel(tableRef.current, filename)}
+      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex justify-center items-center"
+      onClick={() => exportTableToExcel(headers, data, filename)}
     >
+      <FaFileExcel className="inline-block mr-2" />
       Exportar
     </button>
   );
