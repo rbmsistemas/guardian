@@ -19,7 +19,8 @@ import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { formatLocalDate } from "../../utils/getFormatedDate";
 import { AppUrl } from "../../api/inventory.api";
-import ExportExcel from "../../exports/ExportExcel";
+// import ExportExcel from "../../exports/ExportExcel"; convert to lazy loading
+const ExportExcel = React.lazy(() => import("../../exports/ExportExcel"));
 import { urlEnv } from "../../api/request.api";
 
 const Inventory = () => {
