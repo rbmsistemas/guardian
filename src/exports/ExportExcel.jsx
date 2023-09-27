@@ -9,7 +9,14 @@ const exportTableToExcel = (headers, data, filename) => {
   data.forEach((row) => {
     const rowData = [];
     headers.forEach((column) => {
-      rowData.push(row[column]);
+      // Si la columna es la columna de la imagen, asegúrate de que contenga el enlace a la imagen.
+      if (column === "Imagen") {
+        // Agrega el enlace a la celda de la hoja de cálculo.
+        rowData.push({ t: "s", v: row[column], l: { Target: row[column] } });
+      } else {
+        // Para otras columnas, simplemente agrega el valor.
+        rowData.push(row[column]);
+      }
     });
     tableData.push(rowData);
   });

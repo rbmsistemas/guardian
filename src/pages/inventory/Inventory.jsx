@@ -289,24 +289,25 @@ const Inventory = () => {
     );
     const dataToExport = inventoriesToExport.map((item, index) => {
       return {
-        no:
+        "#":
           filters.page * filters.quantityResults -
           filters.quantityResults +
           1 +
           index,
-        tipo: inventoryTypes?.find(
+        Tipo: inventoryTypes?.find(
           (type) => type.id === item.inventoryModel?.inventoryTypeId
         )?.name,
-        marca: inventoryBrands?.find(
+        Marca: inventoryBrands?.find(
           (brand) => brand.id === item.inventoryModel?.inventoryBrandId
         )?.name,
-        modelo: item.inventoryModel?.name,
+        Modelo: item.inventoryModel?.name,
         SN: item.serialNumber,
-        activo: item.activo,
-        status: item.status ? "Alta" : "Baja",
-        creacion: formatLocalDate(item.createdAt),
-        actualizacion: item?.updatedAt ? formatLocalDate(item?.updatedAt) : "",
-        id: item.id,
+        Activo: item.activo,
+        Status: item.status ? "Alta" : "Baja",
+        Creacion: formatLocalDate(item.createdAt),
+        Actualizacion: item?.updatedAt ? formatLocalDate(item?.updatedAt) : "",
+        Imagen: item?.images[0],
+        Id: item.id,
       };
     });
     return dataToExport;
@@ -435,16 +436,17 @@ const Inventory = () => {
           <div className="col-span-3 md:col-span-2 flex flex-col justify-end pb-1 gap-2">
             <ExportExcel
               headers={[
-                "no",
-                "tipo",
-                "marca",
-                "modelo",
+                "#",
+                "Tipo",
+                "Marca",
+                "Modelo",
                 "SN",
-                "activo",
-                "status",
-                "creacion",
-                "actualizacion",
-                "id",
+                "Activo",
+                "Status",
+                "Creacion",
+                "Actualizacion",
+                "Id",
+                "Imagen",
               ]}
               data={handleDataToExport(inventories, resultsToExport)}
               filename={"inventarios" + new Date().getTime() + ".xlsx"}
