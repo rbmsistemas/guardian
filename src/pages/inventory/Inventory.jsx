@@ -20,6 +20,7 @@ import { ClipLoader } from "react-spinners";
 import { formatLocalDate } from "../../utils/getFormatedDate";
 import { AppUrl } from "../../api/inventory.api";
 import ExportExcel from "../../exports/ExportExcel";
+import { urlEnv } from "../../api/request.api";
 
 const Inventory = () => {
   const location = useLocation();
@@ -306,7 +307,7 @@ const Inventory = () => {
         Status: item.status ? "Alta" : "Baja",
         Creacion: formatLocalDate(item.createdAt),
         Actualizacion: item?.updatedAt ? formatLocalDate(item?.updatedAt) : "",
-        Imagen: item?.images[0],
+        Imagen: urlEnv + item?.images[0],
         Id: item.id,
       };
     });
