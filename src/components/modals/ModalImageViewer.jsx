@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { TbRotateClockwise2, TbRotate2 } from "react-icons/tb";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
+import { urlEnv } from "../../api/request.api";
 
 const ModalImageViewer = ({
   title = "",
@@ -90,7 +91,8 @@ const ModalImageViewer = ({
   }, [rotateCounter]);
 
   const downloadImage = (imageUrl = "") => {
-    fetch(imageUrl)
+    console.log(imageUrl);
+    fetch(urlEnv + imageUrl)
       .then((response) => response.blob())
       .then((blob) => {
         const url = window.URL.createObjectURL(blob);

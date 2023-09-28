@@ -27,7 +27,7 @@ const exportTableToExcel = async (headers, data, filename, setLoading) => {
           const compressedImageBase64 = await compressImage(
             imageBlob,
             100,
-            100
+            200
           );
 
           const imageId = workbook.addImage({
@@ -44,6 +44,7 @@ const exportTableToExcel = async (headers, data, filename, setLoading) => {
         } catch (error) {
           console.log(`Error fetching image: ${error}`);
           rowData.push("");
+          setLoading(false);
         }
       } else {
         rowData.push(row[column]);
