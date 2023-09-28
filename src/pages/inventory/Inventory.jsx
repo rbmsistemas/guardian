@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import Context from "../../context/Context";
-import CustomeTable from "../../components/table/CustomeTable";
+// import CustomeTable from "../../components/table/CustomeTable"; dynamic import
+const CustomeTable = lazy(() => import("../../components/table/CustomeTable"));
 import { Label, Modal, Select, TextInput } from "flowbite-react";
 import { FaCheck, FaHome, FaSearch, FaTimes } from "react-icons/fa";
 import {
@@ -19,7 +20,8 @@ import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { formatLocalDate } from "../../utils/getFormatedDate";
 import { AppUrl } from "../../api/inventory.api";
-import ExportExcel from "../../exports/ExportExcel";
+// import ExportExcel from "../../exports/ExportExcel"; dinamic import
+const ExportExcel = lazy(() => import("../../exports/ExportExcel"));
 import { urlEnv } from "../../api/request.api";
 
 const Inventory = () => {
@@ -436,6 +438,7 @@ const Inventory = () => {
           </div>
           <div className="col-span-3 md:col-span-2 flex flex-col justify-end pb-1 gap-2">
             <ExportExcel
+              disabled={resultsToExport.length === 0}
               headers={[
                 "#",
                 "Tipo",
