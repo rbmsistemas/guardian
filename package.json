@@ -16,8 +16,6 @@
     "exceljs": "^4.3.0",
     "flowbite": "^1.6.5",
     "flowbite-react": "^0.4.4",
-    "image-js": "^0.35.4",
-    "image-size": "^1.0.2",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -27,8 +25,7 @@
     "react-router-dom": "^6.11.2",
     "react-select": "^5.7.4",
     "react-spinners": "^0.13.8",
-    "react-webcam": "^7.0.1",
-    "xlsx": "^0.18.5"
+    "react-webcam": "^7.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
