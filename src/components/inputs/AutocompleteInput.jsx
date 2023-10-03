@@ -37,6 +37,8 @@ const DropdownList = ({ options, selectedOption, onSelect }) => {
 };
 
 const AutocompleteInput = ({
+  id,
+  name,
   data,
   value,
   onChange,
@@ -147,6 +149,8 @@ const AutocompleteInput = ({
           </div>
         )}
         <input
+          id={id}
+          name={name}
           type="text"
           className={classNames(
             `w-full py-3 pl-10 pr-3 ${

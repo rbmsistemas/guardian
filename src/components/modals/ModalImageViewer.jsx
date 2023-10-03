@@ -1,5 +1,5 @@
 import { Modal } from "flowbite-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -23,6 +23,8 @@ const ModalImageViewer = ({
   const [rotate, setRotate] = useState("rotate-0");
   const [rotateCounter, setRotateCounter] = useState(0);
   const [scale, setScale] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const thumbnailsRef = useRef(null);
 
   const handleSelectImage = (img = "", index = 0) => {
     if (img === image) {
@@ -31,7 +33,14 @@ const ModalImageViewer = ({
     setImage(img);
     setIndex(index);
     setRotateCounter(0);
+
+    setScrollPosition(thumbnailsRef.current.scrollLeft);
   };
+  useEffect(() => {
+    if (thumbnailsRef.current) {
+      thumbnailsRef.current.scrollLeft = scrollPosition;
+    }
+  }, [image]);
 
   const handleNext = () => {
     if (index < images.length - 1) {
@@ -204,16 +213,19 @@ const ModalImageViewer = ({
         </Modal.Body>
         {!scale && (
           <Modal.Footer style={{ padding: "10px" }}>
-            <div className="w-full px-4 py-2 flex justify-start items-center overflow-x-auto gap-2">
+            <div
+              ref={thumbnailsRef}
+              className="w-full px-4 py-2 flex justify-start items-center overflow-x-auto gap-2"
+            >
               {images.map((img, index) => (
                 <div
                   className="bg-gray-200 rounded-md overflow-hidden border border-neutral-300 cursor-pointer w-24 h-24 min-h-fit min-w-fit max-h-24 max-w-[6rem]"
                   key={index}
-                  onMouseOver={() => handleSelectImage(img, index)}
+                  // onMouseOver={() => handleSelectImage(img, index)}
                   onClick={() => handleSelectImage(img, index)}
                 >
                   <img
-                    className="object-fill overflow-hidden w-full h-full max-w-[6rem] max-h-24"
+                    className="object-cover min-w-[6rem] overflow-hidden w-full h-full max-w-[6rem] max-h-24"
                     src={FormatedUrlImage(img)}
                     alt={title}
                   />

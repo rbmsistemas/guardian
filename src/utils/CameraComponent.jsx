@@ -153,9 +153,8 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
           Capturar imagen
         </button>
       </div>
-
-      <div className="w-full h-full max-h-full grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 mt-2 md:mt-0">
-        <div className="w-28 h-28 border border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
+      <div className="w-full h-full max-h-full flex flex-wrap gap-2 mt-2 md:mt-0">
+        <div className="w-28 h-28 max-w-[7rem] flex-grow border border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
           <label
             htmlFor="upload"
             className="w-full h-full flex flex-col justify-center items-center gap-2 cursor-pointer"
@@ -185,13 +184,13 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             return (
               <div
                 key={index}
-                className="w-28 h-28 border border-dashed border-gray-500 rounded-lg relative transition ease-in-out duration-200 hover:scale-105"
+                className="w-28 h-28 max-w-[7rem] flex-grow border border-dashed border-gray-500 rounded-lg relative transition ease-in-out duration-200 hover:scale-105"
               >
                 <span
                   onClick={() => removeCapturedImage(index)}
                   className="absolute top-3 right-3 bg-red-500 rounded-full text-white hover:bg-red-600 hover:text-white text-xl cursor-pointer p-2 transition ease-in-out hover:scale-110 duration-150"
                 >
-                  <FaRegTrashAlt />
+                  <FaRegTrashAlt size={16} />
                 </span>
                 <img
                   className="object-contain p-1 h-full w-full rounded-lg cursor-pointer"

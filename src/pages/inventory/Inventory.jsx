@@ -405,7 +405,8 @@ const Inventory = () => {
             >
               <option value="">Todos</option>
               <option value={1}>Alta</option>
-              <option value={0}>Baja</option>
+              <option value={2}>Propuesta de baja</option>
+              <option value={3}>Baja</option>
             </Select>
           </div>
           <div className="col-span-6 md:col-span-3 flex flex-col gap-2">

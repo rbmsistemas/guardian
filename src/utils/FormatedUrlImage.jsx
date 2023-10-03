@@ -1,5 +1,5 @@
 import { urlEnv } from "../api/request.api";
-import NoImagenFound from "../assets/img/no_imagen.avif";
+import NoImagenFound from "../assets/img/NoImageFound.jpg";
 
 export const FormatedUrlImage = (src) => {
   if (src === null || src === undefined || src === "") {

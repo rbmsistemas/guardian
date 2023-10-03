@@ -4,13 +4,11 @@ import Context from "../../context/Context";
 import {
   FaCheck,
   FaHome,
-  FaImage,
   FaList,
   FaRegEdit,
   FaRegTrashAlt,
   FaTimes,
   FaUser,
-  FaUserCheck,
 } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
@@ -35,6 +33,7 @@ import { toast } from "react-hot-toast";
 import ModalImageViewer from "../../components/modals/ModalImageViewer";
 import { Base_Inventory } from "../../context/Models";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
+import getFormatedStatus from "../../utils/getFormatedStatus";
 
 const ShowInventory = () => {
   const { id } = useParams();
@@ -105,7 +104,6 @@ const ShowInventory = () => {
 
   const onDelete = async () => {
     setLoading(true);
-    console.log("inventario", inventario);
     const data = await deleteInventory(inventario.id);
     if (!data) {
       errorNotify("Error al eliminar el inventario");
@@ -258,7 +256,7 @@ const ShowInventory = () => {
               <span>
                 <AiOutlinePoweroff className="text-blue-500 text-xl" />
               </span>
-              {inventario.status ? "Alta" : "Baja"}
+              {getFormatedStatus(inventario.status)}
             </p>
           </div>
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
@@ -334,7 +332,7 @@ const ShowInventory = () => {
               <Label htmlFor="comments" value="Comentarios" />
             </div>
             <div
-              className="text-gray-500 min-h-[15vh] list-disc pl-4 w-full"
+              className="text-gray-500 min-h-[7vh] list-disc pl-4 w-full"
               dangerouslySetInnerHTML={{ __html: inventario.comments }}
             ></div>
           </div>
@@ -354,7 +352,7 @@ const ShowInventory = () => {
                     onClick={() => handleShowImages(index)}
                     src={FormatedUrlImage(image)}
                     alt="imagen"
-                    className="w-full h-full object-contain rounded-md"
+                    className="w-full h-full min-w-[7rem] min-h-[7rem] object-contain rounded-md"
                   />
                 </div>
               ))}

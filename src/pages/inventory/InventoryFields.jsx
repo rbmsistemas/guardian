@@ -21,7 +21,7 @@ const InventoryFields = ({
     serialNumber: "",
     activo: "",
     comments: "",
-    status: false,
+    status: 1,
     images: [],
     altaDate: Date.now(),
     bajaDate: null,
@@ -231,7 +231,7 @@ const InventoryFields = ({
       <div className="col-span-12 sm:col-span-6">
         <div className="w-full flex gap-1">
           <span className="text-red-500">*</span>
-          <Label htmlFor="status" value="¿Alta o Baja de equipo?" />
+          <Label htmlFor="status" value="¿Status del equipo?" />
         </div>
         <Select
           value={body.status}
@@ -249,8 +249,9 @@ const InventoryFields = ({
           required={true}
         >
           <option value="">-- Selecciona una opción --</option>
-          <option value={true}>Alta</option>
-          <option value={false}>Baja</option>
+          <option value={1}>Alta</option>
+          <option value={2}>Propuesta de baja</option>
+          <option value={3}>Baja</option>
         </Select>
       </div>
       <div className="col-span-12 sm:col-span-6">

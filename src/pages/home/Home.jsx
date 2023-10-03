@@ -48,9 +48,8 @@ const Home = () => {
   const { inventories, getInventories, users, getUsers } = useContext(Context);
   const [countInventories, setCountInventories] = useState({
     alta: 0,
+    propuestaBaja: 0,
     baja: 0,
-    asignados: 0,
-    sinAsignar: 0,
   });
   const [loading, setLoading] = useState(false);
   const [usersInventories, setUsersInventories] = useState({
@@ -72,10 +71,10 @@ const Home = () => {
 
   useEffect(() => {
     setCountInventories({
-      alta: inventories?.filter((inventary) => inventary.status === true)
+      alta: inventories?.filter((inventary) => inventary.status == 1).length,
+      propuestaBaja: inventories?.filter((inventary) => inventary.status == 2)
         .length,
-      baja: inventories?.filter((inventary) => inventary.status === false)
-        .length,
+      baja: inventories?.filter((inventary) => inventary.status == 3).length,
     });
   }, [inventories]);
 
@@ -118,7 +117,7 @@ const Home = () => {
           <div className="absolute right-1 top-1">
             <BsDatabaseFill className="text-6xl text-white opacity-50" />
           </div>
-          <p className="text-6xl text-white font-bold">
+          <p className="text-5xl text-white font-bold">
             {!loading ? (
               inventories.length
             ) : (
@@ -136,7 +135,7 @@ const Home = () => {
           <div className="absolute right-1 top-1">
             <BsDatabaseFillAdd className="text-6xl text-white opacity-50" />
           </div>
-          <p className="text-6xl text-white font-bold">
+          <p className="text-5xl text-white font-bold">
             {!loading ? (
               countInventories.alta
             ) : (
@@ -148,13 +147,31 @@ const Home = () => {
           </h3>
         </Link>
         <Link
-          to={"/inventario?status=0"}
+          to={"/inventario?status=2"}
+          className="relative h-32 bg-gradient-to-br from-amber-400 to-amber-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
+        >
+          <div className="absolute right-1 top-1">
+            <BsDatabaseFillDash className="text-6xl text-white opacity-50" />
+          </div>
+          <p className="text-5xl text-white font-bold">
+            {!loading ? (
+              countInventories.propuestaBaja
+            ) : (
+              <BounceLoader color={"#ffffff"} loading={loading} />
+            )}
+          </p>
+          <h3 className="text-sm text-center lg:text-base text-white font-bold">
+            Equipos en baja
+          </h3>
+        </Link>
+        <Link
+          to={"/inventario?status=3"}
           className="relative h-32 bg-gradient-to-br from-red-400 to-red-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
         >
           <div className="absolute right-1 top-1">
             <BsDatabaseFillDash className="text-6xl text-white opacity-50" />
           </div>
-          <p className="text-6xl text-white font-bold">
+          <p className="text-5xl text-white font-bold">
             {!loading ? (
               countInventories.baja
             ) : (
@@ -216,13 +233,17 @@ const Home = () => {
             </p>
             <Doughnut
               data={{
-                labels: ["Alta", "Baja"],
+                labels: ["Alta", "Propuesta Baja", "Baja"],
                 datasets: [
                   {
                     label: "Inventario",
-                    data: [countInventories.alta, countInventories.baja],
-                    backgroundColor: ["#7E3AF2", "#EF4444"],
-                    borderColor: ["#7E3AF2", "#EF4444"],
+                    data: [
+                      countInventories.alta,
+                      countInventories.propuestaBaja,
+                      countInventories.baja,
+                    ],
+                    backgroundColor: ["#7E3AF2", "#fbbf24", "#EF4444"],
+                    borderColor: ["#7E3AF2", "#fbbf24", "#EF4444"],
                     borderWidth: 1,
                   },
                 ],

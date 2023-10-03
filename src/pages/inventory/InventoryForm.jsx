@@ -132,9 +132,9 @@ const InventoryForm = () => {
           }
         });
 
-        if (data.status === false) {
+        if (data.status === 3) {
           setData({ ...data, bajaDate: getCurrentFormattedDate() });
-        } else if (data.status === true) {
+        } else if (data.status === 1) {
           setData({
             ...data,
             bajaDate: null,
@@ -232,7 +232,7 @@ const InventoryForm = () => {
           };
         }
 
-        if (data.status === true) {
+        if (data.status === 1) {
           sendData = {
             ...sendData,
             bajaDate: null,

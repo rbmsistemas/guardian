@@ -13,6 +13,7 @@ import {
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import ModalImageViewer from "../modals/ModalImageViewer";
 import { MdPlaylistRemove } from "react-icons/md";
+import getFormatedStatus from "../../utils/getFormatedStatus";
 
 const CustomeTable = ({
   data = [],
@@ -237,12 +238,16 @@ const CustomeTable = ({
                       >
                         <div
                           className={`text-center font-semibold py-1 px-3 ${
-                            item[key].value
-                              ? "bg-green-200 text-green-700"
-                              : "bg-red-200 text-red-700"
+                            item[key]?.value == 1
+                              ? "bg-green-200 text-green-500"
+                              : item[key]?.value == 2
+                              ? "bg-amber-200 text-amber-500"
+                              : item[key]?.value == 3
+                              ? "bg-red-200 text-red-500"
+                              : null
                           } rounded-lg `}
                         >
-                          {item[key].value ? "Alta" : "Baja"}
+                          {getFormatedStatus(item[key]?.value)}
                         </div>
                       </Table.Cell>
                     ) : (

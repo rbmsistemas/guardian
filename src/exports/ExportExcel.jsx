@@ -26,8 +26,8 @@ const exportTableToExcel = async (headers, data, filename, setLoading) => {
 
           const compressedImageBase64 = await compressImage(
             imageBlob,
-            100,
-            200
+            500,
+            700
           );
 
           const imageId = workbook.addImage({

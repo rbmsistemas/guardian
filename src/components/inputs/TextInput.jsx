@@ -52,8 +52,13 @@ const TextInput = ({
           }
           disabled={disabled}
           className={classNames(
-            "w-full py-3 pr-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500",
-            { "pl-10": Icon }
+            "w-full py-3 pr-3   focus:outline-none focus:border-blue-500",
+            { "pl-10": Icon },
+            `${
+              disabled
+                ? "bg-white-50 border-0 border-b-2 border-gray-300"
+                : "bg-white border border-gray-300 rounded-md"
+            }`
           )}
           placeholder={placeholder}
           value={validateValue(value)}

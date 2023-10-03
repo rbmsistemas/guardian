@@ -12,15 +12,15 @@ export const getCurrentFormattedDate = () => {
 
 export const formatLocalDate = (dateString) => {
   if (!dateString || dateString == null || dateString == undefined) return null;
+
   const options = {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
+    timeZone: "UTC",
   };
-  return new Date(dateString)
-    .toLocaleDateString("mx-MX", options)
+  return new Intl.DateTimeFormat("es-ES", options)
+    .format(new Date(dateString))
     .replace(/\//g, "-")
     .replace(",", "");
 };
