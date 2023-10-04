@@ -60,7 +60,7 @@ const Nav = ({ children }) => {
         <div
           ref={navRef}
           id="sidebar"
-          className={`bg-purple-700 ${
+          className={`bg-purple-900 ${
             !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:relative"
           } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen overflow-y-auto md:overflow-y-visible`}
         >

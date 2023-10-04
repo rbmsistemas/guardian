@@ -125,7 +125,7 @@ const Home = () => {
             )}
           </p>
           <h3 className="text-sm text-center lg:text-base text-white font-bold">
-            Equipos en inventario
+            Total de inventario
           </h3>
         </Link>
         <Link
@@ -148,7 +148,7 @@ const Home = () => {
         </Link>
         <Link
           to={"/inventario?status=2"}
-          className="relative h-32 bg-gradient-to-br from-amber-400 to-amber-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
+          className="relative h-32 bg-gradient-to-br from-orange-400 to-orange-700 rounded-lg shadow-xl flex flex-col justify-center items-center"
         >
           <div className="absolute right-1 top-1">
             <BsDatabaseFillDash className="text-6xl text-white opacity-50" />
@@ -161,7 +161,7 @@ const Home = () => {
             )}
           </p>
           <h3 className="text-sm text-center lg:text-base text-white font-bold">
-            Equipos en baja
+            Propuesta para baja
           </h3>
         </Link>
         <Link
@@ -242,8 +242,8 @@ const Home = () => {
                       countInventories.propuestaBaja,
                       countInventories.baja,
                     ],
-                    backgroundColor: ["#7E3AF2", "#fbbf24", "#EF4444"],
-                    borderColor: ["#7E3AF2", "#fbbf24", "#EF4444"],
+                    backgroundColor: ["#7E3AF2", "#FF8A4C", "#EF4444"],
+                    borderColor: ["#7E3AF2", "#FF8A4C", "#EF4444"],
                     borderWidth: 1,
                   },
                 ],
