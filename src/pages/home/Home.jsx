@@ -148,7 +148,7 @@ const Home = () => {
         </Link>
         <Link
           to={"/inventario?status=2"}
-          className="relative h-32 bg-gradient-to-br from-orange-300 to-orange-600 rounded-lg shadow-xl flex flex-col justify-center items-center"
+          className="relative h-32 bg-gradient-to-br from-orange-300 to-orange-500 rounded-lg shadow-xl flex flex-col justify-center items-center"
         >
           <div className="absolute right-1 top-1">
             <BsDatabaseFillDash className="text-6xl text-white opacity-50" />

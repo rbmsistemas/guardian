@@ -64,7 +64,7 @@ const Side = ({
         {
           name: "Modelos",
           icon: Tb3DCubeSphere,
-          onClick: () => navigate("/modelos"),
+          onClick: () => navigate("/inventario/modelos"),
           allowedRoles: [1, 2],
           disabled: false,
         },

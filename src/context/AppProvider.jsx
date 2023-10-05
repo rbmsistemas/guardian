@@ -30,8 +30,10 @@ import {
   handleUpdateInventory,
   handleDeleteInventory,
   handleGetInventoriesByParams,
+  handleGetInventoryModelByParams,
   handleValidateSerialNumber,
   handleValidateActivo,
+  handleGetInventoryModelById,
 } from "../api/inventory.api";
 import {
   POST_SIGNIN,
@@ -59,6 +61,7 @@ import {
   DELETE_INVENTORY,
   GET_INVENTORIES_BY_SEARCH,
   GET_USERS,
+  GET_INVENTORY_MODEL_BY_ID,
 } from "./Types";
 import {
   Base_Company,
@@ -79,6 +82,7 @@ const AppProvider = (props) => {
     inventoryTypes: [Base_InventoryType],
     inventoryBrands: [Base_InventoryBrand],
     inventoryModels: [Base_InventoryModel],
+    inventoryModel: Base_InventoryModel,
     activities: [],
     activity: {},
     companies: [Base_Company],
@@ -379,6 +383,51 @@ const AppProvider = (props) => {
     }
   };
 
+  const getInvetoryModelById = async (id) => {
+    try {
+      const response = await handleGetInventoryModelById(id, state.user.token);
+      if (!response.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+
+      const { inventoryModel, inventories } = await response.data;
+      dispatch({
+        type: GET_INVENTORY_MODEL_BY_ID,
+        payload: inventoryModel,
+      });
+      dispatch({
+        type: GET_INVENTORY,
+        payload: inventories,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getInventoryModelByParams = async (body) => {
+    try {
+      const response = await handleGetInventoryModelByParams(
+        body,
+        state.user.token
+      );
+      if (!response.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+
+      const { inventoryModels } = await response.data;
+      dispatch({
+        type: GET_INVENTORY_MODELS,
+        payload: inventoryModels,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   // activities actions
 
   const getActivities = async (data) => {
@@ -632,6 +681,7 @@ const AppProvider = (props) => {
         inventoryTypes: state.inventoryTypes,
         inventoryBrands: state.inventoryBrands,
         inventoryModels: state.inventoryModels,
+        inventoryModel: state.inventoryModel,
         inventories: state.inventories,
         inventory: state.inventory,
         getUsers,
@@ -653,6 +703,8 @@ const AppProvider = (props) => {
         getInventoryTypes,
         getInventoryBrands,
         getInventoryModels,
+        getInvetoryModelById,
+        getInventoryModelByParams,
         getInventories,
         getInventoryById,
         createInventory,

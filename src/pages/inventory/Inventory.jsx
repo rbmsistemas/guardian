@@ -1,6 +1,5 @@
 import React, { lazy, useContext, useEffect, useState } from "react";
 import Context from "../../context/Context";
-// import CustomeTable from "../../components/table/CustomeTable"; dynamic import
 const CustomeTable = lazy(() => import("../../components/table/CustomeTable"));
 import { Label, Modal, Select, TextInput } from "flowbite-react";
 import { FaCheck, FaHome, FaSearch, FaTimes } from "react-icons/fa";
@@ -20,7 +19,6 @@ import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { formatLocalDate } from "../../utils/getFormatedDate";
 import { AppUrl } from "../../api/inventory.api";
-// import ExportExcel from "../../exports/ExportExcel"; dinamic import
 const ExportExcel = lazy(() => import("../../exports/ExportExcel"));
 import { urlEnv } from "../../api/request.api";
 
@@ -480,9 +478,7 @@ const Inventory = () => {
           </div>
         ) : (
           <CustomeTable
-            showImagen={true}
             data={inventoriesData}
-            // on share copy link to clipboard
             onShare={(id) => handleCopyToClipboard(id)}
             onShow={(id) => navigate(`/inventario/ver/${id}`)}
             onEdit={(id) => navigate(`/inventario/editar/${id}`)}

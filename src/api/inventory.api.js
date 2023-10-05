@@ -165,6 +165,40 @@ export const handleGetInventoryModels = async (token) => {
   }
 };
 
+// get inventaryModelbyId
+export const handleGetInventoryModelById = async (id, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  try {
+    const response = await axios.get(
+      `${urlEnv}/api/inventoryModels/${id}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// get inventaryModelysearch
+export const handleGetInventoryModelByParams = async (body, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/inventoryModels/search`,
+      body,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 // get inventaryBrands
 export const handleGetInventoryBrands = async (token) => {
   config.headers["x-access-token"] = token;

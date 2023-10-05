@@ -24,6 +24,7 @@ import {
   GET_INVENTORY_BY_ID,
   GET_INVENTORY,
   GET_INVENTORIES_BY_SEARCH,
+  GET_INVENTORY_MODEL_BY_ID,
 } from "./Types";
 
 export default (state, action) => {
@@ -154,6 +155,11 @@ export default (state, action) => {
       return {
         ...state,
         inventoryModels: payload,
+      };
+    case GET_INVENTORY_MODEL_BY_ID:
+      return {
+        ...state,
+        inventoryModel: payload,
       };
     default:
       return state;
