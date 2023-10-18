@@ -37,38 +37,38 @@ const Nav = ({ children }) => {
   }, [window.innerWidth]);
 
   return (
-    <div className="min-h-screen h-screen w-full max-h-screen overflow-hidden flex flex-col">
+    <div className="h-screen w-full min-h-full flex overflow-x-hidden">
       <div
-        ref={menuButtonRef}
-        id="navbar"
-        className="sticky top-0 bg-white flex justify-between items-center text-gray-500 h-20 px-3 gap-5 border-b border-gray-300"
+        ref={navRef}
+        id="sidebar"
+        className={`bg-purple-900 fixed z-50 ${
+          !showMenu ? "scale-0 w-0" : "scale-100 md:w-[280px] pt-[70px] md:pt-0"
+        } origin-top-left transition-all duration-150 ease-in-out h-full overflow-y-hidden`}
       >
-        <div className="flex justify-start items-center gap-3">
-          <span
-            onClick={() => setShowMenu(!showMenu)}
-            className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-purple-700 hover:text-white rounded-full p-2 transition duration-150 ease-in-out"
-          >
-            <CgMenu className="h-6 w-6" />
-          </span>
-          <Link to="/">
-            <img src={Logo} className="h-10 hidden md:block" alt="Logo GAP" />
-          </Link>
-        </div>
-        <img src={LogoGuardian} className="h-10" alt="Logo Guardian" />
+        <Side user={user?.user} />
       </div>
-      <div className="flex flex-1 min-h-0">
+      <div className={`flex h-full w-full ${showMenu && "md:pl-[280px]"}`}>
         <div
-          ref={navRef}
-          id="sidebar"
-          className={`bg-purple-900 ${
-            !showMenu ? "scale-0 w-0 fixed" : "scale-100 fixed md:relative"
-          } origin-top-left transition duration-150 ease-in-out z-50 h-full min-h-screen overflow-y-auto md:overflow-y-visible`}
+          ref={menuButtonRef}
+          id="navbar"
+          className="bg-white fixed w-full z-50 h-[70px] flex justify-between items-center text-gray-500 px-3 gap-5 border-b border-gray-300"
         >
-          <Side user={user?.user} />
+          <div className="flex justify-start items-center gap-3">
+            <span
+              onClick={() => setShowMenu(!showMenu)}
+              className="flex justify-center items-center cursor-pointer hover:scale-110 hover:bg-purple-700 hover:text-white rounded-full p-2 transition duration-150 ease-in-out"
+            >
+              <CgMenu className="h-6 w-6" />
+            </span>
+            <Link to="/">
+              <img src={Logo} className="h-10 hidden md:block" alt="Logo GAP" />
+            </Link>
+          </div>
+          <img src={LogoGuardian} className="h-10" alt="Logo Guardian" />
         </div>
         <div
           id="contenido"
-          className="flex-1 min-h-0 w-full overflow-y-auto bg-neutral-200/50"
+          className="flex h-full pt-[70px] w-full overflow-y-auto bg-neutral-200/50"
         >
           {children}
         </div>

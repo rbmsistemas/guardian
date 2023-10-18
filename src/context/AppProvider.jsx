@@ -412,7 +412,7 @@ const AppProvider = (props) => {
         body,
         state.user.token
       );
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Error en la respuesta del servidor");
       }
 
