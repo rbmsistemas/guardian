@@ -40,14 +40,13 @@ const InventoryPing = () => {
           const pingDetail = match[0];
           setPingResults((prevResults) => [...prevResults, pingDetail]);
         }
-        if (response.data.output.includes("bytes of data.")) {
-          const match = response.data.output.match(
-            /bytes from .*: .* time=.* TTL=.*/
-          );
-          if (match) {
-            const pingDetail = match[0];
-            setPingResults((prevResults) => [...prevResults, pingDetail]);
-          }
+      } else if (response.data.output.includes("bytes of data.")) {
+        const match = response.data.output.match(
+          /bytes from .*: .* time=.* TTL=.*/
+        );
+        if (match) {
+          const pingDetail = match[0];
+          setPingResults((prevResults) => [...prevResults, pingDetail]);
         }
       } else {
         setPingResults((prevResults) => [
