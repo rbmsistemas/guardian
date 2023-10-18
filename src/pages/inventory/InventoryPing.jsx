@@ -40,7 +40,7 @@ const InventoryPing = () => {
           const pingDetail = match[0];
           setPingResults((prevResults) => [...prevResults, pingDetail]);
         }
-        if (response.data.output.includes(`PING ${ipAddress}`)) {
+        if (response.data.output.includes("bytes of data.")) {
           const match = response.data.output.match(
             /bytes from .*: .* time=.* TTL=.*/
           );
