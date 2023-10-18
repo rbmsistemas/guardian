@@ -42,8 +42,10 @@ const InventoryPing = () => {
         }
       } else if (response.data.output.includes("bytes of data.")) {
         const match = response.data.output.match(
-          /bytes from .*: .* time=.* TTL=.*/
+          /bytes from .*: icmp_seq=.* ttl=.* time=.* ms/
         );
+        // use this bytes from 10.219.0.14: icmp_seq=1 ttl=127 time=3.82 ms
+
         if (match) {
           const pingDetail = match[0];
           setPingResults((prevResults) => [...prevResults, pingDetail]);
