@@ -6,7 +6,7 @@ import { urlEnv } from "../../api/inventory.api";
 import { RiSignalTowerLine } from "react-icons/ri";
 
 const InventoryPing = () => {
-  const [ipAddress, setIpAddress] = useState("10.219.0.64");
+  const [ipAddress, setIpAddress] = useState("10.219.0.14");
   const [pingResults, setPingResults] = useState([]);
   const [pingInterval, setPingInterval] = useState(null);
   const [pingSummary, setPingSummary] = useState(null);
@@ -32,7 +32,7 @@ const InventoryPing = () => {
         ipAddress,
       });
 
-      if (response.data.output.includes("Respuesta desde")) {
+      if (response.data.output.includes("Respuesta desde" || "bytes from")) {
         const match = response.data.output.match(
           /Respuesta desde .*: .* tiempo=.* TTL=.*/
         );
@@ -91,7 +91,7 @@ const InventoryPing = () => {
   };
 
   return (
-    <div className="p-4 bg-white flex flex-col gap-8">
+    <div className="p-4 bg-white flex flex-col gap-8 w-full">
       <div className="flex flex-col gap-0">
         <h1 className="text-2xl font-semibold">Ping</h1>
         <p className="text-sm">
