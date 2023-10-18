@@ -159,7 +159,7 @@ const Side = ({
           <div
             onMouseEnter={() => setShowEditProfile(true)}
             onMouseLeave={() => setShowEditProfile(false)}
-            className="h-[20vh] p-4 pt-8 relative flex flex-col justify-center items-center"
+            className="h-full max-h-[22vh] p-4 pt-8 relative flex flex-col justify-center items-center"
           >
             <FaUserEdit
               onClick={() => navigate("/perfil")}
@@ -195,7 +195,7 @@ const Side = ({
             <p className="text-white text-sm whitespace-normal">
               {user.firstName + " " + user.lastName}
             </p>
-            <p className="text-white text-xs truncate w-full">
+            <p className="text-white text-xs whitespace-normal w-full">
               {user.company.name}
             </p>
           </div>
