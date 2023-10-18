@@ -32,7 +32,10 @@ const InventoryPing = () => {
         ipAddress,
       });
 
-      if (response.data.output.includes("Respuesta desde" || "bytes from")) {
+      if (
+        response.data.output.includes("Respuesta desde") ||
+        response.data.output.includes("bytes from")
+      ) {
         const match = response.data.output.match(
           /Respuesta desde .*: .* tiempo=.* TTL=.*/
         );
