@@ -32,16 +32,22 @@ const InventoryPing = () => {
         ipAddress,
       });
 
-      if (
-        response.data.output.includes("Respuesta desde") ||
-        response.data.output.includes("bytes from")
-      ) {
+      if (response.data.output.includes("Respuesta desde")) {
         const match = response.data.output.match(
           /Respuesta desde .*: .* tiempo=.* TTL=.*/
         );
         if (match) {
           const pingDetail = match[0];
           setPingResults((prevResults) => [...prevResults, pingDetail]);
+        }
+        if (response.data.output.includes("bytes from")) {
+          const match = response.data.output.match(
+            /bytes from .*: .* time=.* TTL=.*/
+          );
+          if (match) {
+            const pingDetail = match[0];
+            setPingResults((prevResults) => [...prevResults, pingDetail]);
+          }
         }
       } else {
         setPingResults((prevResults) => [
