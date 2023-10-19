@@ -154,10 +154,10 @@ const ModalImageViewer = ({
                 onClick={() => setScale(!scale)}
                 src={FormatedUrlImage(image)}
                 alt={title}
-                className={`${rotate} ${
+                className={`${rotate} transform ${
                   scale
-                    ? "cursor-zoom-out md:max-h-[100vh] overflow-auto"
-                    : "cursor-zoom-in md:max-h-[50vh] overflow-hidden"
+                    ? "scale-150 cursor-zoom-out md:max-h-[100vh] overflow-auto"
+                    : "scale-100 cursor-zoom-in md:max-h-[50vh] overflow-hidden"
                 } object-contain transition ease-in-out duration-200 min-h-[50vh] min-w-[50vw] md:max-w-[90vw] md:max-h-[90vh]`}
               />
             </div>
