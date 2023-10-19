@@ -31,24 +31,23 @@ const InventoryPing = () => {
       const response = await axios.post(`${urlEnv}/api/inventories/ping`, {
         ipAddress,
       });
-
-      if (response.data.output.includes("Respuesta desde")) {
-        const match = response.data.output.match(
-          /Respuesta desde .*: .* tiempo=.* TTL=.*/
-        );
-        if (match) {
-          const pingDetail = match[0];
-          setPingResults((prevResults) => [...prevResults, pingDetail]);
-        }
-      } else if (response.data.output.includes("bytes of data.")) {
-        const match = response.data.output.match(
-          /bytes from .*: icmp_seq=.* ttl=.* time=.* ms/
-        );
-        // use this bytes from 10.219.0.14: icmp_seq=1 ttl=127 time=3.82 ms
-
-        if (match) {
-          const pingDetail = match[0];
-          setPingResults((prevResults) => [...prevResults, pingDetail]);
+      if (response.data.alive == true) {
+        if (response.data.output.includes("Respuesta desde")) {
+          const match = response.data.output.match(
+            /Respuesta desde .*: .* tiempo=.* TTL=.*/
+          );
+          if (match) {
+            const pingDetail = match[0];
+            setPingResults((prevResults) => [...prevResults, pingDetail]);
+          }
+        } else if (response.data.output.includes("bytes of data.")) {
+          const match = response.data.output.match(
+            /bytes from .*: icmp_seq=.* ttl=.* time=.* ms/
+          );
+          if (match) {
+            const pingDetail = match[0];
+            setPingResults((prevResults) => [...prevResults, pingDetail]);
+          }
         }
       } else {
         setPingResults((prevResults) => [
