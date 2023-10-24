@@ -77,11 +77,7 @@ const Nav = ({ children }) => {
               <CgMenu className="h-6 w-6" />
             </span>
             <Link className="w-auto" to="/">
-              <img
-                src={Logo}
-                className="h-10 min-w-fit hidden md:block"
-                alt="Logo GAP"
-              />
+              <img src={Logo} className="h-10 hidden md:block" alt="Logo GAP" />
             </Link>
             {user?.user?.id && (
               <div className="w-[35vw] md:pl-14">
@@ -89,7 +85,7 @@ const Nav = ({ children }) => {
               </div>
             )}
           </div>
-          <img src={LogoGuardian} className="h-10 w-fit" alt="Logo Guardian" />
+          <img src={LogoGuardian} className="h-10" alt="Logo Guardian" />
         </div>
         <div
           id="contenido"
