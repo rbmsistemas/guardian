@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Context from "../../../context/Context";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaSearch } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 import { AiFillFileAdd, AiOutlineClear } from "react-icons/ai";
@@ -9,6 +9,7 @@ import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
 import CustomeTable from "../../../components/table/CustomeTable";
 
 const Models = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const {
     inventoryModels,
@@ -47,7 +48,7 @@ const Models = () => {
   }, [filters]);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(location.search);
     const page = params.get("page");
     const quantityResults = params.get("quantityResults");
     const orderBy = params.get("orderBy");
@@ -56,7 +57,8 @@ const Models = () => {
     const brandType = params.get("brandType");
     const search = params.get("search");
 
-    const newfilters = {
+    setFilters({
+      ...filters,
       page: page ? page : 1,
       quantityResults: quantityResults ? quantityResults : 10,
       orderBy: orderBy ? orderBy : "updatedAt",
@@ -64,10 +66,8 @@ const Models = () => {
       inventoryType: inventoryType ? inventoryType : "",
       brandType: brandType ? brandType : "",
       search: search ? search : "",
-    };
-
-    setFilters(newfilters);
-  }, []);
+    });
+  }, [location]);
 
   useEffect(() => {
     let data = [];
@@ -85,9 +85,9 @@ const Models = () => {
       data.push({
         id: { key: "id", value: model.id },
         // imagen:{key:'imagen', value: model.image},
-        modelo: { key: "modelo", value: model.name },
-        marca: { key: "marca", value: brand?.name ?? "" },
-        tipo: { key: "tipo", value: type?.name ?? "" },
+        modelo: { key: "name", value: model.name },
+        marca: { key: "inventoryBrandId", value: brand?.name ?? "" },
+        tipo: { key: "inventoryTypeId", value: type?.name ?? "" },
         ["Equipos registrados"]: { key: "total", value: totalEntries ?? 0 },
       });
     });
@@ -187,7 +187,6 @@ const Models = () => {
         paramsString += `${key}=${params[key]}&`;
       }
     });
-
     paramsString = paramsString.slice(0, -1);
     navigate(`/inventario/modelos?${paramsString}`);
   };

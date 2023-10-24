@@ -30,6 +30,22 @@ export const handleGetInventoriesByParams = async (body, token) => {
   config.headers["Content-Type"] = "application/json";
   try {
     const response = await axios.post(
+      `${urlEnv}/api/inventories/params`,
+      body,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+export const handleGetInventoriesBySearch = async (body, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(
       `${urlEnv}/api/inventories/search`,
       body,
       config

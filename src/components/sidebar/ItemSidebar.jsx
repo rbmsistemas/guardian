@@ -63,7 +63,7 @@ const ItemSidebar = ({
     return (
       <div
         onClick={() => handleClick(href)}
-        className={`relative w-full px-6 py-2 ${
+        className={`relative w-full px-6 py-2 md:py3 xl:py-4 ${
           disabled
             ? "text-purple-900"
             : "cursor-pointer hover:bg-white text-white hover:text-purple-700"
@@ -82,11 +82,11 @@ const ItemSidebar = ({
   const shouldRenderItem = allowedRoles.includes(userRol);
 
   return shouldRenderItem ? (
-    <div className="w-full flex flex-col gap-2" ref={dropdownRef}>
+    <div className="w-full flex flex-col" ref={dropdownRef}>
       <div className="relative">
         <div
           onClick={() => handleClick(href)}
-          className={`px-6 py-2 text-white hover:text-purple-700 ${
+          className={`px-6 py-3 text-white hover:text-purple-700 ${
             disabled ? "text-purple-900" : "cursor-pointer hover:bg-white  "
           } ${
             isActive && "bg-purple-700 border-r-4 border-red-500"
@@ -100,7 +100,7 @@ const ItemSidebar = ({
         {dropmenu.length > 0 && (
           <MdOutlineKeyboardArrowDown
             onClick={handleDropMenu}
-            className="absolute rounded-md z-20 top-0 right-0 h-6 w-6 m-2 text-neutral-300 hover:text-purple-700 hover:bg-neutral-200 cursor-pointer"
+            className="absolute rounded-md z-20 top-1 right-0 h-6 w-6 m-2 text-neutral-300 hover:text-purple-700 hover:bg-white cursor-pointer"
           />
         )}
       </div>
@@ -110,7 +110,7 @@ const ItemSidebar = ({
             <div
               key={item.name}
               onClick={() => handleClick(item.href)}
-              className="px-6 py-2 hover:bg-white text-white hover:text-purple-800 transition ease-in-out duration-200 flex justify-start gap-4 items-center text-base font-semibold cursor-pointer"
+              className="px-6 py-3 hover:bg-white text-white hover:text-purple-800 transition ease-in-out duration-200 flex justify-start gap-4 items-center text-base font-semibold cursor-pointer"
             >
               <span className="text-2xl">
                 <item.icon />

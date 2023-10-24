@@ -153,13 +153,13 @@ const Side = ({
   }
 
   return (
-    <div className="h-full">
+    <div className="h-[100vh] relative">
       {user.id && (
         <>
           <div
             onMouseEnter={() => setShowEditProfile(true)}
             onMouseLeave={() => setShowEditProfile(false)}
-            className="h-full max-h-[22vh] p-4 pt-8 relative flex flex-col justify-center items-center"
+            className="h-[22vh] p-4 pt-8 relative text-center flex flex-col justify-center items-center"
           >
             <FaUserEdit
               onClick={() => navigate("/perfil")}
@@ -168,7 +168,6 @@ const Side = ({
                 showEditProfile ? "scale-100" : "scale-0"
               } `}
             />
-
             <div className="relative w-fit h-fit pb-2">
               <img
                 src={FormatedUrlImage(user.photo)}
@@ -202,8 +201,8 @@ const Side = ({
           <hr className="border-white border-opacity-10 border-2 w-full" />
         </>
       )}
-      <div className="flex flex-col gap-3 justify-between h-[78vh] pt-4">
-        <div className="flex flex-col gap-3 overflow-y-auto">
+      <div className="flex flex-col justify-between h-[78vh] pt-4">
+        <div className="h-[50vh] md:h-[63]">
           {itemsSidebar.map((item) => (
             <ItemSidebar
               key={item.name}
@@ -218,7 +217,7 @@ const Side = ({
             />
           ))}
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="h-[24vh] md:h-[15vh]">
           {auxItemsSidebar.map((item) => (
             <ItemSidebar
               key={item.name}

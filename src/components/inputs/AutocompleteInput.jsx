@@ -1,11 +1,49 @@
 import React, { useState, useRef, useEffect } from "react";
+import { FaPlusCircle } from "react-icons/fa";
 import { MdClose, MdOutlineKeyboardArrowDown } from "react-icons/md";
 import classNames from "classnames";
-import { FaPlusCircle } from "react-icons/fa";
 
-const DropdownList = ({ options, selectedOption, onSelect }) => {
+export const DropdownList = ({ options, selectedOption, onSelect }) => {
+  const [dropdownPosition, setDropdownPosition] = useState({
+    left: 0,
+  });
+
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const positionDropdown = () => {
+      if (dropdownRef.current) {
+        const dropdownRect = dropdownRef.current.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+
+        let newLeft = dropdownPosition.left;
+        if (dropdownRect.right > viewportWidth) {
+          newLeft -= dropdownRect.right - viewportWidth;
+        }
+
+        if (newLeft !== dropdownPosition.left) {
+          setDropdownPosition({
+            left: newLeft,
+          });
+        }
+      }
+    };
+
+    positionDropdown();
+
+    window.addEventListener("resize", positionDropdown);
+
+    return () => {
+      window.removeEventListener("resize", positionDropdown);
+    };
+  }, [dropdownPosition]);
+
   return (
-    <ul className="mt-2 w-full max-h-52 overflow-y-auto border border-gray-300 bg-white rounded-md shadow-lg absolute z-30">
+    <div
+      style={{ left: dropdownPosition.left }}
+      className="mt-2 w-full whitespace-nowrap md:w-max max-h-[40vh] overflow-y-auto overflow-x-hidden border border-gray-300 bg-white rounded-md shadow-lg absolute z-30"
+      ref={dropdownRef}
+    >
       {options.map((option) => (
         <li
           key={option.value}
@@ -32,7 +70,7 @@ const DropdownList = ({ options, selectedOption, onSelect }) => {
           )}
         </li>
       ))}
-    </ul>
+    </div>
   );
 };
 
@@ -47,6 +85,7 @@ const AutocompleteInput = ({
   icon: Icon,
   disabled = false,
   isClearable = false,
+  cancelWrite = false,
   isOtherOption,
 }) => {
   const [inputValue, setInputValue] = useState("");
@@ -158,6 +197,7 @@ const AutocompleteInput = ({
             } border border-gray-300 rounded-md focus:outline-none focus:border-blue-500`,
             { "pl-10": Icon }
           )}
+          autoComplete="off"
           placeholder={placeholder}
           value={inputValue}
           onChange={handleInputChange}
@@ -165,6 +205,7 @@ const AutocompleteInput = ({
           ref={inputRef}
           required={required}
           disabled={disabled}
+          readOnly={cancelWrite} // Utiliza readOnly en lugar de disabled
         />
         <div
           className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${

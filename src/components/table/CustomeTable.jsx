@@ -102,7 +102,7 @@ const CustomeTable = ({
                 className="bg-neutral-200 border-r border-white"
               >
                 <div
-                  className={`cursor-pointer border-2 border-gray-300 rounded-lg p-1 ${
+                  className={`cursor-pointer border-2 border-gray-300 rounded-lg w-8 h-8 p-1 ${
                     resultsToExport.length === data.length
                       ? "text-purple-500 border-purple-500"
                       : "text-gray-500"
@@ -202,7 +202,7 @@ const CustomeTable = ({
                       style={{ paddingTop: "10px", paddingBottom: "10px" }}
                     >
                       <div
-                        className={`cursor-pointer border-gray-300 rounded-lg p-1 ${
+                        className={`cursor-pointer border-gray-300 rounded-lg w-8 h-8 p-1 ${
                           resultsToExport.includes(item.id.value)
                             ? "text-purple-500 border-purple-500 border-2"
                             : "text-gray-500 border"

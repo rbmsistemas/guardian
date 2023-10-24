@@ -118,7 +118,7 @@ const Login = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-between">
+          <div className="w-full flex flex-col md:flex-row gap-4 justify-between">
             <div className="flex items-center">
               <input
                 id="remember_me"

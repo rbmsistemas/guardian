@@ -23,6 +23,7 @@ import {
   POST_INVENTORY,
   GET_INVENTORY_BY_ID,
   GET_INVENTORY,
+  GET_INVENTORIES_BY_PARAMS,
   GET_INVENTORIES_BY_SEARCH,
   GET_INVENTORY_MODEL_BY_ID,
 } from "./Types";
@@ -121,10 +122,15 @@ export default (state, action) => {
         ...state,
         inventory: payload,
       };
-    case GET_INVENTORIES_BY_SEARCH:
+    case GET_INVENTORIES_BY_PARAMS:
       return {
         ...state,
         inventories: payload,
+      };
+    case GET_INVENTORIES_BY_SEARCH:
+      return {
+        ...state,
+        searchedInventories: payload,
       };
     case POST_INVENTORY:
       return {

@@ -36,6 +36,7 @@ const InventoryForm = () => {
 
   const [data, setData] = useState(Base_Inventory());
   const [images, setImages] = useState([]);
+
   const newInvetoryModels = [
     ...inventoryModels?.map((model) => ({
       value: model.id,
@@ -377,20 +378,32 @@ const InventoryForm = () => {
           <span className="text-gray-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="#" className="text-gray-500 hover:text-gray-700 truncate">
-            Nuevo inventario
+          <Link
+            to="#"
+            className="text-gray-500 hover:text-gray-700 truncate whitespace-normal"
+          >
+            {id
+              ? `Editar ${
+                  id
+                    ? inventoryModels?.find(
+                        (model) => model.id === data.inventoryModelId
+                      )?.name
+                    : "Inventario"
+                }`
+              : "Crear inventario"}
           </Link>
         </div>
         <div className="flex gap-2 justify-center md:justify-end">
-          <Link
-            to="/inventario"
+          <button
+            type="button"
+            onClick={() => navigate("/inventario")}
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
           >
             <span>
               <IoArrowBack className="text-white text-lg" />
             </span>
             {volver && compareChanges(data, inventory) ? "Cancelar" : "Volver"}
-          </Link>
+          </button>
           <button
             type="submit"
             onClick={handleSubmitButton}

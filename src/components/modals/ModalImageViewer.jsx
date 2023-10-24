@@ -9,6 +9,7 @@ import {
 import { TbRotateClockwise2, TbRotate2 } from "react-icons/tb";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import { urlEnv } from "../../api/request.api";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
 const ModalImageViewer = ({
   title = "",
@@ -147,25 +148,35 @@ const ModalImageViewer = ({
             <p className="text-xl font-bold text-blue-500">Ver imagen</p>
           </div>
         </Modal.Header>
-        <Modal.Body style={{ padding: "10px" }}>
-          <div className="w-full h-full flex flex-col relative">
-            <div className="flex items-center justify-center">
-              <img
-                onClick={() => setScale(!scale)}
-                src={FormatedUrlImage(image)}
-                alt={title}
-                className={`${rotate} transform ${
-                  scale
-                    ? "scale-150 cursor-zoom-out md:max-h-[100vh] overflow-auto"
-                    : "scale-100 cursor-zoom-in md:max-h-[50vh] overflow-hidden"
-                } object-contain transition ease-in-out duration-200 min-h-[50vh] min-w-[50vw] md:max-w-[90vw] md:max-h-[90vh]`}
-              />
-            </div>
+        <div
+          className={`${scale ? "h-[70vh]" : "h-[50vh]"} w-full md:h-[80vh]`}
+        >
+          <div className="w-full h-full flex flex-col items-center justify-center relative">
+            <TransformWrapper>
+              <TransformComponent>
+                <div
+                  className={`flex justify-center items-center overflow-auto w-full ${
+                    scale ? " h-full" : " h-[60vh]"
+                  }`}
+                >
+                  <img
+                    onClick={() => setScale(!scale)}
+                    src={FormatedUrlImage(image)}
+                    alt={title}
+                    className={`transform ${
+                      scale
+                        ? "cursor-zoom-out object-center object-cover"
+                        : "cursor-zoom-in object-contain w-full h-full"
+                    }  transition ease-in-out duration-200 ${rotate}`}
+                  />
+                </div>
+              </TransformComponent>
+            </TransformWrapper>
             <div
               className={`${
                 scale
-                  ? "absolute md:fixed bottom-10 md:bottom-20 left-1/2 transform -translate-x-1/2"
-                  : "absolute bottom-10 w-full"
+                  ? "fixed bottom-32 left-1/2 transform -translate-x-1/2"
+                  : "fixed bottom-[28vh] md:bottom-[32vh] w-full"
               } flex justify-center whitespace-nowrap gap-2`}
             >
               <button
@@ -207,7 +218,7 @@ const ModalImageViewer = ({
               </button>
             </div>
           </div>
-        </Modal.Body>
+        </div>
         {!scale && (
           <Modal.Footer
             style={{

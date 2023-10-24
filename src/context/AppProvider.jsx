@@ -34,6 +34,7 @@ import {
   handleValidateSerialNumber,
   handleValidateActivo,
   handleGetInventoryModelById,
+  handleGetInventoriesBySearch,
 } from "../api/inventory.api";
 import {
   POST_SIGNIN,
@@ -59,6 +60,7 @@ import {
   POST_INVENTORY,
   PATCH_INVENTORY,
   DELETE_INVENTORY,
+  GET_INVENTORIES_BY_PARAMS,
   GET_INVENTORIES_BY_SEARCH,
   GET_USERS,
   GET_INVENTORY_MODEL_BY_ID,
@@ -79,6 +81,7 @@ const AppProvider = (props) => {
     users: [Base_User],
     inventories: [Base_Inventory()],
     inventory: Base_Inventory(),
+    searchedInventories: [Base_Inventory()],
     inventoryTypes: [Base_InventoryType],
     inventoryBrands: [Base_InventoryBrand],
     inventoryModels: [Base_InventoryModel],
@@ -285,9 +288,30 @@ const AppProvider = (props) => {
     }
   };
 
-  const getInventoriesBySearch = async (body) => {
+  const getInventoriesByParams = async (body) => {
     try {
       const response = await handleGetInventoriesByParams(
+        body,
+        state.user.token
+      );
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventories } = await response.data;
+      dispatch({
+        type: GET_INVENTORIES_BY_PARAMS,
+        payload: inventories,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getInventoriesBySearch = async (body) => {
+    try {
+      const response = await handleGetInventoriesBySearch(
         body,
         state.user.token
       );
@@ -684,6 +708,7 @@ const AppProvider = (props) => {
         inventoryModel: state.inventoryModel,
         inventories: state.inventories,
         inventory: state.inventory,
+        searchedInventories: state.searchedInventories,
         getUsers,
         handleLogin,
         postSignup,
@@ -710,6 +735,7 @@ const AppProvider = (props) => {
         createInventory,
         updateInventory,
         deleteInventory,
+        getInventoriesByParams,
         getInventoriesBySearch,
         getValidatedSerialNumber,
         getValidatedActivo,

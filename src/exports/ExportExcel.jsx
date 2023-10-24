@@ -111,7 +111,7 @@ const ExportExcel = ({ headers, data, filename, disabled }) => {
     <>
       <button
         disabled={disabled}
-        className={`${
+        className={`truncate ${
           disabled
             ? "bg-gray-500"
             : "cursor-pointer bg-green-500 hover:bg-green-600"

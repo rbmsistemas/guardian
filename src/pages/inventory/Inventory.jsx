@@ -1,7 +1,7 @@
 import React, { lazy, useContext, useEffect, useState } from "react";
 import Context from "../../context/Context";
 const CustomeTable = lazy(() => import("../../components/table/CustomeTable"));
-import { Label, Modal, Select, TextInput } from "flowbite-react";
+import { Label, Modal } from "flowbite-react";
 import { FaCheck, FaHome, FaSearch, FaTimes } from "react-icons/fa";
 import {
   AiFillFileAdd,
@@ -21,6 +21,9 @@ import { formatLocalDate } from "../../utils/getFormatedDate";
 import { AppUrl } from "../../api/inventory.api";
 const ExportExcel = lazy(() => import("../../exports/ExportExcel"));
 import { urlEnv } from "../../api/request.api";
+import AutocompleteInput from "../../components/inputs/AutocompleteInput";
+import { BiDevices } from "react-icons/bi";
+import TextInput from "../../components/inputs/TextInput";
 
 const Inventory = () => {
   const location = useLocation();
@@ -30,7 +33,7 @@ const Inventory = () => {
     inventoryBrands,
     inventoryModels,
     deleteInventory,
-    getInventoriesBySearch,
+    getInventoriesByParams,
     inventories,
   } = useContext(Context);
 
@@ -57,7 +60,7 @@ const Inventory = () => {
   useEffect(() => {
     setIsLoading(true);
     const res = async () => {
-      const data = await getInventoriesBySearch(filters);
+      const data = await getInventoriesByParams(filters);
       if (data) {
         setTotals({
           totalEntries: data.totalEntries,
@@ -173,7 +176,7 @@ const Inventory = () => {
       setModal(false);
       return;
     } else if (data) {
-      const res = await getInventoriesBySearch(filters);
+      const res = await getInventoriesByParams(filters);
       if (res) {
         setTotals({
           totalEntries: res.totalEntries,
@@ -199,17 +202,18 @@ const Inventory = () => {
 
   const handleFilterByParams = (value, type) => {
     let params = filters;
-    if (type === "inventoryType") {
-      params["inventoryType"] = value;
+
+    if (type == "inventoryType") {
+      params["inventoryType"] = value?.toString() ?? "";
     }
     if (type === "brandType") {
-      params["brandType"] = value;
+      params["brandType"] = value?.toString() ?? "";
     }
     if (type === "status") {
       if (value === "") {
         delete params["status"];
       } else {
-        params["status"] = value;
+        params["status"] = value?.toString() ?? "";
       }
     }
     if (type === "quantityResults" && value.length > 0) {
@@ -255,7 +259,6 @@ const Inventory = () => {
         paramsString += `${key}=${params[key]}&`;
       }
     });
-
     paramsString = paramsString.slice(0, -1);
     navigate(`/inventario?${paramsString}`);
   };
@@ -304,7 +307,12 @@ const Inventory = () => {
         Modelo: item.inventoryModel?.name,
         SN: item.serialNumber,
         Activo: item.activo,
-        Status: item.status ? "Alta" : "Baja",
+        Status:
+          item.status === 1
+            ? "Alta"
+            : item.status === 2
+            ? "Propuesta de Baja"
+            : "Baja",
         Creacion: formatLocalDate(item.createdAt),
         Actualizacion: item?.updatedAt ? formatLocalDate(item?.updatedAt) : "",
         Imagen: urlEnv + item?.images[0],
@@ -339,75 +347,70 @@ const Inventory = () => {
         </Link>
       </div>
       <div className="flex flex-col gap-2 rounded-lg">
-        <div className="grid grid-cols-6 md:grid-cols-12 gap-3 pb-2">
-          <div className="col-span-2 flex flex-col gap-2">
-            <div className="w-full">
-              <Label
-                htmlFor="inventoryType"
-                value="Tipo"
-                className="font-bold"
-              />
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-2 pb-2">
+          <div className="col-span-6 md:col-span-2 flex flex-col gap-2">
+            <div className="w-full flex gap-1">
+              <Label htmlFor="inventoryType" value="Tipo" />
             </div>
-            <Select
-              id="inventoryType"
-              icon={MdOutlineCategory}
-              required={true}
+            <AutocompleteInput
+              id={"inventoryType"}
+              name={"inventoryType"}
+              placeholder="Tipo"
+              data={
+                inventoryTypes?.map((type) => ({
+                  value: type.id,
+                  label: type.name,
+                })) ?? []
+              }
               value={filters.inventoryType}
-              onChange={(e) =>
-                handleFilterByParams(e.target.value, "inventoryType")
-              }
-            >
-              <option value="">Todos</option>
-              {inventoryTypes.map((item) => {
-                return (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                );
-              })}
-            </Select>
+              onChange={(e) => handleFilterByParams(e.value, "inventoryType")}
+              icon={BiDevices}
+              isClearable
+            />
           </div>
-          <div className="col-span-2 flex flex-col gap-2">
-            <div className="w-full">
-              <Label htmlFor="brandType" value="Marca" className="font-bold" />
+          <div className="col-span-6 md:col-span-2 flex flex-col gap-2">
+            <div className="w-full flex gap-1">
+              <Label htmlFor="brandType" value="Marca" />
             </div>
-            <Select
-              id="brandType"
-              icon={MdNewReleases}
-              required={true}
+            <AutocompleteInput
+              id={"brandType"}
+              name={"brandType"}
+              placeholder="Marca"
+              data={
+                inventoryBrands?.map((type) => ({
+                  value: type.id,
+                  label: type.name,
+                })) ?? []
+              }
               value={filters.brandType}
-              onChange={(e) =>
-                handleFilterByParams(e.target.value, "brandType")
-              }
-            >
-              <option value="">Todos</option>
-              {inventoryBrands.map((item) => {
-                return (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                );
-              })}
-            </Select>
+              onChange={(e) => handleFilterByParams(e.value, "brandType")}
+              icon={BiDevices}
+              isClearable
+            />
           </div>
-          <div className="col-span-2 flex flex-col gap-2">
-            <div className="w-full">
-              <Label htmlFor="status" value="Status" className="font-bold" />
+          <div className="col-span-6 md:col-span-2 flex flex-col gap-2">
+            <div className="w-full flex gap-1">
+              <Label htmlFor="status" value="Status" />
             </div>
-            <Select
-              id="status"
-              icon={AiOutlinePoweroff}
-              required={true}
+            <AutocompleteInput
+              id={"status"}
+              name={"status"}
+              placeholder="Status"
+              data={
+                [
+                  { value: 1, label: "Alta" },
+                  { value: 2, label: "Propuesta de baja" },
+                  { value: 3, label: "Baja" },
+                ] ?? []
+              }
               value={filters.status}
-              onChange={(e) => handleFilterByParams(e.target.value, "status")}
-            >
-              <option value="">Todos</option>
-              <option value={1}>Alta</option>
-              <option value={2}>Propuesta de baja</option>
-              <option value={3}>Baja</option>
-            </Select>
+              onChange={(e) => handleFilterByParams(e.value, "status")}
+              icon={BiDevices}
+              cancelWrite
+              isClearable
+            />
           </div>
-          <div className="col-span-6 md:col-span-3 flex flex-col gap-2">
+          <div className="col-span-6 md:col-span-3 flex flex-col gap-1">
             <div className="w-full">
               <Label htmlFor="search" value="Buscar" />
             </div>
@@ -415,7 +418,7 @@ const Inventory = () => {
               id="search"
               type="text"
               icon={FaSearch}
-              placeholder="Modelo, serie, activo fijo"
+              placeholder="Modelo, Serie, Activo, comentarios"
               required={true}
               value={filters.search}
               onChange={handleValidateSearch}

@@ -26,7 +26,7 @@ const User = () => {
     inventoryBrands,
     inventoryModels,
     deleteInventory,
-    getInventoriesBySearch,
+    getInventoriesByParams,
     inventories,
   } = useContext(Context);
 
@@ -50,7 +50,7 @@ const User = () => {
   useEffect(() => {
     setIsLoading(true);
     const res = async () => {
-      const data = await getInventoriesBySearch(filters);
+      const data = await getInventoriesByParams(filters);
       if (data) {
         setTotals({
           totalEntries: data.totalEntries,
@@ -147,7 +147,7 @@ const User = () => {
       setModal(false);
       return;
     } else if (data) {
-      const res = await getInventoriesBySearch(filters);
+      const res = await getInventoriesByParams(filters);
       if (res) {
         setTotals({
           totalEntries: res.totalEntries,

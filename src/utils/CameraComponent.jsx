@@ -1,15 +1,17 @@
-import { Modal } from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdCameraswitch, MdFlashOff, MdFlashOn } from "react-icons/md";
-import Webcam from "react-webcam";
 import { FormatedUrlImage } from "./FormatedUrlImage";
 import ModalImageViewer from "../components/modals/ModalImageViewer";
+import CameraPhoto, {
+  FACING_MODES,
+  IMAGE_TYPES,
+} from "react-html5-camera-photo";
+import "react-html5-camera-photo/build/css/index.css";
 
 const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
-  const webcamRef = useRef(null);
   const mediaStreamRef = useRef(null);
   const [currentFacingMode, setCurrentFacingMode] = useState("environment");
 
@@ -24,24 +26,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
     facingMode: currentFacingMode,
   };
 
-  useEffect(() => {
-    const comprobarFlash = async () => {
-      const track = mediaStreamRef.current?.getVideoTracks()[0];
-      if (track) {
-        try {
-          await track.applyConstraints({
-            advanced: [{ torch: !track.getSettings().torch }],
-          });
-          setisFlash(track.getSettings().torch);
-        } catch (error) {
-          console.error("Flash control not supported:", error);
-        }
-      }
-    };
-    comprobarFlash();
-  }, []);
-
-  const captureImage = async () => {
+  const captureImage = async (image) => {
     try {
       if (isCordova) {
         navigator.camera.getPicture(onSuccess, onFail, {
@@ -60,7 +45,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
           alert("Failed because: " + message);
         }
       } else {
-        const imageSrc = webcamRef.current.getScreenshot();
+        const imageSrc = image;
 
         const response = await fetch(imageSrc);
         const blob = await response.blob();
@@ -119,7 +104,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
         >
           <MdCameraswitch color="#ffffff" />
         </p>
-        <p
+        {/* <p
           className="text-2xl text-white absolute top-5 left-5 bg-black/20 p-2 rounded-full cursor-pointer z-10"
           onClick={toggleFlash}
         >
@@ -128,8 +113,15 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
           ) : (
             <MdFlashOff color="#ffffff" />
           )}
-        </p>
-        <Webcam
+        </p> */}
+        <CameraPhoto
+          onTakePhoto={(dataUri) => captureImage(dataUri)}
+          idealFacingMode={currentFacingMode}
+          idealResolution={{ width: 1920, height: 1080 }}
+          isSilentMode={true}
+          imageType={IMAGE_TYPES.JPG}
+        />
+        {/* <Webcam
           audio={false}
           ref={webcamRef}
           videoConstraints={videoConstraints}
@@ -141,8 +133,8 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
           height={1080}
           width={1920}
           className="rounded-lg bg-gray-300 md:max-h-96"
-        />
-        <button
+        /> */}
+        {/* <button
           type="button"
           className="bg-blue-500 border-2 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md flex items-center gap-2 justify-center transition ease-in-out duration-200 hover:scale-105"
           onClick={captureImage}
@@ -151,7 +143,7 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             <AiOutlineCamera className="text-2xl" />
           </span>
           Capturar imagen
-        </button>
+        </button> */}
       </div>
       <div className="w-full h-full max-h-full flex flex-wrap gap-2 mt-2 md:mt-0">
         <div className="w-28 h-28 max-w-[7rem] flex-grow border border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
