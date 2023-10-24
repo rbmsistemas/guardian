@@ -91,7 +91,7 @@ const Nav = ({ children }) => {
           id="contenido"
           className="flex mt-[70px] w-full h-[calc(100vh-70px)] overflow-hidden bg-neutral-200/50"
         >
-          <div className="w-full h-full overflow-y-auto py-3 gap-5 flex flex-col justify-start items-start">
+          <div className="w-full h-full overflow-y-auto gap-5 flex flex-col justify-start items-start">
             {children}
           </div>
         </div>
