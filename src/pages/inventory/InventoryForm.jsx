@@ -434,7 +434,7 @@ const InventoryForm = () => {
           onSubmit={handleSubmit}
           className="flex h-full flex-col gap-5 mt-5"
         >
-          {id ? (
+          {
             <InventoryFields
               body={data}
               setBody={setData}
@@ -444,21 +444,9 @@ const InventoryForm = () => {
               inventoryBrands={newInventoryBrands}
               inventoryModels={newInvetoryModels}
               handleSelectInput={handleSelectInput}
-              titleForm={"Editar inventario"}
+              titleForm={id ? "Editar inventario" : "Crear inventario"}
             />
-          ) : (
-            <InventoryFields
-              body={data}
-              setBody={setData}
-              images={images}
-              setImages={setImages}
-              inventoryTypes={newInventoryTypes}
-              inventoryBrands={newInventoryBrands}
-              inventoryModels={newInvetoryModels}
-              handleSelectInput={handleSelectInput}
-              titleForm={"Crear inventario"}
-            />
-          )}
+          }
           <div className="flex justify-end">
             <button
               ref={submitRef}

@@ -11,7 +11,11 @@ import CameraPhoto, {
 } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 
-const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
+const CameraComponent = ({
+  capturedImage = [],
+  setCapturedImage,
+  enableCamera,
+}) => {
   const mediaStreamRef = useRef(null);
   const [currentFacingMode, setCurrentFacingMode] = useState("environment");
 
@@ -97,14 +101,15 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
 
   return (
     <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="relative flex flex-col gap-4">
-        <p
-          className="text-2xl text-white absolute top-5 right-5 bg-black/20 p-2 rounded-full cursor-pointer z-10"
-          onClick={switchCamera}
-        >
-          <MdCameraswitch color="#ffffff" />
-        </p>
-        {/* <p
+      {enableCamera && (
+        <div className="relative flex flex-col gap-4">
+          <p
+            className="text-2xl text-white absolute top-5 right-5 bg-black/20 p-2 rounded-full cursor-pointer z-10"
+            onClick={switchCamera}
+          >
+            <MdCameraswitch color="#ffffff" />
+          </p>
+          {/* <p
           className="text-2xl text-white absolute top-5 left-5 bg-black/20 p-2 rounded-full cursor-pointer z-10"
           onClick={toggleFlash}
         >
@@ -114,37 +119,15 @@ const CameraComponent = ({ capturedImage = [], setCapturedImage }) => {
             <MdFlashOff color="#ffffff" />
           )}
         </p> */}
-        <CameraPhoto
-          onTakePhoto={(dataUri) => captureImage(dataUri)}
-          idealFacingMode={currentFacingMode}
-          idealResolution={{ width: 1920, height: 1080 }}
-          isSilentMode={true}
-          imageType={IMAGE_TYPES.JPG}
-        />
-        {/* <Webcam
-          audio={false}
-          ref={webcamRef}
-          videoConstraints={videoConstraints}
-          onUserMedia={(stream) => {
-            mediaStreamRef.current = stream;
-          }}
-          mirrored={currentFacingMode === "user"}
-          screenshotFormat="image/jpeg"
-          height={1080}
-          width={1920}
-          className="rounded-lg bg-gray-300 md:max-h-96"
-        /> */}
-        {/* <button
-          type="button"
-          className="bg-blue-500 border-2 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md flex items-center gap-2 justify-center transition ease-in-out duration-200 hover:scale-105"
-          onClick={captureImage}
-        >
-          <span>
-            <AiOutlineCamera className="text-2xl" />
-          </span>
-          Capturar imagen
-        </button> */}
-      </div>
+          <CameraPhoto
+            onTakePhoto={(dataUri) => captureImage(dataUri)}
+            idealFacingMode={currentFacingMode}
+            idealResolution={{ width: 1920, height: 1080 }}
+            isSilentMode={true}
+            imageType={IMAGE_TYPES.JPG}
+          />
+        </div>
+      )}
       <div className="w-full h-full max-h-full flex flex-wrap gap-2 mt-2 md:mt-0">
         <div className="w-28 h-28 max-w-[7rem] flex-grow border border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
           <label

@@ -1,9 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
 import Context from "../../context/Context";
 import { DropdownList } from "../inputs/AutocompleteInput";
 import { useNavigate } from "react-router-dom";
 import { RiCloseCircleFill } from "react-icons/ri";
+import { MdClear } from "react-icons/md";
+import { FaRegSadTear } from "react-icons/fa";
+import { LuDelete } from "react-icons/lu";
 
 const Searcher = () => {
   const {
@@ -13,10 +16,13 @@ const Searcher = () => {
     getInventoriesBySearch,
   } = useContext(Context);
   const navigate = useNavigate();
+  const inputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const [search, setSearch] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
   const [showSearcher, setShowSearcher] = useState(false);
+
   const handleValidateSearch = (e) => {
     const inputValue = e.target.value;
 
@@ -33,6 +39,7 @@ const Searcher = () => {
       }
     }
     setSearch(inputValue);
+    setShowDropdown(true);
   };
 
   useEffect(() => {
@@ -68,17 +75,49 @@ const Searcher = () => {
     value: inventory?.id,
   }));
 
-  if (searchedInventories.length === 0) {
-    formatedData.push({
-      label: "No se encontraron resultados",
-      value: "No se encontraron resultados",
-    });
-  }
+  const handleClearInput = () => {
+    setSearch("");
+    inputRef.current.focus();
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const showMenu =
+    searchedInventories?.length <= 0 ? (
+      <div className="flex justify-start gap-1 items-center absolute md:whitespace-nowrap top-2 md:top-11 h-16 p-2 bg-white/90 w-full rounded-md shadow-md cursor-default ">
+        <span>
+          <FaRegSadTear size={20} className="text-gap-primary mr-2" />
+        </span>
+        <p className=" text-black text-sm">
+          No se encontraron resultados que coincidan con tu búsqueda
+        </p>
+      </div>
+    ) : (
+      <DropdownList
+        options={formatedData}
+        onSelect={(value) => {
+          navigate(`/inventario/ver/${value?.value}`);
+          setSearch("");
+        }}
+      />
+    );
 
   return (
     <div className="relative w-full h-full">
       <div className="hidden w-full md:block">
         <input
+          ref={inputRef}
           value={search}
           onChange={handleValidateSearch}
           id="searcher"
@@ -87,17 +126,23 @@ const Searcher = () => {
           placeholder="Buscar..."
           className="bg-transparent rounded-full py-2 px-4 pl-12 w-full max-w-[70vw] focus:outline-none focus:shadow-outline"
         />
-        <div className="absolute top-0 left-0 mt-3 ml-3">
-          <FaSearch />
+        <div className="absolute top-1/2 transform -translate-y-1/2 left-0 ml-3">
+          <FaSearch size={18} />
         </div>
         {search.length >= 1 && (
-          <DropdownList
-            options={formatedData}
-            onSelect={(value) => {
-              navigate(`/inventario/ver/${value?.value}`);
-              setSearch("");
-            }}
-          />
+          <div
+            onClick={handleClearInput}
+            className="absolute top-1/2 transform -translate-y-1/2 right-0 mr-3 cursor-pointer hover:bg-neutral-400/30 rounded-full p-1 transition duration-150 ease-in-out"
+          >
+            <MdClear size={22} />
+          </div>
+        )}
+        {isLoading ? (
+          <div className="flex items-center justify-center absolute top-11 h-16 bg-white/90 w-full rounded-md shadow-md cursor-default">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gap-orange"></div>
+          </div>
+        ) : (
+          showDropdown && showMenu
         )}
       </div>
       <div className="md:hidden relative w-full h-full">
@@ -108,8 +153,8 @@ const Searcher = () => {
           />
         </div>
         {showSearcher && (
-          <div className="fixed top-0 left-0 w-[100vw] h-[100vh] bg-black/50 flex flex-col">
-            <div className="p-2 pt-8 flex justify-between items-center w-full relative">
+          <div className="fixed top-0 left-0 w-[100vw] h-[100vh] bg-black/40 flex flex-col">
+            <div className="p-2 pt-8 flex justify-between items-center w-[100vw] relative">
               <input
                 value={search}
                 onChange={handleValidateSearch}
@@ -117,12 +162,24 @@ const Searcher = () => {
                 name="searcher"
                 type="text"
                 placeholder="Buscar..."
-                className="bg-white rounded-full py-2 px-4 pl-12 w-[85vw] focus:outline-none focus:shadow-outline"
+                className="bg-white rounded-full py-2 px-4 pl-12 w-full focus:outline-none focus:shadow-outline"
               />
+
               <RiCloseCircleFill
-                onClick={() => setShowSearcher(!showSearcher)}
+                onClick={() => {
+                  setSearch("");
+                  setShowSearcher(!showSearcher);
+                }}
                 className="text-3xl cursor-pointer text-white"
               />
+              {search.length >= 1 && (
+                <div
+                  onClick={handleClearInput}
+                  className="absolute top-19 right-11 mr-2 cursor-pointer hover:bg-neutral-400/30 rounded-full p-1 transition duration-150 ease-in-out"
+                >
+                  <LuDelete size={22} />
+                </div>
+              )}
               <div className="absolute top-11 left-5">
                 <FaSearch />
               </div>
@@ -134,16 +191,13 @@ const Searcher = () => {
                 <div className="animate-ping rounded-full h-10 w-10 border-b-2 border-white"></div>
               )}
             </div>
-            <div className="absolute top-20 left-0 w-full bg-white/50">
-              {search.length >= 1 && (
-                <DropdownList
-                  options={formatedData}
-                  onSelect={(value) => {
-                    setShowSearcher(false);
-                    navigate(`/inventario/ver/${value?.value}`);
-                    setSearch("");
-                  }}
-                />
+            <div className="absolute top-20 left-0 w-[95vw] p-2">
+              {isLoading ? (
+                <div className="flex items-center justify-center absolute top-11 h-16 bg-white/90 w-full rounded-md shadow-md cursor-default">
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gap-orange"></div>
+                </div>
+              ) : (
+                showDropdown && showMenu
               )}
             </div>
           </div>
