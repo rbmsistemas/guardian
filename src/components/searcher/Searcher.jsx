@@ -108,6 +108,7 @@ const Searcher = () => {
         options={formatedData}
         onSelect={(value) => {
           setShowSearcher(false);
+          setShowDropdown(false);
           navigate(`/inventario/ver/${value?.value}`);
           setSearch("");
         }}
