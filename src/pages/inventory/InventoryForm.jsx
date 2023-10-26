@@ -366,17 +366,17 @@ const InventoryForm = () => {
   const actions = [
     {
       id: 1,
-      label: "Guardar",
-      onClick: handleSubmitButton,
-      icon: <FaSave />,
-      color: "text-green-500",
-    },
-    {
-      id: 2,
       label: "Descartar",
       onClick: () => navigate(-1),
       icon: <IoArrowBack />,
       color: "text-red-500",
+    },
+    {
+      id: 2,
+      label: "Guardar",
+      onClick: handleSubmitButton,
+      icon: <FaSave />,
+      color: "text-green-500",
     },
   ];
 
