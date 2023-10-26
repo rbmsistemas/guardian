@@ -107,7 +107,7 @@ const Searcher = () => {
       <DropdownList
         options={formatedData}
         onSelect={(value) => {
-          setShowDropdown(false);
+          setShowSearcher(false);
           navigate(`/inventario/ver/${value?.value}`);
           setSearch("");
         }}
