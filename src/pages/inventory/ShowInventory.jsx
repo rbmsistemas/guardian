@@ -198,7 +198,17 @@ const ShowInventory = () => {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-amber-500 justify-end">
+          <div
+            className={`col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b ${
+              inventario?.status == 1
+                ? " border-green-500"
+                : inventario?.status == 2
+                ? "border-amber-500"
+                : inventario?.status == 3
+                ? "border-red-500"
+                : null
+            }  justify-end`}
+          >
             <div className="w-full">
               <Label htmlFor="" value="Status" />
             </div>

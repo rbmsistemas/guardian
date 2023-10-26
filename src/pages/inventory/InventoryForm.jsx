@@ -12,23 +12,6 @@ import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
 import { Base_Inventory } from "../../context/Models";
 import MobileMenu from "../../components/mobileMenu/MobileMenu";
 
-const actions = [
-  {
-    id: 1,
-    label: "Guardar",
-    onClick: handleSubmitButton,
-    icon: <FaSave />,
-    color: "text-green-500",
-  },
-  {
-    id: 2,
-    label: "Descartar",
-    onClick: () => navigate(-1),
-    icon: <IoArrowBack />,
-    color: "text-red-500",
-  },
-];
-
 const InventoryForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -379,6 +362,23 @@ const InventoryForm = () => {
         break;
     }
   };
+
+  const actions = [
+    {
+      id: 1,
+      label: "Guardar",
+      onClick: handleSubmitButton,
+      icon: <FaSave />,
+      color: "text-green-500",
+    },
+    {
+      id: 2,
+      label: "Descartar",
+      onClick: () => navigate(-1),
+      icon: <IoArrowBack />,
+      color: "text-red-500",
+    },
+  ];
 
   if (id) {
     actions.push({
