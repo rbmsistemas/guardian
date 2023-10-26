@@ -90,7 +90,7 @@ const Nav = ({ children }) => {
               onClick={() => {
                 navigate("/inventario/crear");
               }}
-              className="flex justify-center items-center gap-1 p-2 h-10 w-10 md:w-auto md:min-w-10 border border-neutral-500 text-neutral-500 hover:border-white hover:text-white hover:bg-blue-600 rounded-full hover:bg-neutral-100/50 cursor-pointer transition ease-in-out duration-100"
+              className="flex justify-center items-center gap-1 p-2 h-10 w-10 md:w-auto md:min-w-10 border border-neutral-500 text-neutral-500 hover:border-white hover:text-white hover:bg-blue-600 rounded-full cursor-pointer transition ease-in-out duration-100"
             >
               <span>
                 <MdAdd className="text-3xl md:text-2xl" />

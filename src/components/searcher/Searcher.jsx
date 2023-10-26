@@ -125,6 +125,7 @@ const Searcher = () => {
           name="searcher"
           type="text"
           placeholder="Buscar..."
+          autoComplete="off"
           className="bg-transparent rounded-full py-2 px-4 pl-12 w-full max-w-[70vw] focus:outline-none focus:shadow-outline"
         />
         <div className="absolute top-1/2 transform -translate-y-1/2 left-0 ml-3">
@@ -163,9 +164,9 @@ const Searcher = () => {
                 name="searcher"
                 type="text"
                 placeholder="Buscar..."
+                autoComplete="off"
                 className="bg-white rounded-full py-2 px-4 pl-12 w-full focus:outline-none focus:shadow-outline"
               />
-
               <RiCloseCircleFill
                 onClick={() => {
                   setSearch("");

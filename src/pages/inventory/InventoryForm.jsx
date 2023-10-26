@@ -12,6 +12,23 @@ import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
 import { Base_Inventory } from "../../context/Models";
 import MobileMenu from "../../components/mobileMenu/MobileMenu";
 
+const actions = [
+  {
+    id: 1,
+    label: "Guardar",
+    onClick: handleSubmitButton,
+    icon: <FaSave />,
+    color: "text-green-500",
+  },
+  {
+    id: 2,
+    label: "Descartar",
+    onClick: () => navigate(-1),
+    icon: <IoArrowBack />,
+    color: "text-red-500",
+  },
+];
+
 const InventoryForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -363,6 +380,15 @@ const InventoryForm = () => {
     }
   };
 
+  if (id) {
+    actions.push({
+      id: 3,
+      label: "Ver",
+      onClick: () => navigate(`/inventario/ver/${id}`),
+      icon: <FaEye />,
+      color: "text-blue-500",
+    });
+  }
   return (
     <div className="min-h-full w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
@@ -448,23 +474,22 @@ const InventoryForm = () => {
               titleForm={id ? "Editar inventario" : "Crear inventario"}
             />
           }
+          <div className="hidden md:flex justify-end">
+            <button
+              ref={submitRef}
+              type="submit"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            >
+              <span>
+                <FaSave className="text-white text-lg" />
+              </span>
+
+              {id ? "Actualizar" : "Guardar"}
+            </button>
+          </div>
         </form>
         <div className="md:hidden">
-          <MobileMenu
-            actions={[
-              { id: 1, label: "Guardar", onClick: handleSubmitButton },
-              {
-                id: 2,
-                label: "Cancelar",
-                onClick: () => navigate("/inventario"),
-              },
-              {
-                id: 3,
-                label: "Ver",
-                onClick: () => navigate(`/inventario/ver/${id}`),
-              },
-            ]}
-          />
+          <MobileMenu actions={actions} />
         </div>
       </div>
       {loading && <Loading />}
