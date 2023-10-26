@@ -10,6 +10,7 @@ import Loading from "../../utils/Loading";
 import { uploadImagesInventory } from "../../api/inventory.api";
 import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
 import { Base_Inventory } from "../../context/Models";
+import MobileMenu from "../../components/mobileMenu/MobileMenu";
 
 const InventoryForm = () => {
   const { id } = useParams();
@@ -447,20 +448,24 @@ const InventoryForm = () => {
               titleForm={id ? "Editar inventario" : "Crear inventario"}
             />
           }
-          <div className="flex justify-end">
-            <button
-              ref={submitRef}
-              type="submit"
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
-            >
-              <span>
-                <FaSave className="text-white text-lg" />
-              </span>
-
-              {id ? "Actualizar" : "Guardar"}
-            </button>
-          </div>
         </form>
+        <div className="md:hidden">
+          <MobileMenu
+            actions={[
+              { id: 1, label: "Guardar", onClick: handleSubmitButton },
+              {
+                id: 2,
+                label: "Cancelar",
+                onClick: () => navigate("/inventario"),
+              },
+              {
+                id: 3,
+                label: "Ver",
+                onClick: () => navigate(`/inventario/ver/${id}`),
+              },
+            ]}
+          />
+        </div>
       </div>
       {loading && <Loading />}
     </div>

@@ -15,6 +15,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Label, Modal } from "flowbite-react";
 import {
   MdCalendarMonth,
+  MdCheckCircle,
   MdNewReleases,
   MdOutlineCategory,
   MdOutlineInventory2,
@@ -197,7 +198,28 @@ const ShowInventory = () => {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-amber-500 justify-end">
+            <div className="w-full">
+              <Label htmlFor="" value="Status" />
+            </div>
+            <p
+              className={`${
+                inventario?.status == 1
+                  ? "bg-green-200 text-green-500"
+                  : inventario?.status == 2
+                  ? "bg-amber-200 text-amber-500"
+                  : inventario?.status == 3
+                  ? "bg-red-200 text-red-500"
+                  : null
+              } flex items-center font-bold gap-2 p-2`}
+            >
+              <span>
+                <MdCheckCircle className=" text-xl" />
+              </span>
+              {getFormatedStatus(inventario?.status)}
+            </p>
+          </div>
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="inventoryTipe" value="Tipo de inventario" />
             </div>
@@ -208,7 +230,7 @@ const ShowInventory = () => {
               {inventario.inventoryTypeId}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="inventoryBrand" value="Marca" />
             </div>
@@ -219,7 +241,7 @@ const ShowInventory = () => {
               {inventario.inventoryBrandId}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="inventoryMode" value="Modelo" />
             </div>
@@ -230,7 +252,7 @@ const ShowInventory = () => {
               {inventario.inventoryModelId}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="sn" value="Número Serial" />
             </div>
@@ -241,7 +263,7 @@ const ShowInventory = () => {
               {inventario.serialNumber}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="activo" value="Activo" />
             </div>
@@ -252,18 +274,7 @@ const ShowInventory = () => {
               {inventario.activo}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
-            <div className="w-full">
-              <Label htmlFor="" value="Status" />
-            </div>
-            <p className="text-gray-500 flex items-start gap-4">
-              <span>
-                <AiOutlinePoweroff className="text-blue-500 text-xl" />
-              </span>
-              {getFormatedStatus(inventario.status)}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="activo" value="Creado por" />
             </div>
@@ -274,7 +285,7 @@ const ShowInventory = () => {
               {inventario.createdBy}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="recepcionDate" value="Fecha de recepción" />
             </div>
@@ -285,7 +296,7 @@ const ShowInventory = () => {
               {formatLocalDate(inventario.recepcionDate) ?? "N/A"}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="altaDate" value="Fecha de alta" />
             </div>
@@ -296,7 +307,7 @@ const ShowInventory = () => {
               {formatLocalDate(inventario.altaDate)}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="bajaDate" value="Fecha de baja" />
             </div>
@@ -307,7 +318,7 @@ const ShowInventory = () => {
               {formatLocalDate(inventario.bajaDate) ?? "N/A"}
             </p>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="createdAt" value="Fecha de creación" />
               <p className="text-gray-500 flex items-start gap-4">
@@ -318,7 +329,7 @@ const ShowInventory = () => {
               </p>
             </div>
           </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300">
+          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="updatedAt" value="Ultima modificación" />
               <p className="text-gray-500 flex items-start gap-4">
