@@ -82,23 +82,25 @@ const Nav = ({ children }) => {
               <img src={Logo} className="h-10 hidden md:block" alt="Logo GAP" />
             </Link>
             {user?.user?.id && (
-              <div className="md:w-[35vw] md:pl-14">
-                <Searcher />
-              </div>
+              <>
+                <div className="md:w-[35vw] md:pl-14">
+                  <Searcher />
+                </div>
+                <div
+                  onClick={() => {
+                    navigate("/inventario/crear");
+                  }}
+                  className="flex justify-center items-center gap-1 p-2 h-10 w-10 md:w-auto md:min-w-10 border border-neutral-500 text-neutral-500 hover:border-white hover:text-white hover:bg-blue-600 rounded-full cursor-pointer transition ease-in-out duration-100"
+                >
+                  <span>
+                    <MdAdd className="text-3xl md:text-2xl" />
+                  </span>
+                  <p className="text-sm hidden xl:block font-semibold  whitespace-nowrap">
+                    Nuevo Inventario
+                  </p>
+                </div>
+              </>
             )}
-            <div
-              onClick={() => {
-                navigate("/inventario/crear");
-              }}
-              className="flex justify-center items-center gap-1 p-2 h-10 w-10 md:w-auto md:min-w-10 border border-neutral-500 text-neutral-500 hover:border-white hover:text-white hover:bg-blue-600 rounded-full cursor-pointer transition ease-in-out duration-100"
-            >
-              <span>
-                <MdAdd className="text-3xl md:text-2xl" />
-              </span>
-              <p className="text-sm hidden xl:block font-semibold  whitespace-nowrap">
-                Nuevo Inventario
-              </p>
-            </div>
           </div>
           <img src={LogoGuardian} className="h-10" alt="Logo Guardian" />
         </div>

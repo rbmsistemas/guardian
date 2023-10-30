@@ -485,7 +485,7 @@ const Inventory = () => {
             onShare={(id) => handleCopyToClipboard(id)}
             onShow={(id) => navigate(`/inventario/ver/${id}`)}
             onEdit={(id) => navigate(`/inventario/editar/${id}`)}
-            // onDelete={(id) => handleDelete(id)}
+            onDelete={(id) => handleDelete(id)}
             quantityResults={filters.quantityResults}
             sortByHeader
             setQuantityResults={(quantityResults) =>
