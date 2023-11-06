@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import Context from "../../../context/Context";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaSearch } from "react-icons/fa";
@@ -69,30 +69,32 @@ const Models = () => {
     });
   }, [location]);
 
-  useEffect(() => {
+  const memorizedData = useMemo(() => {
     let data = [];
     inventoryModels.forEach((model) => {
-      // count how many inventories have this model
-      const totalEntries = inventories.filter(
-        (inventory) => inventory.inventoryModelId === model.id
-      ).length;
-      const brand = inventoryBrands.find(
-        (brand) => brand.id === model.inventoryBrandId
-      );
-      const type = inventoryTypes.find(
-        (type) => type.id === model.inventoryTypeId
-      );
+      // const totalEntries = inventories.filter(
+      //   (inventory) => inventory.inventoryModelId === model.id
+      // ).length;
       data.push({
         id: { key: "id", value: model.id },
-        // imagen:{key:'imagen', value: model.image},
         modelo: { key: "name", value: model.name },
-        marca: { key: "inventoryBrandId", value: brand?.name ?? "" },
-        tipo: { key: "inventoryTypeId", value: type?.name ?? "" },
-        ["Equipos registrados"]: { key: "total", value: totalEntries ?? 0 },
+        marca: {
+          key: "inventoryBrandId",
+          value: model?.inventoryBrand?.name ?? "",
+        },
+        tipo: {
+          key: "inventoryTypeId",
+          value: model?.inventoryType?.name ?? "",
+        },
+        // ["Equipos registrados"]: { key: "total", value: totalEntries ?? 0 },
       });
     });
-    setModelsData(data);
+    return data;
   }, [inventoryModels, inventoryBrands, inventoryTypes]);
+
+  useEffect(() => {
+    setModelsData(memorizedData);
+  }, [memorizedData]);
 
   const handleValidateSearch = (e) => {
     const inputValue = e.target.value;
@@ -190,9 +192,9 @@ const Models = () => {
     paramsString = paramsString.slice(0, -1);
     navigate(`/inventario/modelos?${paramsString}`);
   };
-
+  console.log(inventoryModels);
   return (
-    <div className="p-5">
+    <div className="p-5 w-full">
       <div className="flex flex-col md:flex-row gap-4 md:justify-between items-center pb-2">
         <div className="flex gap-2 items-center">
           <Link to="/" className="text-gray-500 hover:text-gray-700">

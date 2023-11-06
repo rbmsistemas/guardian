@@ -40,11 +40,6 @@ const CustomeTable = ({
   const [modal, setModal] = useState(false);
   const [itemName, setItemName] = useState("");
   const [selectAll, setSelectAll] = useState(false);
-  // const [contextMenuVisible, setContextMenuVisible] = useState(false);
-  // const [contextMenuPosition, setContextMenuPosition] = useState({
-  //   top: 0,
-  //   left: 0,
-  // });
 
   const handleShowItem = (item) => {
     setItemSelected(item);
@@ -80,16 +75,6 @@ const CustomeTable = ({
       setResultsToExport([]);
     }
   };
-
-  // const handleRowCheckboxChange = (itemId) => {
-  //   const newSelectedElements = [...resultsToExport];
-  //   if (newSelectedElements.includes(itemId)) {
-  //     newSelectedElements.splice(newSelectedElements.indexOf(itemId), 1);
-  //   } else {
-  //     newSelectedElements.push(itemId);
-  //   }
-  //   setResultsToExport(newSelectedElements);
-  // };
 
   return (
     <>
