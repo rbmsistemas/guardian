@@ -144,7 +144,11 @@ const InventoryForm = () => {
           });
         }
 
-        if (data.recepcionDate) {
+        if (
+          data.recepcionDate !== null &&
+          data.recepcionDate !== undefined &&
+          data.recepcionDate !== ""
+        ) {
           setData({
             ...data,
             recepcionDate: new Date(data.recepcionDate),
@@ -222,7 +226,11 @@ const InventoryForm = () => {
           altaDate: getCurrentFormattedDate(),
         };
 
-        if (data.recepcionDate.length > 0) {
+        if (
+          data.recepcionDate !== null &&
+          data.recepcionDate !== undefined &&
+          data.recepcionDate !== ""
+        ) {
           sendData = {
             ...sendData,
             recepcionDate: new Date(data.recepcionDate),
