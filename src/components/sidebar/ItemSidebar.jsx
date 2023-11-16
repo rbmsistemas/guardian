@@ -50,8 +50,7 @@ const ItemSidebar = ({
   let isActive =
     (pathname === "/" && href === "/") ||
     pathname === href ||
-    pathname?.startsWith(`$'{href}/'`) ||
-    pathname?.includes(`$'{href}/'`);
+    pathname?.startsWith(`${href}/`);
 
   dropmenu.forEach((item) => {
     if (pathname === item.href) {

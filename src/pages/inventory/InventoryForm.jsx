@@ -36,6 +36,7 @@ const InventoryForm = () => {
   const successNotification = (message) => toast.success(message);
 
   const [data, setData] = useState(Base_Inventory());
+  const [selectedDetails, setSelectedDetails] = useState([]);
   const [images, setImages] = useState([]);
 
   const newInvetoryModels = [
@@ -63,6 +64,7 @@ const InventoryForm = () => {
       setVolver(true);
     } else {
       setData(Base_Inventory());
+      setImages([]);
       setVolver(false);
     }
     setLoading(false);
@@ -363,10 +365,25 @@ const InventoryForm = () => {
     }
   };
 
+  let detailsFields = [
+    {
+      name: "Ubicación",
+      id: 1,
+    },
+    {
+      name: "Factura",
+      id: 2,
+    },
+    {
+      name: "Orden de compra",
+      id: 3,
+    },
+  ];
+
   const actions = [
     {
       id: 1,
-      label: "Descartar",
+      label: "Volver",
       onClick: () => navigate(-1),
       icon: <IoArrowBack />,
       color: "text-red-500",
@@ -456,7 +473,6 @@ const InventoryForm = () => {
         </div>
       </div>
       <div className="flex flex-col pb-20">
-        <h2 className="text-xl font-bold"></h2>
         <form
           onSubmit={handleSubmit}
           className="flex h-full flex-col gap-5 mt-5"
@@ -472,6 +488,10 @@ const InventoryForm = () => {
               inventoryModels={newInvetoryModels}
               handleSelectInput={handleSelectInput}
               titleForm={id ? "Editar inventario" : "Crear inventario"}
+              detailsFields={detailsFields}
+              details={[]}
+              setSelectedDetails={setSelectedDetails}
+              selectedDetails={selectedDetails}
             />
           }
           <div className="hidden md:flex justify-end">

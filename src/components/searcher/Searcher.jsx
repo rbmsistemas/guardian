@@ -17,6 +17,7 @@ const Searcher = () => {
   } = useContext(Context);
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const inputMobileRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -93,6 +94,11 @@ const Searcher = () => {
     };
   }, []);
 
+  const handleShowSearcher = () => {
+    setShowSearcher(!showSearcher);
+    inputMobileRef.current.focus();
+  };
+
   const showMenu =
     searchedInventories?.length <= 0 ? (
       <div className="flex justify-start gap-1 items-center absolute md:whitespace-nowrap top-2 md:top-11 h-16 p-2 bg-white/90 w-full rounded-md shadow-md cursor-default ">
@@ -149,62 +155,66 @@ const Searcher = () => {
         )}
       </div>
       <div className="md:hidden relative w-full h-full">
-        <div className="flex justify-center items-center border border-neutral-500 rounded-full p-2 h-10 w-10">
-          <FaSearch
-            onClick={() => setShowSearcher(!showSearcher)}
-            className="text-xl"
-          />
+        <div className="flex justify-center items-center border border-neutral-500 rounded-full cursor-pointer p-2 h-10 w-10">
+          <FaSearch onClick={handleShowSearcher} className="text-xl" />
         </div>
-        {showSearcher && (
-          <div className="fixed top-0 left-0 w-[100vw] h-[100vh] bg-black/40 flex flex-col">
-            <div className="p-2 pt-8 flex justify-between items-center w-[100vw] relative">
-              <input
-                value={search}
-                onChange={handleValidateSearch}
-                id="searcher"
-                name="searcher"
-                type="text"
-                placeholder="Buscar..."
-                autoComplete="off"
-                className="bg-white rounded-full py-2 px-4 pl-12 w-full focus:outline-none focus:shadow-outline"
-              />
-              <RiCloseCircleFill
-                onClick={() => {
-                  setSearch("");
-                  setShowSearcher(!showSearcher);
-                }}
-                className="text-3xl cursor-pointer text-white"
-              />
-              {search.length >= 1 && (
-                <div
-                  onClick={handleClearInput}
-                  className="absolute top-19 right-11 mr-2 cursor-pointer hover:bg-neutral-400/30 rounded-full p-1 transition duration-150 ease-in-out"
-                >
-                  <LuDelete size={22} />
-                </div>
-              )}
-              <div className="absolute top-11 left-5">
-                <FaSearch />
+        {/* {showSearcher && ( */}
+        <div
+          className={`${
+            showSearcher
+              ? "fixed top-0 left-0 w-[100vw] h-[100vh] bg-black/40 flex flex-col"
+              : "hidden"
+          }`}
+        >
+          <div className="p-2 pt-8 flex justify-between items-center w-[100vw] relative">
+            <input
+              ref={inputMobileRef}
+              value={search}
+              onChange={handleValidateSearch}
+              id="searcher"
+              name="searcher"
+              type="text"
+              placeholder="Buscar..."
+              autoComplete="off"
+              className="bg-white rounded-full py-2 px-4 pl-12 w-full focus:outline-none focus:shadow-outline"
+            />
+            <RiCloseCircleFill
+              onClick={() => {
+                setSearch("");
+                setShowSearcher(!showSearcher);
+              }}
+              className="text-4xl cursor-pointer text-white"
+            />
+            {search.length >= 1 && (
+              <div
+                onClick={handleClearInput}
+                className="absolute top-19 right-11 mr-2 cursor-pointer hover:bg-neutral-400/30 rounded-full p-1 transition duration-150 ease-in-out"
+              >
+                <LuDelete size={22} />
               </div>
-            </div>
-            <div className="flex justify-center items-center h-56">
-              {isLoading ? (
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
-              ) : (
-                <div className="animate-ping rounded-full h-10 w-10 border-b-2 border-white"></div>
-              )}
-            </div>
-            <div className="absolute top-20 left-0 w-[95vw] p-2">
-              {isLoading ? (
-                <div className="flex items-center justify-center absolute top-11 h-16 bg-white/90 w-full rounded-md shadow-md cursor-default">
-                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gap-orange"></div>
-                </div>
-              ) : (
-                showDropdown && showMenu
-              )}
+            )}
+            <div className="absolute top-11 left-5">
+              <FaSearch />
             </div>
           </div>
-        )}
+          <div className="flex justify-center items-center h-56">
+            {isLoading ? (
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
+            ) : (
+              <div className="animate-ping rounded-full h-10 w-10 border-b-2 border-white"></div>
+            )}
+          </div>
+          <div className="absolute top-20 left-0 w-[95vw] p-2">
+            {isLoading ? (
+              <div className="flex items-center justify-center absolute top-11 h-16 bg-white/90 w-full rounded-md shadow-md cursor-default">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gap-orange"></div>
+              </div>
+            ) : (
+              showDropdown && showMenu
+            )}
+          </div>
+        </div>
+        {/* )} */}
       </div>
     </div>
   );

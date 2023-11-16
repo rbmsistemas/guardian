@@ -134,7 +134,7 @@ const Inventory = () => {
     }
     setInventoriesData(formatInventories);
   }, [inventories, inventoryModels, inventoryBrands, inventoryTypes]);
-  console.log(inventoriesData);
+
   const handleValidateSearch = (e) => {
     const inputValue = e.target.value;
 

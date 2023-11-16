@@ -1,14 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Label, Select } from "flowbite-react";
-import { MdNewReleases, MdOutlineCategory } from "react-icons/md";
+import {
+  MdNewReleases,
+  MdOutlineCategory,
+  MdOutlineInventory,
+} from "react-icons/md";
 import CameraComponent from "../../utils/CameraComponent";
 import { BiDevices } from "react-icons/bi";
 import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
-import { Tb3DCubeSphere } from "react-icons/tb";
+import { Tb3DCubeSphere, TbListDetails } from "react-icons/tb";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import AutocompleteInput from "../../components/inputs/AutocompleteInput";
 import TextInput from "../../components/inputs/TextInput";
+import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
+import CustomeTable from "../../components/table/CustomeTable";
 
 const InventoryFields = ({
   body = {
@@ -34,6 +40,10 @@ const InventoryFields = ({
   inventoryTypes = [],
   inventoryBrands = [],
   inventoryModels = [],
+  details = [],
+  detailsFields = [],
+  selectedDetails = [],
+  setSelectedDetails,
   titleForm,
   handleSelectInput,
 }) => {
@@ -43,10 +53,11 @@ const InventoryFields = ({
     if (body.inventoryModelId != "0") setBody({ ...body, otherModel: "" });
   }, [body.inventoryTypeId, body.inventoryBrandId, body.inventoryModelId]);
 
-  return (
-    <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start p-5 bg-white rounded-lg">
+  const [showData, setShowData] = useState("general");
+
+  let generalData = (
+    <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start">
       <div className="col-span-12">
-        <h2 className="text-xl font-bold text-blue-600">{titleForm}</h2>
         <p className=" text-gray-500">
           Llena los campos para agregar un nuevo inventario. Los campos marcados
           con <span className="text-red-500">*</span> son obligatorios.
@@ -297,12 +308,70 @@ const InventoryFields = ({
           onChange={(e) => setBody({ ...body, comments: e })}
         />
       </div>
-
       <div className="col-span-12 h-fit">
         <div className="mb-2 ">
           <Label value="Agregar imagenes" />
         </div>
         <CameraComponent capturedImage={images} setCapturedImage={setImages} />
+      </div>
+    </div>
+  );
+
+  let detailsData = (
+    <div className="w-full h-full flex flex-col md:grid md:grid-cols-3">
+      <div className="col-span-1 p-2">
+        <p className=" text-gray-500">
+          Selecciona los campos que deseas agregar al inventario.
+        </p>
+        <div className="w-full flex flex-col gap-2">
+          <CustomeTable
+            data={{
+              orden: {
+                key: "orden",
+                value: 1,
+              },
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="w-full h-full bg-white rounded-lg">
+      <div className="grid grid-cols-2 w-full">
+        <button
+          type="button"
+          className={`text-sm md:text-base ${
+            showData == "general"
+              ? "border-b-2 border-blue-600 text-blue-600 font-semibold"
+              : "text-neutral-500 border-b-2 border-neutral-300"
+          } w-full flex justify-center items-center px-4 py-2`}
+          onClick={() => setShowData("general")}
+        >
+          <span className="pr-2">
+            <MdOutlineInventory className="w-5 h-5" />
+          </span>
+          {titleForm}
+        </button>
+        <button
+          type="button"
+          className={`text-sm md:text-base ${
+            showData == "details"
+              ? "border-b-2 border-blue-600 text-blue-600 font-semibold"
+              : "text-neutral-500 border-b-2 border-neutral-300"
+          } w-full flex justify-center items-center px-4 py-2`}
+          onClick={() => setShowData("details")}
+        >
+          <span className="pr-2">
+            <TbListDetails className="w-5 h-5" />
+          </span>
+          Detalles
+        </button>
+      </div>
+      <div className="w-full h-full p-5">
+        {showData == "general" && generalData}
+        {showData == "details" && detailsData}
       </div>
     </div>
   );

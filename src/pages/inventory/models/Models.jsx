@@ -192,7 +192,7 @@ const Models = () => {
     paramsString = paramsString.slice(0, -1);
     navigate(`/inventario/modelos?${paramsString}`);
   };
-  console.log(inventoryModels);
+
   return (
     <div className="p-5 w-full">
       <div className="flex flex-col md:flex-row gap-4 md:justify-between items-center pb-2">
