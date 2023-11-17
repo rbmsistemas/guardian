@@ -339,6 +339,7 @@ const InventoryForm = () => {
             setTimeout(() => {
               setData(Base_Inventory());
               setImages([]);
+              setSelectedDetails(Base_InventoryField);
 
               navigate(`/inventario/crear`);
             }, 2000);
