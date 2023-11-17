@@ -184,12 +184,17 @@ const CustomeTable = ({
                 >
                   {exportResults && (
                     <Table.Cell
+                      className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${
+                        resultsToExport.includes(item.id.value) &&
+                        "bg-purple-500 text-white"
+                      }
+                  `}
                       style={{ paddingTop: "10px", paddingBottom: "10px" }}
                     >
                       <div
                         className={`cursor-pointer border-gray-300 rounded-lg w-8 h-8 p-1 ${
                           resultsToExport.includes(item.id.value)
-                            ? "text-purple-500 border-purple-500 border-2"
+                            ? "text-white border-white border-2"
                             : "text-gray-500 border"
                         } hover:scale-110 transition ease-in-out duration-200 flex items-center justify-center `}
                         onClick={() => handleSelectElement(item.id.value)}
@@ -206,6 +211,11 @@ const CustomeTable = ({
                     key === "id" && !showId ? null : showImagen &&
                       key === "imagen" ? (
                       <Table.Cell
+                        className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${
+                          resultsToExport.includes(item.id.value) &&
+                          "bg-purple-500 text-white"
+                        }
+                      `}
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
                         key={key}
                       >
@@ -218,6 +228,11 @@ const CustomeTable = ({
                       </Table.Cell>
                     ) : key === "status" ? (
                       <Table.Cell
+                        className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${
+                          resultsToExport.includes(item.id.value) &&
+                          "bg-purple-500 text-white"
+                        }
+                    `}
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
                         key={key}
                       >
@@ -238,6 +253,11 @@ const CustomeTable = ({
                     ) : (
                       <Table.Cell
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                        className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${
+                          resultsToExport.includes(item.id.value) &&
+                          "bg-purple-500 text-white"
+                        }
+                    `}
                         key={key}
                       >
                         {item[key].value}
@@ -247,11 +267,14 @@ const CustomeTable = ({
                   {onShow || onEdit || onDelete ? (
                     <Table.Cell
                       style={{ paddingTop: "10px", paddingBottom: "10px" }}
-                      className="flex gap-2 justify-center"
+                      className={`flex gap-2 justify-center ${
+                        resultsToExport.includes(item.id.value) &&
+                        "bg-purple-500 text-white"
+                      }`}
                     >
                       {onShare && (
                         <div
-                          className="cursor-pointer border border-gap-orange text-gap-orange p-2 rounded-lg hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="cursor-pointer border bg-white border-gap-orange text-gap-orange p-2 rounded-lg hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           onClick={() => onShare(item.id.value)}
                         >
                           <FaShare className="text-xl" />
@@ -259,7 +282,7 @@ const CustomeTable = ({
                       )}
                       {onShow && (
                         <div
-                          className="cursor-pointer border border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="cursor-pointer border bg-white border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           onClick={() => onShow(item.id.value)}
                         >
                           <FaEye className="text-xl" />
@@ -267,7 +290,7 @@ const CustomeTable = ({
                       )}
                       {onEdit && (
                         <div
-                          className="cursor-pointer border border-gap-primary text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="cursor-pointer border bg-white border-gap-primary text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           onClick={() => onEdit(item.id.value)}
                         >
                           <FaRegEdit className="text-xl" />
@@ -276,7 +299,7 @@ const CustomeTable = ({
                       {onDelete &&
                         item?.id !== "00000000-0000-0000-0000-000000000000" && (
                           <div
-                            className="cursor-pointer border border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                            className="cursor-pointer border bg-white border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
                             onClick={() => onDelete(item.id.value)}
                           >
                             <FaRegTrashAlt className="text-xl" />

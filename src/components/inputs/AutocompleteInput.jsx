@@ -41,7 +41,7 @@ export const DropdownList = ({ options, selectedOption, onSelect }) => {
   return (
     <div
       style={{ left: dropdownPosition.left }}
-      className="mt-2 w-full whitespace-nowrap md:w-max max-h-[40vh] overflow-y-auto overflow-x-hidden border border-gray-300 bg-white rounded-md shadow-lg absolute z-30"
+      className="mt-2 min-w-full w-full whitespace-nowrap md:w-max max-h-[44vh] overflow-y-auto overflow-x-hidden border border-gray-300 bg-white rounded-md shadow-lg absolute z-30"
       ref={dropdownRef}
     >
       {options.map((option) => (
@@ -49,12 +49,13 @@ export const DropdownList = ({ options, selectedOption, onSelect }) => {
           key={option.value}
           onClick={() => onSelect(option)}
           className={classNames(
-            "py-2 px-3 cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
+            "py-2 capitalize font-medium px-3 w-full cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
             {
               "text-green-500": "0" == option.value,
               "bg-blue-500 text-white":
                 selectedOption && selectedOption.value === option.value,
-              "hover:bg-yellow-300": selectedOption?.value !== option.value,
+              "hover:bg-purple-800 hover:text-white":
+                selectedOption?.value !== option.value,
             }
           )}
         >
@@ -100,7 +101,9 @@ const AutocompleteInput = ({
         label: "Otro",
         value: "0",
       };
-      setFilteredData([...data, otherOption]);
+      const newData = [...data];
+      newData.unshift(otherOption);
+      setFilteredData(newData);
     } else {
       setFilteredData(data);
     }
@@ -205,7 +208,7 @@ const AutocompleteInput = ({
           ref={inputRef}
           required={required}
           disabled={disabled}
-          readOnly={cancelWrite} // Utiliza readOnly en lugar de disabled
+          readOnly={cancelWrite}
         />
         <div
           className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${

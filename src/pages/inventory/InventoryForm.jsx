@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 import Loading from "../../utils/Loading";
 import { uploadImagesInventory } from "../../api/inventory.api";
 import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
-import { Base_Inventory } from "../../context/Models";
+import { Base_Inventory, Base_InventoryField } from "../../context/Models";
 import MobileMenu from "../../components/mobileMenu/MobileMenu";
 
 const InventoryForm = () => {
@@ -27,6 +27,7 @@ const InventoryForm = () => {
     getValidatedActivo,
     inventory,
     user,
+    allInventoryFields,
   } = useContext(Context);
 
   const [volver, setVolver] = useState(false);
@@ -38,7 +39,6 @@ const InventoryForm = () => {
   const [data, setData] = useState(Base_Inventory());
   const [selectedDetails, setSelectedDetails] = useState([]);
   const [images, setImages] = useState([]);
-
   const newInvetoryModels = [
     ...inventoryModels?.map((model) => ({
       value: model.id,
@@ -65,6 +65,7 @@ const InventoryForm = () => {
     } else {
       setData(Base_Inventory());
       setImages([]);
+      setSelectedDetails(Base_InventoryField);
       setVolver(false);
     }
     setLoading(false);
@@ -74,6 +75,7 @@ const InventoryForm = () => {
     if (id && inventory.id) {
       setData(Base_Inventory(inventory, inventoryModels));
       setImages(inventory?.images || []);
+      setSelectedDetails(inventory?.details || Base_InventoryField);
     }
   }, [inventory]);
 
@@ -157,6 +159,24 @@ const InventoryForm = () => {
           });
         }
 
+        let newSelectedDetails = [];
+        selectedDetails.forEach((detail) => {
+          if (detail.key !== "" && detail.value !== "") {
+            newSelectedDetails.push(detail);
+          } else if (
+            detail.key ===
+            Base_InventoryField.find((field) => field.key === detail.key)?.key
+          ) {
+            newSelectedDetails.push(detail);
+          }
+        });
+
+        newSelectedDetails.forEach((detail) => {
+          if (detail.id) {
+            delete detail.id;
+          }
+        });
+
         if (
           data.serialNumber !== inventory.serialNumber &&
           data.activo !== inventory.activo
@@ -179,6 +199,7 @@ const InventoryForm = () => {
                 ...data,
                 images: arrayImages,
                 recepcionDate: data.recepcionDate ?? null,
+                details: newSelectedDetails,
               },
               user.token
             );
@@ -198,7 +219,7 @@ const InventoryForm = () => {
         } else {
           const res = await updateInventory(
             id,
-            { ...data, images: arrayImages },
+            { ...data, images: arrayImages, details: newSelectedDetails },
             user.token
           );
           if (!res.id) {
@@ -251,6 +272,28 @@ const InventoryForm = () => {
           };
         }
 
+        let newSelectedDetails = [];
+        selectedDetails.forEach((detail) => {
+          if (detail.key !== "" || detail.value !== "") {
+            newSelectedDetails.push(detail);
+          } else if (
+            detail.key ===
+            Base_InventoryField.find((field) => field.key === detail.key)?.key
+          ) {
+            newSelectedDetails.push(detail);
+          }
+        });
+
+        newSelectedDetails.forEach((detail) => {
+          if (detail.id) {
+            delete detail.id;
+          }
+        });
+        sendData = {
+          ...sendData,
+          details: newSelectedDetails,
+        };
+
         let existSN = true;
         if (data.activo) {
           existSN = await handleValidateSerialNumber(data.serialNumber);
@@ -290,7 +333,6 @@ const InventoryForm = () => {
                 notificationError(
                   "Error al cargar las imagenes del inventario."
                 );
-                console.log(response);
               }
             }
             successNotification("Inventario creado correctamente");
@@ -323,7 +365,6 @@ const InventoryForm = () => {
       if (imageRes?.status > 299) {
         setLoading(false);
         notificationError("Error al actualizar la imagen");
-        console.log(imageRes);
       }
       return imageRes.data;
     } catch (error) {
@@ -372,21 +413,6 @@ const InventoryForm = () => {
         break;
     }
   };
-
-  let detailsFields = [
-    {
-      name: "Ubicación",
-      id: 1,
-    },
-    {
-      name: "Factura",
-      id: 2,
-    },
-    {
-      name: "Orden de compra",
-      id: 3,
-    },
-  ];
 
   const actions = [
     {
@@ -496,8 +522,7 @@ const InventoryForm = () => {
               inventoryModels={newInvetoryModels}
               handleSelectInput={handleSelectInput}
               titleForm={id ? "Editar inventario" : "Crear inventario"}
-              detailsFields={detailsFields}
-              details={[]}
+              inventoryFields={allInventoryFields}
               setSelectedDetails={setSelectedDetails}
               selectedDetails={selectedDetails}
             />

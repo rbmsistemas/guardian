@@ -10,7 +10,7 @@ const config = {
   },
 };
 
-// get inventary
+// get inventory
 export const handleGetInventories = async (token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -56,7 +56,7 @@ export const handleGetInventoriesBySearch = async (body, token) => {
   }
 };
 
-// get inventary
+// get inventory
 export const handleGetInventoryById = async (id, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -69,7 +69,7 @@ export const handleGetInventoryById = async (id, token) => {
   }
 };
 
-// create inventary
+// create inventory
 export const handleCreateInventory = async (token, data) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -121,7 +121,7 @@ export const handleValidateActivo = async (data, token) => {
   }
 };
 
-// update inventary
+// update inventory
 export const handleUpdateInventory = async (token, id, data) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -139,7 +139,7 @@ export const handleUpdateInventory = async (token, id, data) => {
   }
 };
 
-// delete inventary
+// delete inventory
 export const handleDeleteInventory = async (token, id) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -155,7 +155,7 @@ export const handleDeleteInventory = async (token, id) => {
   }
 };
 
-// get inventaryTypes
+// get inventoryTypes
 export const handleGetInventoryTypes = async (token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -168,7 +168,7 @@ export const handleGetInventoryTypes = async (token) => {
   }
 };
 
-// get inventaryModels
+// get inventoryModels
 export const handleGetInventoryModels = async (token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -181,7 +181,7 @@ export const handleGetInventoryModels = async (token) => {
   }
 };
 
-// get inventaryModelbyId
+// get inventoryModelbyId
 export const handleGetInventoryModelById = async (id, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -197,7 +197,7 @@ export const handleGetInventoryModelById = async (id, token) => {
   }
 };
 
-// get inventaryModelysearch
+// get inventoryModelysearch
 export const handleGetInventoryModelByParams = async (body, token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -215,7 +215,7 @@ export const handleGetInventoryModelByParams = async (body, token) => {
   }
 };
 
-// get inventaryBrands
+// get inventoryBrands
 export const handleGetInventoryBrands = async (token) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";
@@ -237,6 +237,83 @@ export const uploadImagesInventory = async (data, token) => {
     const response = await axios.post(
       `${urlEnv}/api/uploads/inventory`,
       data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// get inventoryField
+export const handleGetInventoryFields = async (token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  try {
+    const response = await axios.get(`${urlEnv}/api/inventoryFields`, config);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleGetInventoryFieldById = async (id, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  try {
+    const response = await axios.get(
+      `${urlEnv}/api/inventoryFields/${id}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleCreateInventoryField = async (token, data) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/inventoryFields`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleUpdateInventoryField = async (token, id, data) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.patch(
+      `${urlEnv}/api/inventoryFields/${id}`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleDeleteInventoryField = async (token, id) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  try {
+    const response = await axios.delete(
+      `${urlEnv}/api/inventoryFields/${id}`,
       config
     );
     return response;

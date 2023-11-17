@@ -26,6 +26,11 @@ import {
   GET_INVENTORIES_BY_PARAMS,
   GET_INVENTORIES_BY_SEARCH,
   GET_INVENTORY_MODEL_BY_ID,
+  GET_INVENTORY_FIELDS,
+  GET_INVENTORY_FIELD_BY_ID,
+  POST_INVENTORY_FIELD,
+  PATCH_INVENTORY_FIELD,
+  DELETE_INVENTORY_FIELD,
 } from "./Types";
 
 export default (state, action) => {
@@ -167,6 +172,33 @@ export default (state, action) => {
         ...state,
         inventoryModel: payload,
       };
+
+    case GET_INVENTORY_FIELDS:
+      return {
+        ...state,
+        allInventoryFields: payload,
+      };
+    case GET_INVENTORY_FIELD_BY_ID:
+      return {
+        ...state,
+        inventoryField: payload,
+      };
+    case POST_INVENTORY_FIELD:
+      return {
+        ...state,
+        inventoryField: payload,
+      };
+    case PATCH_INVENTORY_FIELD:
+      return {
+        ...state,
+        inventoryField: payload,
+      };
+    case DELETE_INVENTORY_FIELD:
+      return {
+        ...state,
+        inventoryFields: payload,
+      };
+
     default:
       return state;
   }

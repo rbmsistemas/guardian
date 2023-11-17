@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Label, Select } from "flowbite-react";
 import {
+  MdAdd,
+  MdClose,
   MdNewReleases,
   MdOutlineCategory,
   MdOutlineInventory,
@@ -13,8 +15,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import AutocompleteInput from "../../components/inputs/AutocompleteInput";
 import TextInput from "../../components/inputs/TextInput";
-import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
-import CustomeTable from "../../components/table/CustomeTable";
+import { Base_InventoryField } from "../../context/Models";
 
 const InventoryFields = ({
   body = {
@@ -40,8 +41,7 @@ const InventoryFields = ({
   inventoryTypes = [],
   inventoryBrands = [],
   inventoryModels = [],
-  details = [],
-  detailsFields = [],
+  inventoryFields = [],
   selectedDetails = [],
   setSelectedDetails,
   titleForm,
@@ -54,6 +54,29 @@ const InventoryFields = ({
   }, [body.inventoryTypeId, body.inventoryBrandId, body.inventoryModelId]);
 
   const [showData, setShowData] = useState("general");
+
+  const handleOtherField = (e) => {
+    if (e) {
+      if (e?.value == "0") {
+        setSelectedDetails([
+          ...selectedDetails,
+          { id: e.value, key: "", value: "" },
+        ]);
+      } else {
+        const keyExists = selectedDetails.some(
+          (detail) => detail.key === e.label
+        );
+        if (!keyExists) {
+          setSelectedDetails([
+            ...selectedDetails,
+            { id: e.value, key: e.label, value: "" },
+          ]);
+        }
+      }
+
+      document.getElementById("inventoryField").value = "";
+    }
+  };
 
   let generalData = (
     <div className="grid grid-cols-12 w-full h-full gap-3 justify-center items-start">
@@ -318,21 +341,121 @@ const InventoryFields = ({
   );
 
   let detailsData = (
-    <div className="w-full h-full flex flex-col md:grid md:grid-cols-3">
-      <div className="col-span-1 p-2">
-        <p className=" text-gray-500">
-          Selecciona los campos que deseas agregar al inventario.
-        </p>
-        <div className="w-full flex flex-col gap-2">
-          <CustomeTable
-            data={{
-              orden: {
-                key: "orden",
-                value: 1,
-              },
-            }}
-          />
-        </div>
+    <div className="w-full h-full">
+      <p className=" text-gray-500 pb-4">
+        Selecciona los campos que deseas agregar al inventario.
+      </p>
+      <AutocompleteInput
+        id={"inventoryField"}
+        name={"inventoryField"}
+        placeholder="Selecciona un campo"
+        data={inventoryFields?.map((item) => ({
+          value: item.id,
+          label: item?.name ?? item?.key,
+        }))}
+        value={""}
+        onChange={(e) => handleOtherField(e ?? null)}
+        icon={TbListDetails}
+        isClearable
+        isOtherOption={selectedDetails.some((x) => x.id == "0") ? false : true}
+      />
+      <div className="w-full flex flex-col gap-2 py-4">
+        <table className="w-full">
+          <thead className="bg-neutral-300 text-sm md:text-base text-neutral-700">
+            <tr className="border-b border-gray-200">
+              <th className="text-left p-3">Campo</th>
+              <th className="text-center p-3">Valor</th>
+              <th className="text-center p-3">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedDetails.map((item, index) => (
+              <tr key={index} className="border-t border-gray-200">
+                <td className="text-left text-xs md:text-base">
+                  {item.id == "0" ? (
+                    <TextInput
+                      id={item.key}
+                      type="text"
+                      value={item.key}
+                      onChange={(e) => {
+                        let newSelectedDetails = [...selectedDetails];
+                        newSelectedDetails[index].key = e.target.value;
+                        setSelectedDetails(newSelectedDetails);
+                      }}
+                      isClearable
+                    />
+                  ) : (
+                    <span className="uppercase font-medium p-3">
+                      {item.key}
+                    </span>
+                  )}
+                </td>
+                <td className="text-center p-2">
+                  <TextInput
+                    id={item.key}
+                    type="text"
+                    placeholder={item.key}
+                    value={item.value}
+                    onChange={(e) => {
+                      let newSelectedDetails = [...selectedDetails];
+                      newSelectedDetails[index].value = e.target.value;
+                      setSelectedDetails(newSelectedDetails);
+                    }}
+                    isClearable
+                  />
+                </td>
+                <td className="text-center p-2 whitespace-nowrap">
+                  {item.id == "0" && (
+                    <button
+                      type="button"
+                      className="inline-flex justify-center items-center gap-2 text-blue-500 border bordere-blue-500 px-2 py-1 rounded-md text-sm md:text-base hover:border-blue-500 hover:bg-blue-500 hover:text-white transition ease-in-out duration-100"
+                      onClick={() => {
+                        let newInventoryFields = [...inventoryFields];
+                        newInventoryFields.push({
+                          id: selectedDetails.length + 1,
+                          key: item.key,
+                        });
+                        setSelectedDetails([
+                          ...selectedDetails.filter((x) => x.id != "0"),
+                          {
+                            id: selectedDetails.length,
+                            key: item.key,
+                            value: item.value,
+                          },
+                        ]);
+                      }}
+                      style={{ transition: "background-color 0.5s ease" }}
+                    >
+                      <span>
+                        <MdAdd className="w-5 h-5 " />
+                      </span>
+                      <span className="hidden md:block">Agregar</span>
+                    </button>
+                  )}
+                  {!Base_InventoryField.some(
+                    (element) => element.key === item.key
+                  ) && (
+                    <button
+                      type="button"
+                      className="ml-2 inline-flex justify-center items-center gap-2 text-red-500 border bordere-red-500 px-2 py-1 rounded-md text-sm md:text-base hover:border-red-500 hover:bg-red-500 hover:text-white transition ease-in-out duration-100"
+                      onClick={() => {
+                        setSelectedDetails(
+                          selectedDetails.filter((x) => x.id !== item.id)
+                        );
+                      }}
+                      style={{ transition: "background-color 0.5s ease" }}
+                    >
+                      <span>
+                        <MdClose className="w-5 h-5 " />
+                      </span>
+                      <span className="hidden md:block">Eliminar</span>
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -342,11 +465,11 @@ const InventoryFields = ({
       <div className="grid grid-cols-2 w-full">
         <button
           type="button"
-          className={`text-sm md:text-base ${
+          className={`text-sm md:text-base font-bold ${
             showData == "general"
               ? "border-b-2 border-blue-600 text-blue-600 font-semibold"
               : "text-neutral-500 border-b-2 border-neutral-300"
-          } w-full flex justify-center items-center px-4 py-2`}
+          } w-full flex justify-center items-center px-4 py-3`}
           onClick={() => setShowData("general")}
         >
           <span className="pr-2">
@@ -356,11 +479,11 @@ const InventoryFields = ({
         </button>
         <button
           type="button"
-          className={`text-sm md:text-base ${
+          className={`text-sm md:text-base font-bold ${
             showData == "details"
               ? "border-b-2 border-blue-600 text-blue-600 font-semibold"
               : "text-neutral-500 border-b-2 border-neutral-300"
-          } w-full flex justify-center items-center px-4 py-2`}
+          } w-full flex justify-center items-center px-4 py-3`}
           onClick={() => setShowData("details")}
         >
           <span className="pr-2">
@@ -369,7 +492,7 @@ const InventoryFields = ({
           Detalles
         </button>
       </div>
-      <div className="w-full h-full p-5">
+      <div className="w-full h-full p-3 md:p-5">
         {showData == "general" && generalData}
         {showData == "details" && detailsData}
       </div>
@@ -378,3 +501,23 @@ const InventoryFields = ({
 };
 
 export default InventoryFields;
+
+// {detailsFields.map((item, index) => (
+//   <div className="flex items-center gap-2" key={index}>
+//     <input
+//       type="checkbox"
+//       className="w-5 h-5 rounded-md border border-gray-300"
+//       checked={selectedDetails?.some((x) => x.name == item.name)}
+//       onChange={() => {
+//         if (selectedDetails?.some((x) => x.name == item.name)) {
+//           setSelectedDetails(
+//             selectedDetails.filter((x) => x.id != item.id)
+//           );
+//         } else {
+//           setSelectedDetails([...selectedDetails, item]);
+//         }
+//       }}
+//     />
+//     <p className="text-sm">{item.name}</p>
+//   </div>
+// ))}

@@ -52,7 +52,7 @@ const TextInput = ({
           }
           disabled={disabled}
           className={classNames(
-            "w-full py-3 pr-3   focus:outline-none focus:border-blue-500",
+            "w-full py-3 pr-3 capitalize focus:outline-none focus:border-blue-500",
             { "pl-10": Icon },
             `${
               disabled

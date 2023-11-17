@@ -35,6 +35,11 @@ import {
   handleValidateActivo,
   handleGetInventoryModelById,
   handleGetInventoriesBySearch,
+  handleGetInventoryFields,
+  handleGetInventoryFieldById,
+  handleCreateInventoryField,
+  handleUpdateInventoryField,
+  handleDeleteInventoryField,
 } from "../api/inventory.api";
 import {
   POST_SIGNIN,
@@ -64,6 +69,11 @@ import {
   GET_INVENTORIES_BY_SEARCH,
   GET_USERS,
   GET_INVENTORY_MODEL_BY_ID,
+  GET_INVENTORY_FIELDS,
+  GET_INVENTORY_FIELD_BY_ID,
+  POST_INVENTORY_FIELD,
+  PATCH_INVENTORY_FIELD,
+  DELETE_INVENTORY_FIELD,
 } from "./Types";
 import {
   Base_Company,
@@ -72,6 +82,7 @@ import {
   Base_InventoryModel,
   Base_InventoryType,
   Base_User,
+  Base_InventoryField,
 } from "./Models";
 import { handleGetAllUsers } from "../api/users.api";
 
@@ -90,6 +101,8 @@ const AppProvider = (props) => {
     activity: {},
     companies: [Base_Company],
     company: Base_Company,
+    allInventoryFields: Base_InventoryField,
+    inventoryField: {},
   };
   const [state, dispatch] = useReducer(Reducer, initialState);
 
@@ -565,14 +578,6 @@ const AppProvider = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (state.user.token) {
-  //     getActivities(state.user.token);
-  //   }
-  // }, [state.user.token, state.activity]);
-
-  // end activities actions
-
   const getCompanies = async (token) => {
     try {
       const response = await handleGetCompanies(token);
@@ -682,16 +687,115 @@ const AppProvider = (props) => {
     }
   };
 
+  const getInventoryFields = async () => {
+    try {
+      const response = await handleGetInventoryFields(state.user.token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventoryFields } = await response.data;
+      dispatch({
+        type: GET_INVENTORY_FIELDS,
+        payload: inventoryFields,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const getInventoryFieldById = async (id) => {
+    try {
+      const response = await handleGetInventoryFieldById(id, state.user.token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventoryField } = await response.data;
+
+      dispatch({
+        type: GET_INVENTORY_FIELD_BY_ID,
+        payload: inventoryField,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const createInventoryField = async (data) => {
+    try {
+      const response = await handleCreateInventoryField(data, state.user.token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventoryField } = await response.data;
+
+      dispatch({
+        type: POST_INVENTORY_FIELD,
+        payload: inventoryField,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const updateInventoryField = async (id, data) => {
+    try {
+      const response = await handleUpdateInventoryField(
+        id,
+        data,
+        state.user.token
+      );
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventoryField } = await response.data;
+
+      dispatch({
+        type: PATCH_INVENTORY_FIELD,
+        payload: inventoryField,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  const deleteInventoryField = async (id) => {
+    try {
+      const response = await handleDeleteInventoryField(id, state.user.token);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventoryField } = await response.data;
+
+      dispatch({
+        type: DELETE_INVENTORY_FIELD,
+        payload: inventoryField,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   useEffect(() => {
-    if (state.user.token) {
+    if (state.user?.token) {
       getUsers();
       getCompanies(state.user.token);
       getInventories(state.user.token);
       getInventoryTypes(state.user.token);
       getInventoryBrands(state.user.token);
       getInventoryModels(state.user.token);
+      getInventoryFields(state.user.token);
     }
-  }, [state.user.token, state.company, state.inventory, state.inventaryModels]);
+  }, [state.company, state.inventory, state.inventaryModels, state?.user]);
 
   return (
     <Context.Provider
@@ -709,6 +813,8 @@ const AppProvider = (props) => {
         inventories: state.inventories,
         inventory: state.inventory,
         searchedInventories: state.searchedInventories,
+        allInventoryFields: state.allInventoryFields,
+        inventoryField: state.inventoryField,
         getUsers,
         handleLogin,
         postSignup,
@@ -739,6 +845,11 @@ const AppProvider = (props) => {
         getInventoriesBySearch,
         getValidatedSerialNumber,
         getValidatedActivo,
+        getInventoryFields,
+        getInventoryFieldById,
+        createInventoryField,
+        updateInventoryField,
+        deleteInventoryField,
       }}
     >
       {props.children}

@@ -16,6 +16,7 @@ export const Base_Inventory = (inventory = {}, models = []) => {
       altaDate: Date.now(),
       bajaDate: null,
       recepcionDate: "",
+      details: Base_InventoryField,
       createdBy: "",
     };
   } else {
@@ -40,6 +41,7 @@ export const Base_Inventory = (inventory = {}, models = []) => {
       altaDate: inventory.altaDate || Date.now(),
       bajaDate: inventory.bajaDate || null,
       recepcionDate: inventory.recepcionDate || null,
+      details: inventory.details || Base_InventoryField,
       createdBy: inventory.createdBy || "",
       createdAt: inventory.createdAt || Date.now(),
       updatedAt: inventory.updatedAt || Date.now(),
@@ -98,3 +100,10 @@ export const Base_Company = {
   createdAt: Date.now(),
   updatedAt: Date.now(),
 };
+
+export const Base_InventoryField = [
+  { id: 1, key: "orden de compra", value: "" },
+  { id: 2, key: "factura", value: "" },
+  { id: 3, key: "ubicacion", value: "" },
+  { id: 4, key: "usuario", value: "" },
+];
