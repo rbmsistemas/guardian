@@ -228,23 +228,6 @@ export const handleGetInventoryBrands = async (token) => {
   }
 };
 
-export const uploadImagesInventory = async (data, token) => {
-  config.headers["x-access-token"] = token;
-  config.headers["Access-Control-Allow-Origin"] = "*";
-
-  config.headers["Content-Type"] = "multipart/form-data";
-  try {
-    const response = await axios.post(
-      `${urlEnv}/api/uploads/inventory`,
-      data,
-      config
-    );
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
 // get inventoryField
 export const handleGetInventoryFields = async (token) => {
   config.headers["x-access-token"] = token;
@@ -314,6 +297,23 @@ export const handleDeleteInventoryField = async (token, id) => {
   try {
     const response = await axios.delete(
       `${urlEnv}/api/inventoryFields/${id}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const uploadImagesInventory = async (data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  config.headers["Content-Type"] = "multipart/form-data";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/uploads/inventory`,
+      data,
       config
     );
     return response;
