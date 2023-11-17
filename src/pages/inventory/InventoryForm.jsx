@@ -326,7 +326,7 @@ const InventoryForm = () => {
 
               const response = await updateInventory(
                 res?.inventory?.id,
-                { images: imagesArray },
+                { images: imagesArray, details: newSelectedDetails },
                 user.token
               );
               if (!response.id) {
