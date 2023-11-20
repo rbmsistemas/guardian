@@ -109,8 +109,13 @@ const AutocompleteInput = ({
     }
   }, [data, isOtherOption]);
 
+  const normalizeString = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
   const handleInputChange = (e) => {
-    const value = e.target.value;
+    const value = normalizeString(e.target.value);
+
     setInputValue(value);
 
     let filteredOptions = data.filter((option) =>
