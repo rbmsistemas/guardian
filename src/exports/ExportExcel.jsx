@@ -1,8 +1,7 @@
 import React, { useState, lazy } from "react";
 import { FaFileExcel } from "react-icons/fa";
-// import ExcelJS from "exceljs"; lazy load
-const ExcelJS = lazy(() => import("exceljs"));
 import Loading from "../utils/Loading";
+const ExcelJS = () => import("exceljs");
 
 const exportTableToExcel = async (headers, data, filename, setLoading) => {
   setLoading(true);
