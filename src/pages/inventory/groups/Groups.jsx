@@ -37,7 +37,7 @@ const Groups = () => {
 
   return (
     <div className="w-full h-full p-5">
-      <div className="w-full h-full rounded-lg flex flex-col gap-2 bg-white p-5">
+      <div className="w-full h-full rounded-lg flex flex-col gap-2 bg-white p-5 overflow-y-auto">
         <div className="pb-2">
           <h2 className="text-xl font-semibold">Mis grupos</h2>
           <p className="text-gray-400">Aquí puedes administrar tus grupos</p>
