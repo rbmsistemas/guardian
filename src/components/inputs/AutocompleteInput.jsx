@@ -114,12 +114,12 @@ const AutocompleteInput = ({
   };
 
   const handleInputChange = (e) => {
-    const value = normalizeString(e.target.value);
+    const value = e.target.value;
 
     setInputValue(value);
 
     let filteredOptions = data.filter((option) =>
-      option.label.toLowerCase().includes(value.toLowerCase())
+      normalizeString(option).label.toLowerCase().includes(value.toLowerCase())
     );
 
     if (isOtherOption) {
