@@ -62,7 +62,7 @@ const ItemSidebar = ({
     return (
       <div
         onClick={() => handleClick(href)}
-        className={`relative w-full px-6 py-2 md:py3 xl:py-4 ${
+        className={`relative w-full px-6 py-2 md:py-3 ${
           disabled
             ? "text-purple-900"
             : "cursor-pointer hover:bg-white text-white hover:text-purple-700"

@@ -121,8 +121,14 @@ const Inventory = () => {
             )?.name,
           },
           modelo: { key: "inventoryModelId", value: item.inventoryModel?.name },
-          SN: { key: "serialNumber", value: item.serialNumber },
-          activo: { key: "activo", value: item.activo },
+          SN: {
+            key: "serialNumber",
+            value: item.serialNumber?.length > 0 ? item.serialNumber : "N/A",
+          },
+          activo: {
+            key: "activo",
+            value: item.activo?.length > 0 ? item.activo : "N/A",
+          },
           status: { key: "status", value: item.status },
           creacion: {
             key: "createdAt",
@@ -483,8 +489,8 @@ const Inventory = () => {
           <CustomeTable
             data={inventoriesData}
             onShare={(id) => handleCopyToClipboard(id)}
-            onShow={(id) => navigate(`/inventario/ver/${id}`)}
-            onEdit={(id) => navigate(`/inventario/editar/${id}`)}
+            onShow={"/inventario/ver/"}
+            onEdit={"/inventario/editar/"}
             onDelete={(id) => handleDelete(id)}
             quantityResults={filters.quantityResults}
             sortByHeader

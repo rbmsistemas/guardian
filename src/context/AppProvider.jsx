@@ -40,6 +40,7 @@ import {
   handleCreateInventoryField,
   handleUpdateInventoryField,
   handleDeleteInventoryField,
+  handleGetInventoryGroups,
 } from "../api/inventory.api";
 import {
   POST_SIGNIN,
@@ -74,6 +75,8 @@ import {
   POST_INVENTORY_FIELD,
   PATCH_INVENTORY_FIELD,
   DELETE_INVENTORY_FIELD,
+  GET_INVENTORY_GROUPS,
+  GET_INVENTORY_GROUP,
 } from "./Types";
 import {
   Base_Company,
@@ -103,6 +106,8 @@ const AppProvider = (props) => {
     company: Base_Company,
     allInventoryFields: Base_InventoryField,
     inventoryField: {},
+    inventoryGroups: [],
+    inventoryGroup: {},
   };
   const [state, dispatch] = useReducer(Reducer, initialState);
 
@@ -785,6 +790,25 @@ const AppProvider = (props) => {
     }
   };
 
+  const getInventoryGroups = async (body) => {
+    try {
+      const response = await handleGetInventoryGroups(state.user.token, body);
+      if (response?.status >= 300) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      const { inventoryGroups } = await response.data;
+
+      dispatch({
+        type: GET_INVENTORY_GROUPS,
+        payload: inventoryGroups,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (state.user?.token) {
       getUsers();
@@ -815,6 +839,8 @@ const AppProvider = (props) => {
         searchedInventories: state.searchedInventories,
         allInventoryFields: state.allInventoryFields,
         inventoryField: state.inventoryField,
+        inventoryGroups: state.inventoryGroups,
+        inventoryGroup: state.inventoryGroup,
         getUsers,
         handleLogin,
         postSignup,
@@ -850,6 +876,7 @@ const AppProvider = (props) => {
         createInventoryField,
         updateInventoryField,
         deleteInventoryField,
+        getInventoryGroups,
       }}
     >
       {props.children}

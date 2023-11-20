@@ -35,6 +35,7 @@ import ModalImageViewer from "../../components/modals/ModalImageViewer";
 import { Base_Inventory } from "../../context/Models";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import getFormatedStatus from "../../utils/getFormatedStatus";
+import InventoryDetailsView from "./InventoryDetails";
 
 const ShowInventory = () => {
   const { id } = useParams();
@@ -97,6 +98,7 @@ const ShowInventory = () => {
         bajaDate: inventory.bajaDate ?? null,
         createdBy: inventory.createdBy ?? "",
         recepcionDate: inventory.recepcionDate ?? null,
+        details: inventory.details ?? [],
         createdAt: inventory.createdAt ?? "",
         updatedAt: inventory.updatedAt ?? "",
       });
@@ -350,6 +352,14 @@ const ShowInventory = () => {
               </p>
             </div>
           </div>
+        </div>
+        <div className="py-2 w-full">
+          <Label
+            className="text-xl"
+            htmlFor="details"
+            value="Detalles y Grupos"
+          />
+          <InventoryDetailsView data={inventario.details} />
         </div>
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
           <div className="col-span-4 flex flex-col gap-2 border-b border-b-gray-300">

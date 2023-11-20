@@ -19,6 +19,7 @@ const Nav = lazy(() => import("../components/navbar/Navbar"));
 const User = lazy(() => import("../pages/user/User"));
 const Profile = lazy(() => import("../pages/profile/Profile"));
 const Models = lazy(() => import("../pages/inventory/models/Models"));
+const Groups = lazy(() => import("../pages/inventory/groups/Groups"));
 
 const LoginRouter = () => {
   return (
@@ -50,6 +51,7 @@ const AuthRouter = () => {
             <Route path="/inventario/ver/:id" element={<ShowInventory />} />
             <Route path="/inventario/ping" element={<InventoryPing />} />
             <Route path="/inventario/modelos" element={<Models />} />
+            <Route path="/inventario/grupos" element={<Groups />} />
             <Route path="/actividades" element={<Actividad />} />
             <Route path="/actividades/crear" element={<ActividadForm />} />
             <Route path="/actividades/editar/:id" element={<ActividadForm />} />

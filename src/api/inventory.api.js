@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import axios from "axios";
 
 export const urlEnv = import.meta.env.VITE_API_URL || "http://localhost:4000";
@@ -297,6 +298,23 @@ export const handleDeleteInventoryField = async (token, id) => {
   try {
     const response = await axios.delete(
       `${urlEnv}/api/inventoryFields/${id}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const handleGetInventoryGroups = async (token, data) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  config.headers["Content-Type"] = "application/json";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/inventories/groups`,
+      data,
       config
     );
     return response;

@@ -88,6 +88,8 @@ const AutocompleteInput = ({
   isClearable = false,
   cancelWrite = false,
   isOtherOption,
+  error,
+  setErrors,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [filteredData, setFilteredData] = useState(data || []);
@@ -196,6 +198,7 @@ const AutocompleteInput = ({
           </div>
         )}
         <input
+          onFocus={() => error && setErrors({ ...error, [name]: false })}
           id={id}
           name={name}
           type="text"
@@ -203,7 +206,10 @@ const AutocompleteInput = ({
             `w-full py-3 pl-10 pr-3 ${
               disabled && "bg-gray-100"
             } border border-gray-300 rounded-md focus:outline-none focus:border-blue-500`,
-            { "pl-10": Icon }
+            { "pl-10": Icon },
+            {
+              "border-red-500 border-2 shadow-md shadow-red-500/50": error,
+            }
           )}
           autoComplete="off"
           placeholder={placeholder}

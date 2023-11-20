@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AiOutlineLogout } from "react-icons/ai";
-import { FaUserEdit, FaUsers } from "react-icons/fa";
+import { FaLayerGroup, FaUserEdit, FaUsers } from "react-icons/fa";
 import {
   MdDashboard,
   MdGavel,
@@ -65,6 +65,13 @@ const Side = ({
           name: "Modelos",
           icon: Tb3DCubeSphere,
           href: "/inventario/modelos",
+          allowedRoles: [1, 2],
+          disabled: false,
+        },
+        {
+          name: "Grupos",
+          icon: FaLayerGroup,
+          href: "/inventario/grupos",
           allowedRoles: [1, 2],
           disabled: false,
         },

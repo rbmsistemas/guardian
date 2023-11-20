@@ -46,6 +46,8 @@ const InventoryFields = ({
   setSelectedDetails,
   titleForm,
   handleSelectInput,
+  errors,
+  setErrors,
 }) => {
   useEffect(() => {
     if (body.inventoryTypeId != "0") setBody({ ...body, otherType: "" });
@@ -100,6 +102,8 @@ const InventoryFields = ({
             isClearable
             isOtherOption
             required
+            error={errors.inventoryModelId}
+            setErrors={setErrors}
           />
         </div>
       </div>
@@ -148,6 +152,8 @@ const InventoryFields = ({
           disabled={
             body.otherModel == "" || body.inventoryModelId != "0" ? true : false
           }
+          error={errors.inventoryBrandId}
+          setErrors={setErrors}
         />
       </div>
       <div className="col-span-12 sm:col-span-6">
@@ -198,6 +204,8 @@ const InventoryFields = ({
           disabled={
             body.otherModel == "" || body.inventoryModelId != "0" ? true : false
           }
+          error={errors.inventoryTypeId}
+          setErrors={setErrors}
         />
       </div>
       <div className="col-span-12 sm:col-span-6">

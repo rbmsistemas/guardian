@@ -31,6 +31,8 @@ import {
   POST_INVENTORY_FIELD,
   PATCH_INVENTORY_FIELD,
   DELETE_INVENTORY_FIELD,
+  GET_INVENTORY_GROUPS,
+  GET_INVENTORY_GROUP,
 } from "./Types";
 
 export default (state, action) => {
@@ -197,6 +199,16 @@ export default (state, action) => {
       return {
         ...state,
         inventoryFields: payload,
+      };
+    case GET_INVENTORY_GROUPS:
+      return {
+        ...state,
+        inventoryGroups: payload,
+      };
+    case GET_INVENTORY_GROUP:
+      return {
+        ...state,
+        inventoryGroup: payload,
       };
 
     default:

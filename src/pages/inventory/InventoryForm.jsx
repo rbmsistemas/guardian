@@ -39,6 +39,7 @@ const InventoryForm = () => {
   const [data, setData] = useState(Base_Inventory());
   const [selectedDetails, setSelectedDetails] = useState([]);
   const [images, setImages] = useState([]);
+  const [errors, setErrors] = useState({});
   const newInvetoryModels = [
     ...inventoryModels?.map((model) => ({
       value: model.id,
@@ -119,6 +120,39 @@ const InventoryForm = () => {
 
     if (id) {
       try {
+        console.log(data);
+        if (
+          isNaN(Number(data.inventoryModelId)) ||
+          Number(data.inventoryModelId) < 0 ||
+          data.inventoryModelId === ""
+        ) {
+          notificationError("El campo Modelo es requerido");
+          setErrors({ ...errors, inventoryModelId: true });
+          setLoading(false);
+          return;
+        }
+
+        if (
+          isNaN(Number(data.inventoryBrandId)) ||
+          Number(data.inventoryBrandId) < 0 ||
+          data.inventoryBrandId === ""
+        ) {
+          notificationError("El campo Marca es requerido");
+          setErrors({ ...errors, inventoryBrandId: true });
+          setLoading(false);
+          return;
+        }
+
+        if (
+          isNaN(data.inventoryTypeId) ||
+          Number(data.inventoryTypeId) < 0 ||
+          data.inventoryTypeId === ""
+        ) {
+          notificationError("El campo Tipo es requerido");
+          setErrors({ ...errors, inventoryTypeId: true });
+          setLoading(false);
+          return;
+        }
         let newImagesArray = [];
         let arrayImages = [];
         newImagesArray = await Promise.all(
@@ -209,7 +243,7 @@ const InventoryForm = () => {
               successNotification("Inventario actualizado correctamente");
               setTimeout(() => {
                 navigate(`/inventario/editar/${res.id}`);
-              }, 2000);
+              }, 500);
             }
           } else {
             notificationError(
@@ -228,7 +262,7 @@ const InventoryForm = () => {
             successNotification("Inventario actualizado correctamente");
             setTimeout(() => {
               navigate(`/inventario/editar/${res.id}`);
-            }, 2000);
+            }, 500);
           }
         }
       } catch (error) {
@@ -237,6 +271,39 @@ const InventoryForm = () => {
       }
     } else {
       try {
+        if (
+          isNaN(Number(data.inventoryModelId)) ||
+          Number(data.inventoryModelId) < 0 ||
+          data.inventoryModelId === ""
+        ) {
+          notificationError("El campo Modelo es requerido");
+          setErrors({ ...errors, inventoryModelId: true });
+          setLoading(false);
+          return;
+        }
+
+        if (
+          isNaN(Number(data.inventoryBrandId)) ||
+          Number(data.inventoryBrandId) < 0 ||
+          data.inventoryBrandId === ""
+        ) {
+          notificationError("El campo Marca es requerido");
+          setErrors({ ...errors, inventoryBrandId: true });
+          setLoading(false);
+          return;
+        }
+
+        if (
+          isNaN(data.inventoryTypeId) ||
+          Number(data.inventoryTypeId) < 0 ||
+          data.inventoryTypeId === ""
+        ) {
+          notificationError("El campo Tipo es requerido");
+          setErrors({ ...errors, inventoryTypeId: true });
+          setLoading(false);
+          return;
+        }
+
         let newArrayImages = [];
 
         let sendData = {
@@ -339,6 +406,7 @@ const InventoryForm = () => {
             setTimeout(() => {
               setData(Base_Inventory());
               setImages([]);
+              setErrors({});
               setSelectedDetails(Base_InventoryField);
 
               navigate(`/inventario/crear`);
@@ -507,7 +575,7 @@ const InventoryForm = () => {
           )}
         </div>
       </div>
-      <div className="flex flex-col pb-20">
+      <div className="flex flex-col pb-40 md:pb-20">
         <form
           onSubmit={handleSubmit}
           className="flex h-full flex-col gap-5 mt-5"
@@ -526,6 +594,8 @@ const InventoryForm = () => {
               inventoryFields={allInventoryFields}
               setSelectedDetails={setSelectedDetails}
               selectedDetails={selectedDetails}
+              errors={errors}
+              setErrors={setErrors}
             />
           }
           <div className="hidden md:flex justify-end">

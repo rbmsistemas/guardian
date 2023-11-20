@@ -14,6 +14,7 @@ import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import ModalImageViewer from "../modals/ModalImageViewer";
 import { MdPlaylistRemove } from "react-icons/md";
 import getFormatedStatus from "../../utils/getFormatedStatus";
+import { Link, useNavigate } from "react-router-dom";
 
 const CustomeTable = ({
   data = [],
@@ -36,6 +37,7 @@ const CustomeTable = ({
   resultsToExport = [],
   setResultsToExport = () => {},
 }) => {
+  const navigate = useNavigate();
   const [itemSelected, setItemSelected] = useState({});
   const [modal, setModal] = useState(false);
   const [itemName, setItemName] = useState("");
@@ -167,24 +169,12 @@ const CustomeTable = ({
               data.map((item) => (
                 <Table.Row
                   key={item.id.value}
-                  onDoubleClick={() => onShow(item.id.value)}
-                  // onContextMenu={(e) => {
-                  //   e.preventDefault();
-                  //   setContextMenuVisible(true);
-                  //   setContextMenuPosition({ top: e.clientY, left: e.clientX });
-                  //   DisplayAux({
-                  //     item,
-                  //     onShow,
-                  //     onEdit,
-                  //     onDelete,
-                  //     visible: contextMenuVisible,
-                  //   });
-                  // }}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800 relative"
+                  onDoubleClick={() => navigate(onShow + item.id.value)}
+                  className="bg-white"
                 >
                   {exportResults && (
                     <Table.Cell
-                      className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${
+                      className={` dark:border-gray-700 dark:bg-gray-800 ${
                         resultsToExport.includes(item.id.value) &&
                         "bg-purple-500 text-white"
                       }
@@ -211,7 +201,7 @@ const CustomeTable = ({
                     key === "id" && !showId ? null : showImagen &&
                       key === "imagen" ? (
                       <Table.Cell
-                        className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${
+                        className={`${
                           resultsToExport.includes(item.id.value) &&
                           "bg-purple-500 text-white"
                         }
@@ -228,7 +218,7 @@ const CustomeTable = ({
                       </Table.Cell>
                     ) : key === "status" ? (
                       <Table.Cell
-                        className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${
+                        className={`${
                           resultsToExport.includes(item.id.value) &&
                           "bg-purple-500 text-white"
                         }
@@ -253,7 +243,7 @@ const CustomeTable = ({
                     ) : (
                       <Table.Cell
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
-                        className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${
+                        className={`${
                           resultsToExport.includes(item.id.value) &&
                           "bg-purple-500 text-white"
                         }
@@ -281,20 +271,20 @@ const CustomeTable = ({
                         </div>
                       )}
                       {onShow && (
-                        <div
+                        <Link
                           className="cursor-pointer border bg-white border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
-                          onClick={() => onShow(item.id.value)}
+                          to={`${onShow}${item.id.value}`}
                         >
                           <FaEye className="text-xl" />
-                        </div>
+                        </Link>
                       )}
                       {onEdit && (
-                        <div
+                        <Link
                           className="cursor-pointer border bg-white border-gap-primary text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
-                          onClick={() => onEdit(item.id.value)}
+                          to={`${onEdit}${item.id.value}`}
                         >
                           <FaRegEdit className="text-xl" />
-                        </div>
+                        </Link>
                       )}
                       {onDelete &&
                         item?.id !== "00000000-0000-0000-0000-000000000000" && (
