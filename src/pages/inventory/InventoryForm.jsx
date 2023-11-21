@@ -120,7 +120,6 @@ const InventoryForm = () => {
 
     if (id) {
       try {
-        console.log(data);
         if (
           isNaN(Number(data.inventoryModelId)) ||
           Number(data.inventoryModelId) < 0 ||

@@ -100,7 +100,7 @@ const CameraComponent = ({
   };
 
   return (
-    <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="w-full h-full grid grid-cols-1 gap-4">
       {enableCamera && (
         <div className="relative flex flex-col gap-4">
           <p

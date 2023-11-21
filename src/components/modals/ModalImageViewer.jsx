@@ -10,6 +10,8 @@ import { TbRotateClockwise2, TbRotate2 } from "react-icons/tb";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import { urlEnv } from "../../api/request.api";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const ModalImageViewer = ({
   title = "",
@@ -160,6 +162,7 @@ const ModalImageViewer = ({
                   }`}
                 >
                   <img
+                    loading="lazy"
                     onClick={() => setScale(!scale)}
                     src={FormatedUrlImage(image)}
                     alt={title}
@@ -167,7 +170,7 @@ const ModalImageViewer = ({
                       scale
                         ? "cursor-zoom-out object-center object-cover"
                         : "cursor-zoom-in object-contain w-full h-full"
-                    }  transition ease-in-out duration-200 ${rotate}`}
+                    } transition ease-in-out duration-200 ${rotate}`}
                   />
                 </div>
               </TransformComponent>
@@ -243,8 +246,9 @@ const ModalImageViewer = ({
                   // onMouseOver={() => handleSelectImage(img, index)}
                   onClick={() => handleSelectImage(img, index)}
                 >
-                  <img
-                    className="object-cover min-w-[6rem] overflow-hidden w-full h-full max-w-[6rem] max-h-24"
+                  <LazyLoadImage
+                    effect="blur"
+                    className="object-cover min-w-[6rem] aspect-square overflow-hidden w-full h-full max-w-[6rem] max-h-24"
                     src={FormatedUrlImage(img)}
                     alt={title}
                   />

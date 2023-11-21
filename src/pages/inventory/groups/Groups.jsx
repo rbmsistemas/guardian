@@ -7,6 +7,9 @@ import TextInput from "../../../components/inputs/TextInput";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { FormatedUrlImage } from "../../../utils/FormatedUrlImage";
 import ModalImageViewer from "../../../components/modals/ModalImageViewer";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import Masonry from "react-masonry-css";
 
 const Groups = () => {
   const { getInventoryGroups, inventoryGroups, allInventoryFields } =
@@ -75,18 +78,35 @@ const Groups = () => {
                 ? ` "${groupType} ${groupName}"`
                 : " en tu inventario"}
             </p>
-            <div className="w-full grid grid-cols-3 md:grid-cols-6 lg:grid-cols-10 gap-4">
-              {images &&
-                images.length > 0 &&
-                images.map((image, index) => (
-                  <img
-                    key={index}
-                    onClick={() => handleShowImages(index)}
-                    src={FormatedUrlImage(image)}
-                    alt="imagen"
-                    className="w-full h-[7rem] min-w-[7rem] object-cover rounded-md cursor-pointer"
-                  />
-                ))}
+            <div className="w-full">
+              <Masonry
+                breakpointCols={{
+                  default: 5,
+                  1100: 4,
+                  700: 3,
+                  500: 2,
+                }}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
+                {images &&
+                  images.length > 0 &&
+                  images.map((image, index) => (
+                    <div
+                      key={index}
+                      className="my-masonry-grid_column"
+                      style={{ marginBottom: "10px" }}
+                    >
+                      <LazyLoadImage
+                        effect="blur"
+                        onClick={() => handleShowImages(index)}
+                        src={FormatedUrlImage(image)}
+                        alt="imagen"
+                        className="w-full h-auto object-fill rounded-md cursor-pointer"
+                      />
+                    </div>
+                  ))}
+              </Masonry>
             </div>
           </>
         )}
