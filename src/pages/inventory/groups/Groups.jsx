@@ -59,6 +59,7 @@ const Groups = () => {
               }}
               icon={FaLayerGroup}
               value={groupType}
+              isClearable
             />
             <TextInput
               placeholder="Nombre del grupo"
@@ -67,6 +68,7 @@ const Groups = () => {
               }}
               value={groupName}
               icon={MdDriveFileRenameOutline}
+              isClearable
             />
           </div>
         </div>
