@@ -73,7 +73,7 @@ const Groups = () => {
         {inventoryGroups && (
           <>
             <p className="text-gray-400">
-              {inventoryGroups.length} grupos encontrados para
+              {inventoryGroups.length} registros encontrados para
               {groupType || groupName
                 ? ` "${groupType} ${groupName}"`
                 : " en tu inventario"}
