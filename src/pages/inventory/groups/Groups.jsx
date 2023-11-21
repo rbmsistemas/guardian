@@ -11,6 +11,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Masonry from "react-masonry-css";
 import { FiChevronRight } from "react-icons/fi";
+import { TbTrash } from "react-icons/tb";
 
 const Groups = () => {
   const { getInventoryGroups, inventoryGroups, allInventoryFields } =
@@ -84,7 +85,18 @@ const Groups = () => {
           <p className="text-gray-400">Aquí puedes administrar tus grupos</p>
         </div>
         <div className="w-full p-2 border rounded-md">
-          <p className="text-blue-800 font-semibold pb-2">Buscar grupo</p>
+          <div className="w-full flex justify-between items-center pb-2">
+            <p className="text-blue-800 font-semibold pb-2">Buscar grupo</p>
+            <Link
+              to={"/inventario/grupos"}
+              className="text-gray-400 hover:text-gray-600 transition-all ease-in-out duration-200 flex items-center gap-2"
+            >
+              <span className="text-sm">
+                <TbTrash />
+              </span>{" "}
+              Limpiar
+            </Link>
+          </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 uppercase">
             <AutocompleteInput
               data={allInventoryFields?.map((item) => ({
