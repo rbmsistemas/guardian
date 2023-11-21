@@ -89,9 +89,9 @@ const Groups = () => {
             <p className="text-blue-800 font-semibold pb-2">Buscar grupo</p>
             <Link
               to={"/inventario/grupos"}
-              className="text-gray-400 hover:text-gray-600 transition-all ease-in-out duration-200 flex items-center gap-2"
+              className="text-gray-400 border hover:text-gray-600 transition-all ease-in-out duration-200 flex items-center gap-2"
             >
-              <span className="text-sm">
+              <span className="text-lg">
                 <TbTrash />
               </span>{" "}
               Limpiar
