@@ -355,7 +355,7 @@ const ShowInventory = () => {
         </div>
         <div className="py-2 w-full">
           <Label
-            className="text-xl"
+            className="text-xl uppercase"
             htmlFor="details"
             value="Detalles y Grupos"
           />

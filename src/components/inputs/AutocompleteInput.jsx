@@ -49,7 +49,7 @@ export const DropdownList = ({ options, selectedOption, onSelect }) => {
           key={option.value}
           onClick={() => onSelect(option)}
           className={classNames(
-            "py-2 capitalize font-medium px-3 w-full cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
+            "py-2 font-medium px-3 w-full cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
             {
               "text-green-500": "0" == option.value,
               "bg-blue-500 text-white":
@@ -90,6 +90,7 @@ const AutocompleteInput = ({
   isOtherOption,
   error,
   setErrors,
+  className,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [filteredData, setFilteredData] = useState(data || []);
@@ -203,13 +204,14 @@ const AutocompleteInput = ({
           name={name}
           type="text"
           className={classNames(
-            `w-full py-3 pl-10 pr-3 ${
+            `w-full py-3 pl-10 pr-3 capitalize ${
               disabled && "bg-gray-100"
             } border border-gray-300 rounded-md focus:outline-none focus:border-blue-500`,
             { "pl-10": Icon },
             {
               "border-red-500 border-2 shadow-md shadow-red-500/50": error,
-            }
+            },
+            { className }
           )}
           autoComplete="off"
           placeholder={placeholder}

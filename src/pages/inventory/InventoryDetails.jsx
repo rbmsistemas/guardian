@@ -1,28 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const InventoryDetailsView = ({ data }) => {
-  data = data.map((pair) => {
-    pair.key = pair.key.charAt(0).toUpperCase() + pair.key.slice(1);
-    return pair;
-  });
-
-  data = data.map((pair) => {
-    if (typeof pair.value === "string") {
-      pair.value =
-        pair.value.charAt(0).toUpperCase() + pair.value.slice(1).toLowerCase();
-    }
-    return pair;
-  });
-
   return (
     <div className="w-full flex gap-2 flex-wrap py-3">
       {data.map((pair, index) => (
-        <p key={index} className={`p-2 rounded-md border text-gray-800`}>
-          <span id="key" className="font-semibold">
+        <Link
+          to={"/inventario/grupos?type=" + pair.key + "&name=" + pair.value}
+          key={index}
+          className={`p-2 rounded-md border text-gray-800 hover:underline hover:text-white hover:bg-blue-600 transition-all ease-in-out duration-200`}
+        >
+          <span id="key" className="font-semibold uppercase">
             {pair.key}
           </span>
           : <span id="value"> {pair.value ? pair.value : "N/A"}</span>
-        </p>
+        </Link>
       ))}
     </div>
   );
