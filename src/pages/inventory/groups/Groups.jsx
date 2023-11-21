@@ -50,7 +50,9 @@ const Groups = () => {
         name:
           group?.inventoryModel?.name +
             " " +
-            group?.inventoryModel?.inventoryBrand?.name || "Grupo",
+            group?.inventoryModel?.inventoryBrand?.name +
+            (group.serialNumber ? " - SN " + group.serialNumber : "") ||
+          "Grupo",
         images: group.images,
       }));
       setImages(groupImages);
@@ -164,7 +166,7 @@ const Groups = () => {
       </div>
       {modal && (
         <ModalImageViewer
-          images={images}
+          images={images?.map((image) => image.images)?.flat() ?? []}
           title={groupName || groupType || "Grupo"}
           show={modal}
           onClose={() => setModal(false)}
