@@ -23,7 +23,7 @@ const CameraComponent = ({
   const [showModal, setShowModal] = useState(false);
   const [isFlash, setisFlash] = useState(false);
   const cordova = window.cordova;
-  const diagnostic = cordova.plugins.diagnostic;
+  const diagnostic = cordova?.plugins?.diagnostic;
 
   const notifyError = (error) => toast.error(error);
 
