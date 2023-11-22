@@ -343,7 +343,11 @@ const InventoryFields = ({
         <div className="mb-2 ">
           <Label value="Agregar imagenes" />
         </div>
-        <CameraComponent capturedImage={images} setCapturedImage={setImages} />
+        <CameraComponent
+          capturedImage={images}
+          setCapturedImage={setImages}
+          enableCamera
+        />
       </div>
     </div>
   );
