@@ -22,7 +22,8 @@ const CameraComponent = ({
   const [image, setImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isFlash, setisFlash] = useState(false);
-  const isCordova = typeof window.cordova !== "undefined";
+  const cordova = window.cordova;
+  const diagnostic = cordova.plugins.diagnostic;
 
   const notifyError = (error) => toast.error(error);
 
@@ -30,9 +31,48 @@ const CameraComponent = ({
     facingMode: currentFacingMode,
   };
 
+  useEffect(() => {
+    const checkCameraPermission = async () => {
+      if (cordova) {
+        diagnostic.getPermissionAuthorizationStatus(
+          function (status) {
+            switch (status) {
+              case diagnostic.permissionStatus.GRANTED:
+                // Permiso otorgado, puedes usar la cámara
+                break;
+              case diagnostic.permissionStatus.NOT_REQUESTED:
+              case diagnostic.permissionStatus.DENIED:
+              case diagnostic.permissionStatus.DENIED_ALWAYS:
+                // Permiso no otorgado, solicita permiso al usuario
+                diagnostic.requestRuntimePermission(
+                  diagnostic.permission.CAMERA,
+                  function (status) {
+                    if (status === diagnostic.permissionStatus.GRANTED) {
+                      // Permiso otorgado, puedes usar la cámara
+                    } else {
+                      // Permiso no otorgado, maneja el escenario correspondiente
+                    }
+                  },
+                  function (error) {
+                    // Maneja cualquier error al solicitar permiso
+                  }
+                );
+                break;
+            }
+          },
+          function (error) {
+            // Maneja cualquier error al verificar el estado del permiso
+          }
+        );
+      }
+    };
+
+    checkCameraPermission(); // Verifica el permiso al cargar el componente
+  }, []);
+
   const captureImage = async (image) => {
     try {
-      if (isCordova) {
+      if (cordova) {
         navigator.camera.getPicture(onSuccess, onFail, {
           quality: 50,
           destinationType: Camera.DestinationType.FILE_URI,
