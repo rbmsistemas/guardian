@@ -222,10 +222,9 @@ const Groups = () => {
                     </Link>
                     <Masonry
                       breakpointCols={{
-                        default: 7,
-                        1200: 6,
-                        1100: 5,
-                        700: 4,
+                        default: 5,
+                        1100: 4,
+                        700: 3,
                         500: 2,
                       }}
                       className="my-masonry-grid"
@@ -255,10 +254,9 @@ const Groups = () => {
           <div className="w-full p-3">
             <Masonry
               breakpointCols={{
-                default: 7,
-                1200: 6,
-                1100: 5,
-                700: 4,
+                default: 5,
+                1100: 4,
+                700: 3,
                 500: 2,
               }}
               className="my-masonry-grid"
@@ -283,7 +281,11 @@ const Groups = () => {
       </div>
       {modal && (
         <ModalImageViewer
-          images={images?.map((image) => image.images)?.flat() ?? []}
+          images={
+            viewMod == 1
+              ? images?.map((image) => image.images)?.flat() ?? []
+              : images?.map((image) => image.image) ?? []
+          }
           title={groupName || groupType || "Grupo"}
           show={modal}
           onClose={() => setModal(false)}
