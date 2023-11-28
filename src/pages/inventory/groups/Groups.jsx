@@ -282,7 +282,7 @@ const Groups = () => {
       {modal && (
         <ModalImageViewer
           images={
-            viewMod == 1
+            viewMod == 0
               ? images?.map((image) => image.images)?.flat() ?? []
               : images?.map((image) => image.image) ?? []
           }
