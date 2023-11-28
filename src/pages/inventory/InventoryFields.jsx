@@ -343,11 +343,7 @@ const InventoryFields = ({
         <div className="mb-2 ">
           <Label value="Agregar imagenes" />
         </div>
-        <CameraComponent
-          capturedImage={images}
-          setCapturedImage={setImages}
-          enableCamera
-        />
+        <CameraComponent capturedImage={images} setCapturedImage={setImages} />
       </div>
     </div>
   );
@@ -407,7 +403,11 @@ const InventoryFields = ({
                     id={item.key}
                     type="text"
                     placeholder={item.key}
-                    value={item.value}
+                    value={
+                      item?.key == "Mac"
+                        ? getMACFormat(item.value.toUpperCase())
+                        : item.value
+                    }
                     onChange={(e) => {
                       let newSelectedDetails = [...selectedDetails];
                       newSelectedDetails[index].value = e.target.value;
@@ -514,22 +514,16 @@ const InventoryFields = ({
 
 export default InventoryFields;
 
-// {detailsFields.map((item, index) => (
-//   <div className="flex items-center gap-2" key={index}>
-//     <input
-//       type="checkbox"
-//       className="w-5 h-5 rounded-md border border-gray-300"
-//       checked={selectedDetails?.some((x) => x.name == item.name)}
-//       onChange={() => {
-//         if (selectedDetails?.some((x) => x.name == item.name)) {
-//           setSelectedDetails(
-//             selectedDetails.filter((x) => x.id != item.id)
-//           );
-//         } else {
-//           setSelectedDetails([...selectedDetails, item]);
-//         }
-//       }}
-//     />
-//     <p className="text-sm">{item.name}</p>
-//   </div>
-// ))}
+const getMACFormat = (mac) => {
+  if (mac) {
+    let macFormat = "";
+    for (let i = 0; i < mac.length; i++) {
+      if (i % 4 == 0 && i != 0) {
+        macFormat += ":" + mac[i];
+      } else {
+        macFormat += mac[i];
+      }
+    }
+    return macFormat;
+  }
+};
