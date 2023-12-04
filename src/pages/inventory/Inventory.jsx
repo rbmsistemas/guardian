@@ -287,7 +287,7 @@ const Inventory = () => {
     const updatedAt = formatLocalDate(inventory.updatedAt);
 
     const stringToCopy = `Tipo: ${inventoryType}\nMarca: ${inventoryBrand}\nModelo: ${inventoryModel}\nSN: ${serialNumber}\nActivo: ${activo}\nStatus: ${
-      status ? "Alta" : "Baja"
+      status === 1 ? "Alta" : status === 2 ? "Propuesta de Baja" : "Baja"
     }\nCreado: ${createdAt}\nActualizado: ${updatedAt}\n\n ${AppUrl}/inventario/ver/${id}`;
     navigator.clipboard.writeText(stringToCopy);
     successNotify("Inventario copiado al portapapeles");
@@ -304,12 +304,8 @@ const Inventory = () => {
           filters.quantityResults +
           1 +
           index,
-        Tipo: inventoryTypes?.find(
-          (type) => type.id === item.inventoryModel?.inventoryTypeId
-        )?.name,
-        Marca: inventoryBrands?.find(
-          (brand) => brand.id === item.inventoryModel?.inventoryBrandId
-        )?.name,
+        Tipo: item.inventoryModel?.inventoryType?.name,
+        Marca: item.inventoryModel?.inventoryBrand?.name,
         Modelo: item.inventoryModel?.name,
         SN: item.serialNumber,
         Activo: item.activo,

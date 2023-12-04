@@ -186,9 +186,8 @@ const CameraComponent = ({
             id="upload"
             className="hidden"
             multiple={true}
-            accept={
-              ".png, .jpg, .jpeg, .webp, avif, .gif, .jfif, .svg, .bmp, .tiff"
-            }
+            capture="camera"
+            accept="image/*"
             onChange={(e) =>
               setCapturedImage([...capturedImage, ...e.target.files])
             }

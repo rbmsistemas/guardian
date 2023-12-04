@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <AppProvider>
-      <div className="min-h-screen h-auto bg-neutral-50">
+      <div className="h-[100vh] bg-neutral-50">
         <AppRouter />
         <Toaster />
       </div>

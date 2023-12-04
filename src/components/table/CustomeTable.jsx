@@ -305,7 +305,7 @@ const CustomeTable = ({
       <div className="flex justify-end items-center mt-5 text-xs md:text-base">
         <div className="flex gap-2 items-center flex-wrap justify-end">
           <p className="text-gray-500">
-            Mostrando {data.length} de {totalEntries} resultados
+            {data.length} de {totalEntries} resultados
           </p>
           <select
             className="border border-gray-300 rounded-lg p-2 text-sm md:text-base"
