@@ -62,7 +62,7 @@ const Groups = () => {
     } else if (groupName) {
       getInventoryGroups({ name: groupName });
     } else {
-      getInventoryGroups({});
+      getInventoryGroups([]);
     }
     setSelectImagesGroup([]);
   }, [groupType, groupName]);
