@@ -21,6 +21,8 @@ const Searcher = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [search, setSearch] = useState("");
+  const [advancedSearch, setAdvancedSearch] = useState(false);
+  const [advancedSearchData, setAdvancedSearchData] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showSearcher, setShowSearcher] = useState(false);
 
@@ -45,23 +47,31 @@ const Searcher = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    const res = async () => {
-      const data = await getInventoriesBySearch({
-        inventoryType: "",
-        brandType: "",
-        search: search,
-        status: "",
-        page: 1,
-        quantityResults: 10,
-        orderBy: "updatedAt",
-        sort: "DESC",
-      });
-    };
-    res();
+    if (search.length <= 0) {
+      setIsLoading(false);
+      return;
+    }
+
+    handleGetInventory();
     setIsLoading(false);
   }, [search]);
 
-  const formatedData = searchedInventories?.map((inventory) => ({
+  const handleGetInventory = async () => {
+    const data = await getInventoriesBySearch({
+      inventoryType: "",
+      brandType: "",
+      search: search,
+      advancedSearch,
+      status: "",
+      page: 1,
+      quantityResults: 10,
+      orderBy: "updatedAt",
+      sort: "DESC",
+    });
+    setAdvancedSearchData(data?.advancedResults);
+  };
+
+  let formatedData = searchedInventories?.map((inventory) => ({
     label: `${inventory?.inventoryModel?.name} - ${
       inventoryTypes.find(
         (type) => type?.id === inventory?.inventoryModel?.inventoryTypeId
@@ -75,6 +85,25 @@ const Searcher = () => {
     `,
     value: inventory?.id,
   }));
+
+  if (advancedSearch) {
+    let formatedDataAdvanced = advancedSearchData?.map((inventory) => ({
+      label: `${inventory?.inventoryModel?.name} - ${
+        inventoryTypes.find(
+          (type) => type?.id === inventory?.inventoryModel?.inventoryTypeId
+        )?.name
+      } - ${
+        inventoryBrands.find(
+          (brand) => brand?.id === inventory?.inventoryModel?.inventoryBrandId
+        )?.name
+      } ${inventory?.serialNumber ? "/ SN " + inventory?.serialNumber : ""}
+        ${inventory?.activo ? "/ # " + inventory?.activo : ""}
+        `,
+      value: inventory?.id,
+    }));
+
+    formatedData = [...formatedData, ...formatedDataAdvanced];
+  }
 
   const handleClearInput = () => {
     setSearch("");
@@ -103,22 +132,24 @@ const Searcher = () => {
     searchedInventories?.length <= 0 ? (
       <div className="flex justify-start gap-1 items-center absolute md:whitespace-nowrap top-2 md:top-11 h-16 p-2 bg-white/90 w-full rounded-md shadow-md cursor-default ">
         <span>
-          <FaRegSadTear size={20} className="text-gap-primary mr-2" />
+          <FaRegSadTear size={20} className="text-gap-primary pr-2" />
         </span>
         <p className=" text-black text-sm">
           No se encontraron resultados que coincidan con tu búsqueda
         </p>
       </div>
     ) : (
-      <DropdownList
-        options={formatedData}
-        onSelect={(value) => {
-          setShowSearcher(false);
-          setShowDropdown(false);
-          navigate(`/inventario/ver/${value?.value}`);
-          setSearch("");
-        }}
-      />
+      <>
+        <DropdownList
+          options={formatedData}
+          onSelect={(value) => {
+            setShowSearcher(false);
+            setShowDropdown(false);
+            navigate(`/inventario/ver/${value?.value}`);
+            setSearch("");
+          }}
+        />
+      </>
     );
 
   return (
@@ -135,6 +166,23 @@ const Searcher = () => {
           autoComplete="off"
           className="bg-transparent rounded-full py-2 px-4 pl-12 w-full max-w-[70vw] focus:outline-none focus:shadow-outline"
         />
+        {showDropdown && (
+          <div className="absolute transform right-14 top-2">
+            <input
+              type="checkbox"
+              name="advancedSearch"
+              className="rounded-sm cursor-pointer"
+              id="advancedSearch"
+              checked={advancedSearch}
+              onChange={(e) => {
+                setAdvancedSearch(e.target.checked);
+                if (e.target.checked) {
+                  handleGetInventory();
+                }
+              }}
+            />
+          </div>
+        )}
         <div className="absolute top-1/2 transform -translate-y-1/2 left-0 ml-3">
           <FaSearch size={18} />
         </div>
@@ -158,7 +206,6 @@ const Searcher = () => {
         <div className="flex justify-center items-center border border-neutral-500 rounded-full cursor-pointer p-2 h-10 w-10">
           <FaSearch onClick={handleShowSearcher} className="text-xl" />
         </div>
-        {/* {showSearcher && ( */}
         <div
           className={`${
             showSearcher

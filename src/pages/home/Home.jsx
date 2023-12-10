@@ -117,9 +117,13 @@ const Home = () => {
           <div className="absolute right-1 top-1">
             <BsDatabaseFill className="text-6xl text-white opacity-50" />
           </div>
-          <p className="text-5xl text-white font-bold">
+          <p className="text-4xl text-white font-bold">
             {!loading ? (
-              inventories.length
+              <span>
+                {inventories.length
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
             ) : (
               <BounceLoader color={"#ffffff"} loading={loading} />
             )}
@@ -135,9 +139,13 @@ const Home = () => {
           <div className="absolute right-1 top-1">
             <BsDatabaseFillAdd className="text-6xl text-white opacity-50" />
           </div>
-          <p className="text-5xl text-white font-bold">
+          <p className="text-4xl text-white font-bold">
             {!loading ? (
-              countInventories.alta
+              <span>
+                {countInventories.alta
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
             ) : (
               <BounceLoader color={"#ffffff"} loading={loading} />
             )}
@@ -153,9 +161,13 @@ const Home = () => {
           <div className="absolute right-1 top-1">
             <BsDatabaseFillDash className="text-6xl text-white opacity-50" />
           </div>
-          <p className="text-5xl text-white font-bold">
+          <p className="text-4xl text-white font-bold">
             {!loading ? (
-              countInventories.propuestaBaja
+              <span>
+                {countInventories.propuestaBaja
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
             ) : (
               <BounceLoader color={"#ffffff"} loading={loading} />
             )}
@@ -171,9 +183,15 @@ const Home = () => {
           <div className="absolute right-1 top-1">
             <BsDatabaseFillDash className="text-6xl text-white opacity-50" />
           </div>
-          <p className="text-5xl text-white font-bold">
+          <p className="text-4xl text-white font-bold">
             {!loading ? (
-              countInventories.baja
+              // countInventories.baja add a , every 3 digits (1,000)
+
+              <span>
+                {countInventories.baja
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
             ) : (
               <BounceLoader color={"#ffffff"} loading={loading} />
             )}
@@ -228,7 +246,7 @@ const Home = () => {
           <div className="p-4 h-60 col-span-2 md:col-span-1 flex flex-col justify-center items-center md:border-r border-gray-300">
             <p className="text-base text-center pb-3 font-bold">
               <span className="text-neutral-600 font-bold">
-                Registros por estado
+                Porcentaje de registros
               </span>{" "}
             </p>
             <Doughnut
@@ -238,9 +256,30 @@ const Home = () => {
                   {
                     label: "Inventario",
                     data: [
-                      countInventories.alta,
-                      countInventories.propuestaBaja,
-                      countInventories.baja,
+                      // countInventories.alta,
+                      // countInventories.propuestaBaja,
+                      // countInventories.baja, convert to %
+                      (
+                        (countInventories.alta /
+                          (countInventories.alta +
+                            countInventories.propuestaBaja +
+                            countInventories.baja)) *
+                        100
+                      ).toFixed(2),
+                      (
+                        (countInventories.propuestaBaja /
+                          (countInventories.alta +
+                            countInventories.propuestaBaja +
+                            countInventories.baja)) *
+                        100
+                      ).toFixed(2),
+                      (
+                        (countInventories.baja /
+                          (countInventories.alta +
+                            countInventories.propuestaBaja +
+                            countInventories.baja)) *
+                        100
+                      ).toFixed(2),
                     ],
                     backgroundColor: ["#7E3AF2", "#FF8A4C", "#EF4444"],
                     borderColor: ["#7E3AF2", "#FF8A4C", "#EF4444"],

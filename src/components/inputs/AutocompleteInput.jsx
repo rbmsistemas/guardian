@@ -45,11 +45,11 @@ export const DropdownList = ({ options, selectedOption, onSelect }) => {
       ref={dropdownRef}
     >
       {options.map((option) => (
-        <li
+        <div
           key={option.value}
           onClick={() => onSelect(option)}
           className={classNames(
-            "py-2 font-medium px-3 w-full cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
+            "py-2 font-medium text-xs px-3 w-full cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
             {
               "text-green-500": "0" == option.value,
               "bg-blue-500 text-white":
@@ -69,7 +69,7 @@ export const DropdownList = ({ options, selectedOption, onSelect }) => {
               }`}
             />
           )}
-        </li>
+        </div>
       ))}
     </div>
   );

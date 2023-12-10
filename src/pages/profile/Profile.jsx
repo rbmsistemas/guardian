@@ -23,7 +23,7 @@ const Profile = () => {
   }, [activeTab]);
 
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex justify-center items-center relative">
         <div className="min-h-[14rem] w-full bg-gradient-to-r from-purple-700 to-purple-500"></div>
         <div className="absolute p-4 top-[4rem] w-full h-full min-h-[80vh] grid grid-cols-12 gap-4 justify-center items-center">
