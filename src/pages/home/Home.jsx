@@ -125,7 +125,7 @@ const Home = () => {
       });
       setRegistersByMonth({ months: monthsNames, data });
     }
-  }, [inventories, users]);
+  }, []);
 
   useEffect(() => {
     const handleGetUsers = async () => {
