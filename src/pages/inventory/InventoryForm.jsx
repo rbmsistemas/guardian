@@ -11,6 +11,7 @@ import { uploadImagesInventory } from "../../api/inventory.api";
 import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
 import { Base_Inventory, Base_InventoryField } from "../../context/Models";
 import MobileMenu from "../../components/mobileMenu/MobileMenu";
+import TrimObjectsValues from "../../utils/TrimObjectsValue";
 
 const InventoryForm = () => {
   const { id } = useParams();
@@ -95,14 +96,6 @@ const InventoryForm = () => {
 
   const handleValidateSerialNumber = async (serialNumber, currentId = null) => {
     const res = await getValidatedSerialNumber({ serialNumber, currentId });
-    if (res.status === true) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  const handleValidateActivo = async (activo, currentId = null) => {
-    const res = await getValidatedActivo({ activo, currentId });
     if (res.status === true) {
       return true;
     } else {
@@ -210,34 +203,29 @@ const InventoryForm = () => {
           }
         });
 
-        if (
-          data.serialNumber !== inventory.serialNumber &&
-          data.activo !== inventory.activo
-        ) {
+        if (data.serialNumber?.trim() !== inventory.serialNumber?.trim()) {
           let existSN = true;
-          if (data.activo) {
+          if (data.serialNumber) {
             existSN = await handleValidateSerialNumber(
-              data.serialNumber,
+              data.serialNumber.trim(),
               data.id
             );
           }
-          let existActivo = true;
-          if (data.activo) {
-            existActivo = await handleValidateActivo(data.activo, data.id);
-          }
-          if (existSN || existActivo) {
+          if (existSN) {
             const res = await updateInventory(
               id,
-              {
+              TrimObjectsValues({
                 ...data,
                 images: arrayImages,
                 recepcionDate: data.recepcionDate ?? null,
                 details: newSelectedDetails,
-              },
+                serialNumber: data.serialNumber.trim(),
+              }),
               user.token
             );
             if (!res.id) {
               notificationError("Error al actualizar el inventario");
+              setLoading(false);
             } else {
               successNotification("Inventario actualizado correctamente");
               setTimeout(() => {
@@ -246,17 +234,23 @@ const InventoryForm = () => {
             }
           } else {
             notificationError(
-              "El Numero de Serie o Activo ya existe. Verifique la información."
+              "El Número de Serie ya existe. Verifique los datos."
             );
+            setLoading(false);
           }
         } else {
           const res = await updateInventory(
             id,
-            { ...data, images: arrayImages, details: newSelectedDetails },
+            TrimObjectsValues({
+              ...data,
+              images: arrayImages,
+              details: newSelectedDetails,
+            }),
             user.token
           );
           if (!res.id) {
             notificationError("Error al actualizar el inventario");
+            setLoading(false);
           } else {
             successNotification("Inventario actualizado correctamente");
             setTimeout(() => {
@@ -267,6 +261,7 @@ const InventoryForm = () => {
       } catch (error) {
         console.log(error);
         notificationError("Error al actualizar el inventario");
+        setLoading(false);
       }
     } else {
       try {
@@ -355,22 +350,25 @@ const InventoryForm = () => {
             delete detail.id;
           }
         });
+
+        let existSN = true;
+        if (data.serialNumber) {
+          existSN = await handleValidateSerialNumber(data.serialNumber.trim());
+        } else {
+          existSN = false;
+        }
+
         sendData = {
           ...sendData,
           details: newSelectedDetails,
+          serialNumber: data.serialNumber ? data.serialNumber.trim() : "",
         };
 
-        let existSN = true;
-        if (data.activo) {
-          existSN = await handleValidateSerialNumber(data.serialNumber);
-        }
-        let existActivo = true;
-        if (data.activo) {
-          existActivo = await handleValidateActivo(data.activo);
-        }
-
-        if (existSN || existActivo) {
-          const res = await createInventory(sendData, user.token);
+        if (existSN) {
+          const res = await createInventory(
+            TrimObjectsValues(sendData),
+            user.token
+          );
           if (!res.status) {
             notificationError("Error al crear el inventario");
           } else {
@@ -409,16 +407,17 @@ const InventoryForm = () => {
               setSelectedDetails(Base_InventoryField);
 
               navigate(`/inventario/crear`);
-            }, 2000);
+            }, 1000);
           }
         } else {
           notificationError(
-            "El Numero de Serie o Activo ya existe. Verifique la información."
+            "El Número de Serie ya existe. Verifique los datos."
           );
         }
       } catch (error) {
         console.log(error);
         notificationError("Error al crear el inventario");
+        setLoading(false);
       }
     }
     setLoading(false);

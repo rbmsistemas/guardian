@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import TextInput from "../../components/inputs/TextInput";
 import { Label } from "flowbite-react";
 import { AiFillEdit, AiFillSave } from "react-icons/ai";
+import { MdCancel } from "react-icons/md";
 
 const UserProfile = ({ userData }) => {
   const [user, setUser] = useState(userData);
@@ -106,7 +107,18 @@ const UserProfile = ({ userData }) => {
           disabled={true}
         />
       </div>
-      <div className="col-span-2 flex justify-end items-center">
+      <div className="col-span-2 flex justify-end gap-2 items-center">
+        {isEdit && (
+          <button
+            onClick={() => setIsEdit(false)}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+          >
+            <span>
+              <MdCancel className="text-white text-lg" />
+            </span>
+            Cancelar
+          </button>
+        )}
         {isEdit ? (
           <button
             onClick={handleSave}

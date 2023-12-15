@@ -259,6 +259,27 @@ const AppProvider = (props) => {
         type: POST_INVENTORY,
         payload: inventory,
       });
+      const inventoryType = inventory?.inventoryModel?.inventoryType || null;
+      const inventoryBrand = inventory?.inventoryModel?.inventoryBrand || null;
+
+      if (!state.inventoryTypes.includes(inventoryType)) {
+        dispatch({
+          type: GET_INVENTORY_TYPES,
+          payload: [
+            ...state.inventoryTypes,
+            inventory.inventoryModel?.inventoryType,
+          ],
+        });
+      }
+      if (!state.inventoryBrands.includes(inventoryBrand)) {
+        dispatch({
+          type: GET_INVENTORY_BRANDS,
+          payload: [
+            ...state.inventoryBrands,
+            inventory.inventoryModel?.inventoryBrand,
+          ],
+        });
+      }
       return { inventory, status: true };
     } catch (error) {
       console.log(error);
@@ -647,6 +668,19 @@ const AppProvider = (props) => {
         type: PATCH_COMPANY,
         payload: company,
       });
+      if (company.id === state.user.user.companyId) {
+        dispatch({
+          type: POST_SIGNIN,
+          payload: { ...state.user, user: { ...state.user.user, company } },
+        });
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...state.user,
+            user: { ...state.user.user, company },
+          })
+        );
+      }
       return company;
     } catch (error) {
       console.log(error);

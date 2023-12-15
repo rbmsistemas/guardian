@@ -369,7 +369,8 @@ const Groups = () => {
                     </div>
                     <Masonry
                       breakpointCols={{
-                        default: 5,
+                        default: 6,
+                        1300: 6,
                         1100: 4,
                         700: 3,
                         500: 2,

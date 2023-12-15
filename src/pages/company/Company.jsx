@@ -204,8 +204,8 @@ const Company = () => {
             showId={false}
             showImagen={true}
             data={companiesData}
-            onShow={(id) => navigate(`/companies/ver/${id}`)}
-            onEdit={(id) => navigate(`/companies/editar/${id}`)}
+            onShow={"/companies/ver/"}
+            onEdit={"/companies/editar/"}
             onDelete={(id) => handleDelete(id)}
             quantityResults={filters.quantityResults}
             setQuantityResults={(quantityResults) =>
