@@ -49,14 +49,14 @@ const InventoryForm = () => {
   ];
   const newInventoryBrands = [
     ...inventoryBrands?.map((brand) => ({
-      value: brand.id,
-      label: brand.name,
+      value: brand?.id,
+      label: brand?.name,
     })),
   ];
   const newInventoryTypes = [
     ...inventoryTypes?.map((type) => ({
-      value: type.id,
-      label: type.name,
+      value: type?.id,
+      label: type?.name,
     })),
   ];
 

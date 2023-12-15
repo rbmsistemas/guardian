@@ -100,7 +100,7 @@ const Home = () => {
         const months = [];
         const data = [];
         inventories.forEach((inventory) => {
-          const month = new Date(inventory.createdAt).getMonth();
+          const month = new Date(inventory?.createdAt)?.getMonth();
           if (!months.includes(month)) {
             months.push(month);
             data.push(1);
