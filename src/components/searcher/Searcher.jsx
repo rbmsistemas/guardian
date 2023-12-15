@@ -122,6 +122,7 @@ const Searcher = () => {
       <>
         <DropdownList
           options={formatedData}
+          count={true}
           onSelect={(value) => {
             setShowSearcher(false);
             setShowDropdown(false);
