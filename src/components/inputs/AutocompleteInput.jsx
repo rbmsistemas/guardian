@@ -59,8 +59,10 @@ export const DropdownList = ({ options, selectedOption, onSelect, count }) => {
             }
           )}
         >
-          {count && <span className="text-gray-400 text-xs">{i}</span>}
-          {option.label}
+          <>
+            {count && <span className="text-gray-400 text-xs">{i}</span>}{" "}
+            {option.label}
+          </>
           {option.value == "0" && (
             <FaPlusCircle
               className={`${
