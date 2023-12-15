@@ -95,12 +95,14 @@ const Home = () => {
   }, [inventories, users]);
 
   useEffect(() => {
-    if (users.length > 0 || inventories.length > 0) {
-      const separeateByMonth = (inventories) => {
+    if (users.length > 0 || inventories?.length > 0) {
+      const separateByMonth = (inventories) => {
         const months = [];
         const data = [];
         inventories?.forEach((inventory) => {
-          const month = new Date(inventory?.createdAt)?.getMonth();
+          const month = new Date(inventory?.createdAt)
+            ?.toISOString()
+            .split("T")[0];
           if (!months.includes(month)) {
             months.push(month);
             data.push(1);
@@ -112,11 +114,11 @@ const Home = () => {
         return { months, data };
       };
 
-      const { months, data } = separeateByMonth(inventories);
+      const { months, data } = separateByMonth(inventories);
       let monthsNames = [];
       months?.forEach((month) => {
-        let monthDate = new Date();
-        monthDate.setMonth(month);
+        // Parse the ISO date string
+        let monthDate = new Date(month);
         monthsNames.push(
           new Intl.DateTimeFormat("es-ES", { month: "long" }).format(monthDate)
         );
