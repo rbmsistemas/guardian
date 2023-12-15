@@ -60,7 +60,11 @@ export const DropdownList = ({ options, selectedOption, onSelect, count }) => {
           )}
         >
           <span>
-            {count && <span className="text-gray-400 text-xs">{i}</span>}{" "}
+            {count && (
+              <span className="text-gray-400 text-xs">
+                {i + 1} {". "}
+              </span>
+            )}{" "}
             {option.label}
           </span>
           {option.value == "0" && (
