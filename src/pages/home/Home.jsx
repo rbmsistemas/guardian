@@ -95,7 +95,7 @@ const Home = () => {
   }, [inventories, users]);
 
   useEffect(() => {
-    if (inventories.length > 0) {
+    if (users.length > 0 || inventories.length > 0) {
       const separeateByMonth = (inventories) => {
         const months = [];
         const data = [];
