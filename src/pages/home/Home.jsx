@@ -102,7 +102,7 @@ const Home = () => {
         inventories?.forEach((inventory) => {
           const createdAt = inventory?.createdAt;
           if (createdAt) {
-            const month = new Date(createdAt).toISOString().split("T")[0];
+            const month = new Date(createdAt).getUTCMonth();
             if (!months.includes(month)) {
               months.push(month);
               data.push(1);
@@ -118,14 +118,15 @@ const Home = () => {
       const { months, data } = separateByMonth(inventories);
       let monthsNames = [];
       months?.forEach((month) => {
-        let monthDate = new Date(month);
+        let monthDate = new Date();
+        monthDate.setUTCMonth(month);
         monthsNames.push(
           new Intl.DateTimeFormat("es-ES", { month: "long" }).format(monthDate)
         );
       });
       setRegistersByMonth({ months: monthsNames, data });
     }
-  }, []);
+  }, [inventories, users]);
 
   useEffect(() => {
     const handleGetUsers = async () => {
