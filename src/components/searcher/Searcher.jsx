@@ -235,7 +235,6 @@ const Searcher = () => {
             inputRef.current.focus();
             setShowSearcher(true);
             setSearch(search);
-            handleGetInventory();
           }}
           className={`flex justify-center items-center gap-1 h-10 w-10 border
            rounded-full cursor-pointer

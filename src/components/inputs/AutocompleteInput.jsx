@@ -3,7 +3,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import { MdClose, MdOutlineKeyboardArrowDown } from "react-icons/md";
 import classNames from "classnames";
 
-export const DropdownList = ({ options, selectedOption, onSelect }) => {
+export const DropdownList = ({ options, selectedOption, onSelect, count }) => {
   const [dropdownPosition, setDropdownPosition] = useState({
     left: 0,
   });
@@ -59,6 +59,7 @@ export const DropdownList = ({ options, selectedOption, onSelect }) => {
             }
           )}
         >
+          {count && <span className="text-gray-400 text-xs">{i}</span>}
           {option.label}
           {option.value == "0" && (
             <FaPlusCircle
@@ -91,6 +92,7 @@ const AutocompleteInput = ({
   error,
   setErrors,
   className,
+  count,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [filteredData, setFilteredData] = useState(data || []);
@@ -247,6 +249,7 @@ const AutocompleteInput = ({
           options={filteredData}
           selectedOption={selectedOption}
           onSelect={handleSelectOption}
+          count={count}
         />
       )}
     </div>
