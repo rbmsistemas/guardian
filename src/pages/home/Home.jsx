@@ -114,15 +114,16 @@ const Home = () => {
 
       const { months, data } = separeateByMonth(inventories);
       let monthsNames = [];
-      months.forEach((month) => {
-        let monthName = new Date().setMonth(month);
+      months?.forEach((month) => {
+        let monthDate = new Date();
+        monthDate.setMonth(month);
         monthsNames.push(
-          new Intl.DateTimeFormat("es-ES", { month: "long" }).format(monthName)
+          new Intl.DateTimeFormat("es-ES", { month: "long" }).format(monthDate)
         );
       });
       setRegistersByMonth({ months: monthsNames, data });
     }
-  }, []);
+  }, [inventories, users]);
 
   useEffect(() => {
     const handleGetUsers = async () => {
