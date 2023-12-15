@@ -176,15 +176,26 @@ const Side = ({
               } `}
             />
             <div className="relative w-fit h-fit pb-2">
-              <img
-                src={FormatedUrlImage(user.photo)}
-                className="h-14 w-14 bg cursor-pointer object-cover rounded-full ring-2 p-1 ring-purple-300"
-                alt={user.userName}
-                onClick={() => {
-                  setImageSelected({ image: user.photo, name: user.userName });
-                  setModal(true);
-                }}
-              />
+              {user?.photo ? (
+                <img
+                  src={FormatedUrlImage(user.photo)}
+                  className="h-14 w-14 bg cursor-pointer object-cover rounded-full ring-2 p-1 ring-purple-300"
+                  alt={user.userName}
+                  onClick={() => {
+                    setImageSelected({
+                      image: user.photo,
+                      name: user.userName,
+                    });
+                    setModal(true);
+                  }}
+                />
+              ) : (
+                <div className="h-14 w-14 bg cursor-pointer object-cover rounded-full ring-2 p-1 ring-purple-300 flex justify-center items-center">
+                  <p className="text-white text-lg whitespace-normal w-full h-full rounded-full bg-gradient-to-tr from-gap-orange to-orange-300 flex justify-center items-center font-bold">
+                    {user.firstName[0] + user.lastName[0]}
+                  </p>
+                </div>
+              )}
               <img
                 src={FormatedUrlImage(user.company.logo)}
                 className="absolute bg-white p-1 cursor-pointer bottom-2 -right-2 h-6 w-6 object-cover rounded-full"

@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-// import GuardianLogo from "../../assets/img/guardian_alt.png";
-import GuardianLogo from "../../assets/logo/sinabe_icon.png";
 import { Link } from "react-router-dom";
 import Bodega from "../../assets/img/bodega.webp";
 import Users from "../../assets/img/users.webp";
@@ -12,10 +10,6 @@ import {
   BsDatabaseFillAdd,
   BsDatabaseFillDash,
 } from "react-icons/bs";
-import {
-  AiOutlineUsergroupAdd,
-  AiOutlineUsergroupDelete,
-} from "react-icons/ai";
 import { BounceLoader } from "react-spinners";
 import {
   Chart as ChartJS,
@@ -28,8 +22,10 @@ import {
   Tooltip,
   Legend,
   RadialLinearScale,
+  BarController,
+  BarElement,
 } from "chart.js";
-import { Line, Doughnut } from "react-chartjs-2";
+import { Line, Doughnut, Bar } from "react-chartjs-2";
 
 ChartJS.register(
   ArcElement,
@@ -41,7 +37,8 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   Title,
-  RadialLinearScale
+  BarController,
+  BarElement
 );
 
 const Home = () => {
@@ -57,6 +54,10 @@ const Home = () => {
     data: [],
   });
   const [time, setTime] = useState(7);
+  const [registersByMonth, setRegistersByMonth] = useState({
+    months: [],
+    data: [],
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -92,6 +93,36 @@ const Home = () => {
       setUsersInventories({ labels, data });
     }
   }, [inventories, users]);
+
+  useEffect(() => {
+    if (inventories.length > 0) {
+      const separeateByMonth = (inventories) => {
+        const months = [];
+        const data = [];
+        inventories.forEach((inventory) => {
+          const month = new Date(inventory.createdAt).getMonth();
+          if (!months.includes(month)) {
+            months.push(month);
+            data.push(1);
+          } else {
+            const index = months.indexOf(month);
+            data[index] += 1;
+          }
+        });
+        return { months, data };
+      };
+
+      const { months, data } = separeateByMonth(inventories);
+      let monthsNames = [];
+      months.forEach((month) => {
+        let monthName = new Date().setMonth(month);
+        monthsNames.push(
+          new Intl.DateTimeFormat("es-ES", { month: "long" }).format(monthName)
+        );
+      });
+      setRegistersByMonth({ months: monthsNames, data });
+    }
+  }, []);
 
   useEffect(() => {
     const handleGetUsers = async () => {
@@ -238,7 +269,7 @@ const Home = () => {
           </h3>
         </Link> */}
       </div>
-      <div className="bg-white p-2 md:p-4 rounded-lg">
+      <div className="bg-white p-2 md:p-4 rounded-lg flex flex-col gap-8">
         <p className="col-span-2 md:col-span-4 4xl:col-span-5 pb-2 text-base text-left font-bold text-purple-600">
           Reportes
         </p>
@@ -360,6 +391,39 @@ const Home = () => {
                 },
               }}
             />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-8 md:gap-4">
+          <div className="p-4 h-60 col-span-2 md:col-span-1 flex flex-col justify-center items-center">
+            <p className="text-base text-center pb-3 font-bold">
+              {/* registros por mes */}
+              Registros por mes
+            </p>
+            {registersByMonth.months.length > 0 && (
+              <Bar
+                data={{
+                  labels: registersByMonth.months,
+                  datasets: [
+                    {
+                      label: "Inventario",
+                      data: registersByMonth.data,
+                      backgroundColor: "#7E3AF2",
+                      borderColor: "#7E3AF2",
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                }}
+              />
+            )}
           </div>
         </div>
       </div>

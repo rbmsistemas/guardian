@@ -44,12 +44,12 @@ export const DropdownList = ({ options, selectedOption, onSelect }) => {
       className="mt-2 min-w-full w-full whitespace-nowrap md:w-max max-h-[44vh] overflow-y-auto overflow-x-hidden border border-gray-300 bg-white rounded-md shadow-lg absolute z-30"
       ref={dropdownRef}
     >
-      {options.map((option) => (
+      {options.map((option, i) => (
         <div
-          key={option.value}
+          key={i}
           onClick={() => onSelect(option)}
           className={classNames(
-            "py-2 font-medium text-xs px-3 w-full cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
+            "py-2 font-medium text-sm px-3 w-full cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
             {
               "text-green-500": "0" == option.value,
               "bg-blue-500 text-white":
