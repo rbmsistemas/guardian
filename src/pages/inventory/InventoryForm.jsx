@@ -7,7 +7,10 @@ import InventoryFields from "./InventoryFields";
 import { FiChevronRight } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import Loading from "../../utils/Loading";
-import { uploadImagesInventory } from "../../api/inventory.api";
+import {
+  uploadFileInventory,
+  uploadImagesInventory,
+} from "../../api/inventory.api";
 import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
 import { Base_Inventory, Base_InventoryField } from "../../context/Models";
 import MobileMenu from "../../components/mobileMenu/MobileMenu";
@@ -25,7 +28,6 @@ const InventoryForm = () => {
     updateInventory,
     getInventoryById,
     getValidatedSerialNumber,
-    getValidatedActivo,
     inventory,
     user,
     allInventoryFields,
@@ -150,7 +152,7 @@ const InventoryForm = () => {
         newImagesArray = await Promise.all(
           images.map(async (image) => {
             if (image instanceof File) {
-              const imageUrl = await handleUploadFile(image);
+              const imageUrl = await handleUploadImage(image);
               return imageUrl;
             } else {
               return image;
@@ -158,9 +160,28 @@ const InventoryForm = () => {
           })
         );
 
-        newImagesArray.forEach((imageUrl) => {
+        newImagesArray?.forEach((imageUrl) => {
           if (imageUrl) {
             arrayImages.push(imageUrl);
+          }
+        });
+
+        let newFilesArray = [];
+        let arrayFiles = [];
+        newFilesArray = await Promise.all(
+          data.files.map(async (file) => {
+            if (file instanceof File) {
+              const fileUrl = await handleUploadFile(file);
+              return fileUrl;
+            } else {
+              return file;
+            }
+          })
+        );
+
+        newFilesArray?.forEach((fileUrl) => {
+          if (fileUrl) {
+            arrayFiles.push(fileUrl);
           }
         });
 
@@ -376,7 +397,7 @@ const InventoryForm = () => {
             if (images.length > 0) {
               newImages = await Promise.all(
                 images.map(async (image) => {
-                  const imageUrl = await handleUploadFile(image);
+                  const imageUrl = await handleUploadImage(image);
                   return imageUrl;
                 })
               );
@@ -399,6 +420,34 @@ const InventoryForm = () => {
                 );
               }
             }
+
+            if (data.files.length > 0) {
+              let newFiles = await Promise.all(
+                data.files.map(async (file) => {
+                  const fileUrl = await handleUploadFile(file);
+                  return fileUrl;
+                })
+              );
+
+              let filesArray = [];
+              newFiles.forEach((fileUrl) => {
+                if (fileUrl) {
+                  filesArray.push(fileUrl);
+                }
+              });
+
+              const response = await updateInventory(
+                res?.inventory?.id,
+                { files: filesArray, details: newSelectedDetails },
+                user.token
+              );
+              if (!response.id) {
+                notificationError(
+                  "Error al cargar los archivos del inventario"
+                );
+              }
+            }
+
             successNotification("Inventario creado correctamente");
             setTimeout(() => {
               setData(Base_Inventory());
@@ -423,7 +472,7 @@ const InventoryForm = () => {
     setLoading(false);
   };
 
-  const handleUploadFile = async (image) => {
+  const handleUploadImage = async (image) => {
     try {
       let formData = new FormData();
       formData.append("image", image);
@@ -437,6 +486,23 @@ const InventoryForm = () => {
     } catch (error) {
       console.log(error);
       notificationError("Error al actualizar la imagen");
+    }
+  };
+
+  const handleUploadFile = async (file) => {
+    try {
+      let formData = new FormData();
+      formData.append("file", file);
+
+      const fileRes = await uploadFileInventory(formData, user.token);
+      if (fileRes?.status > 299) {
+        setLoading(false);
+        notificationError("Error al cargar el archivo");
+      }
+      return fileRes.data;
+    } catch (error) {
+      console.log(error);
+      notificationError("Error al cargar el archivo");
     }
   };
 
@@ -507,6 +573,7 @@ const InventoryForm = () => {
       color: "text-blue-500",
     });
   }
+
   return (
     <div className="min-h-full w-full p-5">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">

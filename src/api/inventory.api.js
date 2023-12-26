@@ -339,3 +339,20 @@ export const uploadImagesInventory = async (data, token) => {
     return error.response;
   }
 };
+
+export const uploadFileInventory = async (data, token) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
+  config.headers["Content-Type"] = "multipart/form-data";
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/uploads/inventory/file`,
+      data,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};

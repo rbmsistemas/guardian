@@ -1,0 +1,66 @@
+.file-item {
+  position: relative;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.file-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  z-index: -1;
+  filter: blur(2px); /* Aplica el desenfoque al fondo */
+  transition: filter 0.3s ease-in-out;
+}
+
+.file-item:hover .file-background {
+  filter: blur(0); /* Elimina el desenfoque al hacer hover */
+}
+
+.file-content {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 1; /* Asegura que los elementos de contenido estén sobre el fondo */
+}
+
+.file-actions {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.file-item:hover .file-actions {
+  opacity: 1;
+}
+
+.action-button {
+  margin: 0 5px;
+  padding: 8px; /* Aumenta el tamaño de los botones */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.download-button {
+  background-color: #27ae60;
+  color: #fff;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: #fff;
+}

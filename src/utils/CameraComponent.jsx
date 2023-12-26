@@ -168,8 +168,8 @@ const CameraComponent = ({
           />
         </div>
       )}
-      <div className="w-full h-full max-h-full flex flex-wrap gap-2 mt-2 md:mt-0">
-        <div className="w-28 h-28 max-w-[7rem] flex-grow border border-dashed border-gray-500 text-gray-500 rounded-lg transition ease-in-out duration-200 hover:scale-105 hover:bg-slate-100">
+      <div className="w-full h-full max-h-full flex flex-wrap gap-4 mt-2 md:mt-0">
+        <div className="w-32 h-32 gap-2 items-center justify-center rounded-md hover:bg-gray-50 transition-all ease-in-out duration-200 shadow-md p-4">
           <label
             htmlFor="upload"
             className="w-full h-full flex flex-col justify-center items-center gap-2 cursor-pointer"
@@ -186,7 +186,6 @@ const CameraComponent = ({
             id="upload"
             className="hidden"
             multiple={true}
-            capture="camera"
             accept="image/*"
             onChange={(e) =>
               setCapturedImage([...capturedImage, ...e.target.files])
@@ -198,7 +197,7 @@ const CameraComponent = ({
             return (
               <div
                 key={index}
-                className="w-28 h-28 max-w-[7rem] flex-grow border border-dashed border-gray-500 rounded-lg relative transition ease-in-out duration-200 hover:scale-105"
+                className=" relative w-32 h-32 max-w-[7rem] flex-grow items-center justify-center rounded-md hover:bg-gray-50 transition-all ease-in-out duration-200 shadow-md"
               >
                 <span
                   onClick={() => removeCapturedImage(index)}

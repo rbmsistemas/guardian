@@ -13,6 +13,7 @@ export const Base_Inventory = (inventory = {}, models = []) => {
       comments: "",
       status: 1,
       images: [],
+      files: [],
       altaDate: Date.now(),
       bajaDate: null,
       recepcionDate: "",
@@ -38,6 +39,7 @@ export const Base_Inventory = (inventory = {}, models = []) => {
       comments: inventory.comments || "",
       status: inventory.status || 1,
       images: inventory.images || [],
+      files: inventory.files || [],
       altaDate: inventory.altaDate || Date.now(),
       bajaDate: inventory.bajaDate || null,
       recepcionDate: inventory.recepcionDate || null,
@@ -106,4 +108,18 @@ export const Base_InventoryField = [
   { id: 2, key: "factura", value: "" },
   { id: 3, key: "ubicacion", value: "" },
   { id: 4, key: "usuario", value: "" },
+];
+
+export const Base_InventoryFiles = [
+  {
+    title: "",
+    description: "",
+    file: {
+      fileName: "",
+      fileSize: "",
+      fileType: "",
+      fileURL: "",
+      fileAuthor: "",
+    },
+  },
 ];
