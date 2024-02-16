@@ -48,6 +48,9 @@ const Nav = ({ children }) => {
   }, [window.location.pathname, window.innerWidth]);
 
   useEffect(() => {
+    if (localStorage.getItem("pride") === "/pride") {
+      setImProud(true);
+    }
     if (location.pathname.includes("pride")) {
       localStorage.setItem("pride", location.pathname);
       setImProud(true);
