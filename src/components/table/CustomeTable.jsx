@@ -1,4 +1,4 @@
-import { Table, TextInput } from "flowbite-react";
+import { Table } from "flowbite-react";
 import React, { useState } from "react";
 import {
   FaCheckSquare,
@@ -15,6 +15,7 @@ import ModalImageViewer from "../modals/ModalImageViewer";
 import { MdPlaylistRemove } from "react-icons/md";
 import getFormatedStatus from "../../utils/getFormatedStatus";
 import { Link, useNavigate } from "react-router-dom";
+import TextInput from "../inputs/TextInput";
 
 const CustomeTable = ({
   data = [],
@@ -26,6 +27,7 @@ const CustomeTable = ({
   showImagen = false,
   quantityResults = 5,
   setQuantityResults,
+  showFooterControls = true,
   page = 1,
   setPage,
   totalEntries = 0,
@@ -42,6 +44,7 @@ const CustomeTable = ({
   const [modal, setModal] = useState(false);
   const [itemName, setItemName] = useState("");
   const [selectAll, setSelectAll] = useState(false);
+  const [customPage, setCustomPage] = useState(page);
 
   const handleShowItem = (item) => {
     setItemSelected(item);
@@ -115,6 +118,14 @@ const CustomeTable = ({
                   >
                     Imagen
                   </Table.HeadCell>
+                ) : item === "no" ? (
+                  <Table.HeadCell
+                    style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                    className="bg-neutral-200 border-r border-white"
+                    key={item}
+                  >
+                    #
+                  </Table.HeadCell>
                 ) : (
                   <Table.HeadCell
                     style={{ paddingTop: "10px", paddingBottom: "10px" }}
@@ -164,13 +175,13 @@ const CustomeTable = ({
               </Table.HeadCell>
             ) : null}
           </Table.Head>
-          <Table.Body className="divide-y">
+          <Table.Body className="divide-y" style={{ tableLayout: "fixed" }}>
             {data.length >= 1 &&
-              data.map((item) => (
+              data.map((item, index) => (
                 <Table.Row
-                  key={item.id.value}
+                  key={item.id.value ?? index}
                   onDoubleClick={() => navigate(onShow + item.id.value)}
-                  className="bg-white"
+                  className="bg-white font-light dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ease-in-out duration-200 cursor-pointer"
                 >
                   {exportResults && (
                     <Table.Cell
@@ -185,7 +196,7 @@ const CustomeTable = ({
                         className={`cursor-pointer border-gray-300 rounded-lg w-8 h-8 p-1 ${
                           resultsToExport.includes(item.id.value)
                             ? "text-white border-white border-2"
-                            : "text-gray-500 border"
+                            : "text-neutral-500 border"
                         } hover:scale-110 transition ease-in-out duration-200 flex items-center justify-center `}
                         onClick={() => handleSelectElement(item.id.value)}
                       >
@@ -243,7 +254,7 @@ const CustomeTable = ({
                     ) : (
                       <Table.Cell
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
-                        className={`${
+                        className={`text-neutral-600 ${
                           resultsToExport.includes(item.id.value) &&
                           "bg-purple-500 text-white"
                         }
@@ -264,7 +275,7 @@ const CustomeTable = ({
                     >
                       {onShare && (
                         <div
-                          className="cursor-pointer border bg-white border-gap-orange text-gap-orange p-2 rounded-lg hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="cursor-pointer text-gap-orange p-2 rounded-lg hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           onClick={() => onShare(item.id.value)}
                         >
                           <FaShare className="text-xl" />
@@ -272,7 +283,7 @@ const CustomeTable = ({
                       )}
                       {onShow && (
                         <Link
-                          className="cursor-pointer border bg-white border-gap-green text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="cursor-pointer text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           to={`${onShow}${item.id.value}`}
                         >
                           <FaEye className="text-xl" />
@@ -280,7 +291,7 @@ const CustomeTable = ({
                       )}
                       {onEdit && (
                         <Link
-                          className="cursor-pointer border bg-white border-gap-primary text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="cursor-pointer text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           to={`${onEdit}${item.id.value}`}
                         >
                           <FaRegEdit className="text-xl" />
@@ -289,7 +300,7 @@ const CustomeTable = ({
                       {onDelete &&
                         item?.id !== "00000000-0000-0000-0000-000000000000" && (
                           <div
-                            className="cursor-pointer border bg-white border-red-600 text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                            className="cursor-pointer text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
                             onClick={() => onDelete(item.id.value)}
                           >
                             <FaRegTrashAlt className="text-xl" />
@@ -302,30 +313,82 @@ const CustomeTable = ({
           </Table.Body>
         </Table>
       </div>
-      <div className="flex justify-end items-center mt-5 text-xs md:text-base">
-        <div className="flex gap-2 items-center flex-wrap justify-end">
-          <p className="text-gray-500">
-            {data.length} de {totalEntries} resultados
-          </p>
-          <select
-            className="border border-gray-300 rounded-lg p-2 text-sm md:text-base"
-            value={quantityResults}
-            onChange={(e) => setQuantityResults(e.target.value)}
-          >
-            <option value={5}>5 resultados</option>
-            <option value={10}>10 resultados</option>
-            <option value={20}>20 resultados</option>
-            <option value={30}>30 resultados</option>
-            <option value={40}>40 resultados</option>
-            <option value={50}>50 resultados</option>
-            <option value={totalEntries}>Todos los resultados</option>
-          </select>
-          <p className="text-gray-500">
-            en la página {page} de {totalPages} páginas
-          </p>
-          <div className="flex gap-3">
+      {showFooterControls && (
+        <div className="flex flex-col-reverse md:gap-x-2.5 md:flex-row justify-end py-2 text-sm">
+          <div className="flex gap-2 items-center pb-2">
+            <div className="max-w-[100px] w-full">
+              <TextInput
+                inputClassName={"text-center font-semibold"}
+                type="text"
+                value={totalEntries}
+                readOnly={true}
+              />
+            </div>
+            <p className="text-neutral-600 text-base inline-block">
+              Resultados totales
+            </p>
+          </div>
+          <div className="flex gap-2 items-center pb-2">
+            <div className="max-w-[100px] w-full text-center">
+              <TextInput
+                type="number"
+                value={customPage}
+                max={totalPages}
+                onChange={(e) => setCustomPage(e.target.value)}
+                onBlur={() => {
+                  const inputValue = customPage.trim();
+                  if (inputValue === "") {
+                    setCustomPage(1);
+                    setPage(1);
+                  } else {
+                    const pageNumber = parseInt(inputValue, 10);
+
+                    if (
+                      !isNaN(pageNumber) &&
+                      pageNumber > 0 &&
+                      pageNumber <= totalPages
+                    ) {
+                      setPage(pageNumber);
+                    } else {
+                      setCustomPage(page);
+                      setPage(page);
+                    }
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.target.blur(); // Quitar el foco del input para desencadenar el evento onBlur y actualizar el estado
+                  }
+                }}
+                inputClassName={"text-center font-semibold"}
+              />
+            </div>
+            <p className="text-neutral-600 text-base inline-block">
+              De {totalPages} páginas
+            </p>
+          </div>
+          <div className="flex gap-2 items-center pb-2">
+            <select
+              className="text-center font-semibold border-none rounded-md p-2 max-w-[100px] w-full"
+              value={quantityResults}
+              onChange={(e) => setQuantityResults(e.target.value)}
+            >
+              <option value="5">5 </option>
+              <option value="10">10 </option>
+              <option value="20">20 </option>
+              <option value="30">30 </option>
+              <option value="40">40 </option>
+              <option value="50">50 </option>
+              <option value={totalEntries}>Todos los resultados</option>
+            </select>
+            <p className="text-neutral-600 text-base inline-block">
+              Resultados por página
+            </p>
+          </div>
+
+          <div className="flex gap-2 items-center pb-2 font-semibold">
             <button
-              className={`border border-gray-300 rounded-lg p-2 ${
+              className={`w-full border border-gray-300 rounded-lg py-3 px-4 ${
                 page == 1
                   ? ""
                   : "cursor-pointer hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110 active:bg-gray-500 active:text-white "
@@ -336,7 +399,7 @@ const CustomeTable = ({
               Anterior
             </button>
             <button
-              className={`border border-gray-300 rounded-lg p-2 ${
+              className={`w-full border border-gray-300 rounded-lg py-3 px-4 ${
                 page == totalPages || totalEntries == 0 || data.length == 0
                   ? " "
                   : "cursor-pointer hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110 active:bg-gray-500 active:text-white "
@@ -350,7 +413,7 @@ const CustomeTable = ({
             </button>
           </div>
         </div>
-      </div>
+      )}
       {modal && (
         <ModalImageViewer
           images={[itemSelected?.imagen?.value] || []}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 import { BiDollar } from "react-icons/bi";
 import { MdClose } from "react-icons/md";
@@ -15,13 +15,18 @@ const TextInput = ({
   isClearable,
   disabled,
   formatPrice,
+  inputClassName,
+  readOnly,
+  onBlur,
+  onKeyDown,
+  max,
 }) => {
   const handleClearInput = () => {
     onChange({ target: { value: "" } });
   };
 
   const validateValue = (value) => {
-    if (type === "number" && value) {
+    if (type === "number" && typeof value === "string") {
       return value.replace(/[^0-9]/g, "");
     } else if (type === "date" && value) {
       value = `${value}T00:00:00.000Z`;
@@ -45,24 +50,32 @@ const TextInput = ({
         )}
         <input
           id={id}
-          type={type}
+          type={type || "text"}
           required={required}
+          readOnly={readOnly}
           max={
-            type === "date" ? getCurrentFormattedDate().substring(0, 10) : null
+            type === "date"
+              ? getCurrentFormattedDate().substring(0, 10)
+              : type === "number"
+              ? max
+              : null
           }
           disabled={disabled}
           className={classNames(
-            "w-full py-3 pr-3 placeholder:capitalize focus:outline-none focus:border-blue-500",
+            "w-full py-2 pr-3 font-light placeholder:capitalize focus:outline-none focus:border-blue-500",
             { "pl-10": Icon },
             `${
               disabled
                 ? "bg-white-50 border-0 border-b-2 border-gray-300"
-                : "bg-white border border-gray-300 rounded-md"
-            }`
+                : "bg-white border border-gray-100 rounded-md"
+            }`,
+            inputClassName
           )}
           placeholder={placeholder}
           value={validateValue(value)}
           onChange={onChange}
+          onBlur={onBlur}
+          onKeyDown={onKeyDown}
         />
         <div
           className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${

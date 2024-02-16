@@ -104,22 +104,24 @@ const compressImage = async (imageBlob, maxWidth, maxHeight) => {
   });
 };
 
-const ExportExcel = ({ headers, data, filename, disabled }) => {
+const ExportExcel = ({ headers, data, filename, disabled, title }) => {
   const [loading, setLoading] = useState(false);
 
   return (
     <>
       <button
         disabled={disabled}
-        className={`truncate ${
+        className={`flex gap-2 justify-center ${
           disabled
-            ? "bg-gray-500"
-            : "cursor-pointer bg-green-500 hover:bg-green-600"
-        }  text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            ? "bg-none text-gray-500 cursor-not-allowed border-2 border-gray-300"
+            : "cursor-pointer bg-green-500 hover:bg-green-600 text-white border-2 border-green-500 hover:border-green-600"
+        } font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline`}
         onClick={() => exportTableToExcel(headers, data, filename, setLoading)}
       >
         <FaFileExcel className="inline-block mr-2" />
-        Exportar
+        <span className="hidden md:block text-sm truncate">
+          {title || "Exportar"}
+        </span>
       </button>
       {loading && <Loading />}
     </>

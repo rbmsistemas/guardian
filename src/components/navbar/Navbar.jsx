@@ -2,18 +2,25 @@ import React, { useContext, useEffect, useState, useRef, lazy } from "react";
 const Side = lazy(() => import("../sidebar/Sidebar"));
 import Logo from ".././../assets/img/gap.png";
 import LogoGuardian from ".././../assets/logo/sinabe.png";
+import Sinabe_icon from ".././../assets/logo/sinabe_icon.png";
+import Gap_Icon from ".././../assets/img/gap_icon.png";
 import { CgMenu } from "react-icons/cg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Context from "../../context/Context";
 import { TbSquareArrowLeftFilled } from "react-icons/tb";
 import Searcher from "../searcher/Searcher";
 import { MdAdd } from "react-icons/md";
+const pride = "/src/assets/img/pride.jpg";
 
 const Nav = ({ children }) => {
   const { user } = useContext(Context);
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState(true);
+  const [imProud, setImProud] = useState(
+    localStorage.getItem("pride") === "/pride" ? true : false
+  );
   const navRef = useRef(null);
   const menuButtonRef = useRef(null);
 
@@ -40,8 +47,16 @@ const Nav = ({ children }) => {
     }
   }, [window.location.pathname, window.innerWidth]);
 
+  useEffect(() => {
+    if (location.pathname.includes("pride")) {
+      localStorage.setItem("pride", location.pathname);
+      setImProud(true);
+      navigate("/");
+    }
+  }, [location.pathname, navigate]);
+
   return (
-    <div className="relative h-screen w-full min-h-full flex overflow-x-hidden">
+    <div className="relative w-full min-h-[100dvh] flex overflow-x-hidden">
       <div
         ref={navRef}
         id="sidebar"
@@ -49,7 +64,17 @@ const Nav = ({ children }) => {
           !showMenu ? "scale-0 w-0" : "scale-100 w-full md:w-[280px]"
         } origin-top-left transition-all duration-150 ease-in-out h-screen overflow-y-hidden`}
       >
-        <div className="bg-purple-900 relative max-h-screen h-screen w-[280px]">
+        <div
+          style={{
+            backgroundImage: `url(${imProud ? pride : ""})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+          className={`${
+            imProud ? "bg-none" : "bg-purple-900"
+          } relative max-h-screen h-screen w-[280px]`}
+        >
           <div className="absolute z-50 top-10 -right-3 md:hidden">
             <TbSquareArrowLeftFilled
               onClick={() => setShowMenu(!showMenu)}
@@ -78,12 +103,16 @@ const Nav = ({ children }) => {
             >
               <CgMenu className="h-6 w-6" />
             </span>
-            <Link className="w-auto" to="/">
-              <img src={Logo} className="h-10 hidden md:block" alt="Logo GAP" />
+            <Link className="min-w-fit" to="/">
+              <img
+                src={Logo}
+                className="h-10 object-cover hidden md:block"
+                alt="Logo GAP"
+              />
             </Link>
             {user?.user?.id && (
               <>
-                <div className="md:w-[35vw] md:pl-14">
+                <div className="md:w-[35vw] pl-2">
                   <Searcher />
                 </div>
                 <div
@@ -102,11 +131,23 @@ const Nav = ({ children }) => {
               </>
             )}
           </div>
-          <img src={LogoGuardian} className="h-10" alt="Logo Guardian" />
+          <div className="flex justify-end items-center gap-2">
+            <img src={Gap_Icon} className="h-10 md:hidden" alt="Logo GAP" />
+            <img
+              src={Sinabe_icon}
+              className="h-10 object-contain md:hidden"
+              alt="Logo Guardian"
+            />
+          </div>
+          <img
+            src={LogoGuardian}
+            className="h-10 object-contain hidden md:block"
+            alt="Logo Guardian"
+          />
         </div>
         <div
           id="contenido"
-          className="flex pt-[70px] w-full h-[100vh] overflow-hidden bg-neutral-200/50"
+          className="flex pt-[70px] w-full h-[100dvh] overflow-hidden bg-stone-100"
         >
           <div
             id="children"

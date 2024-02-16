@@ -291,6 +291,23 @@ export const handleUpdateInventoryField = async (token, id, data) => {
   }
 };
 
+export const handleGetInventoryModelsWithMostStock = async (token, body) => {
+  config.headers["x-access-token"] = token;
+  config.headers["Access-Control-Allow-Origin"] = "*";
+  config.headers["Content-Type"] = "application/json";
+
+  try {
+    const response = await axios.post(
+      `${urlEnv}/api/inventories/models-stock`,
+      body,
+      config
+    );
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 export const handleDeleteInventoryField = async (token, id) => {
   config.headers["x-access-token"] = token;
   config.headers["Access-Control-Allow-Origin"] = "*";

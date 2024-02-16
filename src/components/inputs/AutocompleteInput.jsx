@@ -41,7 +41,7 @@ export const DropdownList = ({ options, selectedOption, onSelect, count }) => {
   return (
     <div
       style={{ left: dropdownPosition.left }}
-      className="mt-2 min-w-full w-full whitespace-nowrap md:w-max max-h-[44vh] overflow-y-auto overflow-x-hidden border border-gray-300 bg-white rounded-md shadow-lg absolute z-30"
+      className="mt-2 pt-1 min-w-full w-full whitespace-nowrap md:w-max max-h-[44vh] overflow-y-auto overflow-x-hidden border border-gray-300 bg-white rounded-md shadow-lg absolute z-30"
       ref={dropdownRef}
     >
       {options.map((option, i) => (
@@ -49,7 +49,7 @@ export const DropdownList = ({ options, selectedOption, onSelect, count }) => {
           key={i}
           onClick={() => onSelect(option)}
           className={classNames(
-            "py-2 font-medium text-sm px-3 w-full cursor-pointer flex justify-between items-center border-b border-gray-300 transition ease-in-out duration-100",
+            "py-2 text-sm pl-4 w-full cursor-pointer flex justify-between text-neutral-500 items-center border-b border-gray-100 transition ease-in-out duration-100",
             {
               "text-green-500": "0" == option.value,
               "bg-blue-500 text-white":
@@ -212,9 +212,9 @@ const AutocompleteInput = ({
           name={name}
           type="text"
           className={classNames(
-            `w-full py-3 pl-10 pr-3 capitalize ${
+            `w-full py-2 pl-10 pr-3 font-light ${
               disabled && "bg-gray-100"
-            } border border-gray-300 rounded-md focus:outline-none focus:border-blue-500`,
+            } border border-gray-100 rounded-md focus:outline-none focus:border-blue-500`,
             { "pl-10": Icon },
             {
               "border-red-500 border-2 shadow-md shadow-red-500/50": error,

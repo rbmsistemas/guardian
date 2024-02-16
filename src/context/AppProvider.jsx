@@ -845,15 +845,15 @@ const AppProvider = (props) => {
 
   useEffect(() => {
     if (state.user?.token) {
-      getUsers();
+      // getUsers();
+      // getInventories(state.user.token);
       getCompanies(state.user.token);
-      getInventories(state.user.token);
       getInventoryTypes(state.user.token);
       getInventoryBrands(state.user.token);
       getInventoryModels(state.user.token);
       getInventoryFields(state.user.token);
     }
-  }, [state.company, state.inventory, state.inventaryModels, state?.user]);
+  }, [state.company, state.inventaryModels, state?.user]);
 
   return (
     <Context.Provider

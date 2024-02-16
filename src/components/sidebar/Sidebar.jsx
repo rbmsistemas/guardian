@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AiOutlineLogout } from "react-icons/ai";
-import { FaLayerGroup, FaUserEdit, FaUsers } from "react-icons/fa";
+import { FaLayerGroup, FaRegSadCry, FaUserEdit, FaUsers } from "react-icons/fa";
 import {
   MdDashboard,
   MdGavel,
@@ -157,6 +157,18 @@ const Side = ({
         disabled: false,
       }
     );
+  }
+  if (localStorage.getItem("pride") === "/pride") {
+    auxItemsSidebar.unshift({
+      name: "Oprimir",
+      icon: FaRegSadCry,
+      onClick: () => {
+        localStorage.removeItem("pride");
+        window.location.reload();
+      },
+      allowedRoles: [],
+      disabled: false,
+    });
   }
 
   return (

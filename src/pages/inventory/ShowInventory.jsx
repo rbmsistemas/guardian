@@ -17,18 +17,13 @@ import {
   MdCalendarMonth,
   MdCheckCircle,
   MdNewReleases,
-  MdOutlineCategory,
   MdOutlineInventory2,
 } from "react-icons/md";
 import Loading from "../../utils/Loading";
 import { formatLocalDate } from "../../utils/getFormatedDate";
 import { BiDevices } from "react-icons/bi";
 import { Tb3DCubeSphere } from "react-icons/tb";
-import {
-  AiOutlineFieldNumber,
-  AiOutlineNumber,
-  AiOutlinePoweroff,
-} from "react-icons/ai";
+import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import "../../Quill.css";
 import { toast } from "react-hot-toast";
 import ModalImageViewer from "../../components/modals/ModalImageViewer";
