@@ -65,25 +65,10 @@ const ShowInventory = () => {
     if (inventory.id) {
       setInventario({
         id: inventory.id ?? "",
-        inventoryTypeId:
-          inventoryTypes.find(
-            (item) =>
-              item.id ===
-              (inventoryModels.find(
-                (item) => item.id === inventory.inventoryModelId
-              )?.inventoryTypeId ?? "")
-          )?.name ?? "",
-        inventoryBrandId:
-          inventoryBrands.find(
-            (item) =>
-              item.id ===
-              (inventoryModels.find(
-                (item) => item.id === inventory.inventoryModelId
-              )?.inventoryBrandId ?? "")
-          )?.name ?? "",
-        inventoryModelId:
-          inventoryModels.find((item) => item.id === inventory.inventoryModelId)
-            ?.name ?? "",
+        inventoryTypeId: inventory?.inventoryModel?.inventoryType?.name ?? "",
+
+        inventoryBrandId: inventory?.inventoryModel?.inventoryBrand?.name ?? "",
+        inventoryModelId: inventory?.inventoryModel?.name ?? "",
         serialNumber: inventory.serialNumber ?? "",
         activo: inventory.activo ?? "",
         comments: inventory.comments ?? "",
