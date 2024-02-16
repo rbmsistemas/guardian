@@ -70,7 +70,7 @@ const InventoryFields = ({
     description: "",
   });
 
-  console.log(currentFile);
+  // console.log(currentFile);
 
   const handleOtherField = (e) => {
     if (e) {
@@ -608,7 +608,7 @@ const InventoryFields = ({
       </Modal>
     </div>
   );
-  console.log(body);
+  // console.log(body);
   let detailsData = (
     <div className="w-full h-full">
       <p className=" text-gray-500 pb-4">
