@@ -10,7 +10,7 @@ import Context from "../../context/Context";
 import { TbSquareArrowLeftFilled } from "react-icons/tb";
 import Searcher from "../searcher/Searcher";
 import { MdAdd } from "react-icons/md";
-const pride = "../../assets/img/pride.jpg";
+import pride from "../../assets/img/pride.jpg";
 
 const Nav = ({ children }) => {
   const { user } = useContext(Context);
