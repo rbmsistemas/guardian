@@ -458,7 +458,7 @@ const Inventory = () => {
         )
       )}
 
-      {!isLoading && (
+      {!isLoading && totals.totalEntries >= 1 && (
         <CustomeTable
           data={inventoriesData}
           onShare={(id) => handleCopyToClipboard(id)}
