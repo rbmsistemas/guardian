@@ -16,3 +16,11 @@
   background: white;
   margin-bottom: 10px;
 }
+
+.widget {
+  width: calc(33.33% - 20px);
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-sizing: border-box;
+}

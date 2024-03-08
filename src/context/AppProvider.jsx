@@ -262,7 +262,9 @@ const AppProvider = (props) => {
       const inventoryType = inventory?.inventoryModel?.inventoryType || null;
       const inventoryBrand = inventory?.inventoryModel?.inventoryBrand || null;
 
-      if (!state.inventoryTypes.includes(inventoryType)) {
+      let inventoryTypesArray = state.inventoryTypes.map((type) => type.id);
+      let inventoryBrandsArray = state.inventoryBrands.map((brand) => brand.id);
+      if (!inventoryTypesArray.includes(inventoryType.id)) {
         dispatch({
           type: GET_INVENTORY_TYPES,
           payload: [
@@ -271,7 +273,7 @@ const AppProvider = (props) => {
           ],
         });
       }
-      if (!state.inventoryBrands.includes(inventoryBrand)) {
+      if (!inventoryBrandsArray.includes(inventoryBrand.id)) {
         dispatch({
           type: GET_INVENTORY_BRANDS,
           payload: [

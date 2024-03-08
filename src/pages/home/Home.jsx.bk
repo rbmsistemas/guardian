@@ -6,6 +6,7 @@ import {
   BsDatabaseFillAdd,
   BsDatabaseFillDash,
 } from "react-icons/bs";
+import { BounceLoader } from "react-spinners";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -25,7 +26,6 @@ import MostModelsChart from "./charts/MostModelsChart";
 import RecentsTable from "./charts/RecentsTable";
 import { formatedInventoriesForTable } from "../../utils/FormatedInventoriesForTable";
 import { FaArrowAltCircleRight } from "react-icons/fa";
-import LinksInventoryStatus from "./charts/LinksInventoryStatus";
 
 ChartJS.register(
   ArcElement,
@@ -61,6 +61,10 @@ const Home = () => {
     data: [],
   });
 
+  const [resizingWidget, setResizingWidget] = useState(null);
+  const [initialX, setInitialX] = useState(0);
+  const [blocksPosition, setBlocksPosition] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     const handleGetInventories = async () => {
@@ -82,13 +86,12 @@ const Home = () => {
   }, [inventories]);
 
   useEffect(() => {
-    if (users.length > 1 && inventories.length >= 1) {
-      console.log(users);
+    if (users.length > 0 || inventories.length > 0) {
       const inventoriesByUser = users.map((item) => {
-        if (item?.company?.id === user?.user?.company?.id) {
+        if (item?.company?.id === user?.user?.companyId) {
           return {
             id: item?.id,
-            name: item?.firstName + " " + item?.lastName?.charAt(0),
+            name: item?.firstName + " " + item?.lastName.charAt(0),
             inventories: item?.inventory,
           };
         }
@@ -117,8 +120,6 @@ const Home = () => {
             }
           }
         });
-        months.sort((a, b) => a - b);
-
         return { months, data };
       };
 
@@ -142,55 +143,66 @@ const Home = () => {
     handleGetUsers();
   }, [time]);
 
-  const linksToInventory = [
-    {
-      id: "totalInventory",
-      title: "Inventario total",
-      shortTitle: "Total",
-      icon: BsDatabaseFill,
-      amount: inventories.length,
-      gradientFrom: "from-green-400",
-      gradientTo: "to-green-700",
-      loading,
-      linkTo: "/inventario",
-    },
-    {
-      id: "altaInventory",
-      title: "Equipos en alta",
-      shortTitle: "Alta",
-      icon: BsDatabaseFillAdd,
-      amount: countInventories.alta,
-      gradientFrom: "from-indigo-400",
-      gradientTo: "to-purple-800",
-      loading,
-      linkTo: "/inventario?status=1",
-    },
-    {
-      id: "propuestaBajaInventory",
-      title: "Propuesta para baja",
-      shortTitle: "Propuesta Baja",
-      icon: BsDatabaseFillDash,
-      amount: countInventories.propuestaBaja,
-      gradientFrom: "from-amber-300",
-      gradientTo: "to-orange-500",
-      loading,
-      linkTo: "/inventario?status=2",
-    },
-    {
-      id: "bajaInventory",
-      title: "Equipos en baja",
-      shortTitle: "Baja",
-      icon: BsDatabaseFillDash,
-      amount: countInventories.baja,
-      gradientFrom: "from-red-400",
-      gradientTo: "to-red-700",
-      loading,
-      linkTo: "/inventario?status=3",
-    },
-  ];
+  const startResize = (e, index) => {
+    setResizingWidget(index);
+    setInitialX(e.clientX);
+  };
+
+  const resizeWidget = (e) => {
+    if (resizingWidget !== null) {
+      const deltaX = e.clientX - initialX;
+      const widgets = document.getElementsByClassName("widget");
+      const newWidth = widgets[resizingWidget].offsetWidth + deltaX;
+      widgets[resizingWidget].style.width = `${newWidth}px`;
+      setInitialX(e.clientX);
+
+      // Guardar la nueva dimensión en el localStorage
+      localStorage.setItem(`widget-${resizingWidget}-width`, newWidth);
+    }
+  };
+
+  const stopResize = () => {
+    setResizingWidget(null);
+
+    // Guardar las dimensiones finales de todos los widgets en el localStorage
+    const widgets = document.getElementsByClassName("widget");
+    for (let i = 0; i < widgets.length; i++) {
+      const width = widgets[i].offsetWidth;
+      localStorage.setItem(`widget-${i}-width`, width);
+    }
+  };
+
+  useEffect(() => {
+    // Restaurar las dimensiones almacenadas en el localStorage al cargar la página
+    const widgets = document.getElementsByClassName("widget");
+    for (let i = 0; i < widgets.length; i++) {
+      const width = localStorage.getItem(`widget-${i}-width`);
+      if (width) {
+        widgets[i].style.width = `${width}px`;
+      }
+    }
+  }, []);
+
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData("blockIndex", index);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, index) => {
+    const draggedBlockIndex = e.dataTransfer.getData("blockIndex");
+    const newBlocksPosition = [...blocksPosition];
+    const draggedBlock = newBlocksPosition[draggedBlockIndex];
+    newBlocksPosition.splice(draggedBlockIndex, 1);
+    newBlocksPosition.splice(index, 0, draggedBlock);
+    setBlocksPosition(newBlocksPosition);
+  };
+
   return (
-    <div className="grid grid-cols-12 content-start min-h-full w-full overflow-y-auto p-4 gap-4">
-      <div className="col-span-12 bg-white p-2 px-4 rounded-md">
+    <div className="flex flex-wrap min-h-full w-full h-full p-4 gap-4">
+      <div className="w-full p-2 px-4 bg-white rounded-md">
         <h1 className="text-base md:text-xl text-left font-normal text-purple-600">
           Bienvenido de nuevo,
           <span className="font-semibold"> {user?.user?.firstName}!</span>
@@ -200,23 +212,143 @@ const Home = () => {
           sistema.
         </p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 col-span-12 md:gap-4 rounded-lg">
-        {linksToInventory.map((link) => (
-          <LinksInventoryStatus
-            key={link.id}
-            id={link.id}
-            title={link.title}
-            shortTitle={link.shortTitle}
-            icon={link.icon}
-            linkTo={link.linkTo}
-            amount={link.amount}
-            gradientFrom={link.gradientFrom}
-            gradientTo={link.gradientTo}
-            loading={link.loading}
-          />
-        ))}
+      <div
+        onMouseDown={(e) => startResize(e, 0)}
+        onMouseUp={stopResize}
+        onMouseMove={resizeWidget}
+        draggable
+        onDragStart={(e) => handleDragStart(e, 0)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, 0)}
+        className="flex flex-wrap gap-2 md:gap-4 rounded-lg widget min-w-[300px] bg-white"
+      >
+        <Link
+          to={"/inventario"}
+          className="w-full max-w-xs h-32 md:h-48 bg-gradient-to-tr from-green-400 to-teal-700 rounded-lg shadow-lg flex flex-col-reverse p-3"
+        >
+          <div className="bg-white/25 text-teal-700 p-2 rounded-full flex gap-1 md:gap-2 items-center justify-center">
+            <BsDatabaseFill className="text-2xl md:text-4xl" />
+            <h3 className="hidden md:inline-block text-xs md:text-sm text-center lg:text-base font-bold">
+              Total de inventario
+            </h3>
+            <h3 className="md:hidden text-xs md:text-sm text-center lg:text-base font-bold">
+              Total
+            </h3>
+          </div>
+          <p className="text-4xl md:text-5xl text-white font-bold flex justify-center items-center h-full">
+            {!loading ? (
+              <span>
+                {inventories.length
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
+            ) : (
+              <BounceLoader
+                color={"#ffffff"}
+                loading={loading}
+                className="text-lg"
+              />
+            )}
+          </p>
+        </Link>
+        <Link
+          to={"/inventario?status=1"}
+          className="w-full max-w-xs h-32 md:h-48 bg-gradient-to-tr from-purple-400 to-purple-800 rounded-lg shadow-lg flex flex-col-reverse p-3"
+        >
+          <div className="bg-white/25 text-purple-800 p-2 rounded-full flex gap-1 md:gap-2 items-center justify-center">
+            <BsDatabaseFillAdd className="text-2xl md:text-4xl" />
+            <h3 className="hidden md:inline-block text-xs md:text-sm text-center lg:text-base font-bold">
+              Equipos en alta
+            </h3>
+            <h3 className="md:hidden text-xs md:text-sm text-center lg:text-base font-bold">
+              Alta
+            </h3>
+          </div>
+          <p className="text-4xl md:text-5xl text-white font-bold flex justify-center items-center h-full">
+            {!loading ? (
+              <span>
+                {countInventories.alta
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
+            ) : (
+              <BounceLoader
+                color={"#ffffff"}
+                loading={loading}
+                className="text-lg"
+              />
+            )}
+          </p>
+        </Link>
+        <Link
+          to={"/inventario?status=2"}
+          className="w-full max-w-xs h-32 md:h-48 bg-gradient-to-tr from-orange-300 to-orange-500 rounded-lg shadow-lg flex flex-col-reverse p-3"
+        >
+          <div className="bg-white/25 text-orange-500 p-2 rounded-full flex gap-1 md:gap-2 items-center justify-center">
+            <BsDatabaseFillDash className="text-2xl md:text-4xl" />
+            <h3 className="hidden md:inline-block text-xs md:text-sm text-center lg:text-base font-bold">
+              Propuesta para baja
+            </h3>
+            <h3 className="md:hidden text-xs md:text-sm text-center lg:text-base font-bold">
+              Propuesta Baja
+            </h3>
+          </div>
+          <p className="text-4xl md:text-5xl text-white font-bold flex justify-center items-center h-full">
+            {!loading ? (
+              <span>
+                {countInventories.propuestaBaja
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
+            ) : (
+              <BounceLoader
+                color={"#ffffff"}
+                loading={loading}
+                className="text-lg"
+              />
+            )}
+          </p>
+        </Link>
+        <Link
+          to={"/inventario?status=3"}
+          className="w-full max-w-xs h-32 md:h-48 bg-gradient-to-tr from-red-400 to-red-700 rounded-lg shadow-lg flex flex-col-reverse p-3"
+        >
+          <div className="bg-white/25 text-red-700 p-2 rounded-full flex gap-1 md:gap-2 items-center justify-center">
+            <BsDatabaseFillDash className="text-2xl md:text-4xl" />
+            <h3 className="hidden md:inline-block text-xs md:text-sm text-center lg:text-base font-bold">
+              Equipos en baja
+            </h3>
+            <h3 className="md:hidden text-xs md:text-sm text-center lg:text-base font-bold">
+              Baja
+            </h3>
+          </div>
+          <p className="text-4xl md:text-5xl text-white font-bold flex justify-center items-center h-full">
+            {!loading ? (
+              <span>
+                {countInventories.baja
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
+            ) : (
+              <BounceLoader
+                color={"#ffffff"}
+                loading={loading}
+                className="text-lg"
+              />
+            )}
+          </p>
+        </Link>
       </div>
-      <div className="col-span-12 md:col-span-6 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
+      <div
+        onMouseDown={(e) => startResize(e, 1)}
+        onMouseUp={stopResize}
+        onMouseMove={resizeWidget}
+        draggable
+        onDragStart={(e) => handleDragStart(e, 1)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, 1)}
+        className="p-2 px-4 rounded-md flex flex-col widget w-1/2"
+      >
         <p className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-fit h-12 flex items-center">
           <span>Modelos con más stock</span>
         </p>
@@ -224,7 +356,16 @@ const Home = () => {
           <MostModelsChart token={user?.token} />
         </div>
       </div>
-      <div className="col-span-12 md:col-span-6 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
+      <div
+        onMouseDown={(e) => startResize(e, 2)}
+        onMouseUp={stopResize}
+        onMouseMove={resizeWidget}
+        draggable
+        onDragStart={(e) => handleDragStart(e, 2)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, 2)}
+        className="p-2 px-4 rounded-md flex flex-col widget w-1/2"
+      >
         <p className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-fit h-12 flex items-center">
           <span>Porcentaje de registros</span>
         </p>
@@ -277,7 +418,16 @@ const Home = () => {
           />
         </div>
       </div>
-      <div className="col-span-12 md:col-span-6 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
+      <div
+        onMouseDown={(e) => startResize(e, 3)}
+        onMouseUp={stopResize}
+        onMouseMove={resizeWidget}
+        draggable
+        onDragStart={(e) => handleDragStart(e, 3)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, 3)}
+        className="p-2 px-4 rounded-md flex flex-col widget w-1/2"
+      >
         <p className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-fit h-12 flex items-center">
           Registros por mes
         </p>
@@ -310,7 +460,16 @@ const Home = () => {
           )}
         </div>
       </div>
-      <div className="col-span-12 md:col-span-6 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
+      <div
+        onMouseDown={(e) => startResize(e, 4)}
+        onMouseUp={stopResize}
+        onMouseMove={resizeWidget}
+        draggable
+        onDragStart={(e) => handleDragStart(e, 4)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, 4)}
+        className="p-2 px-4 rounded-md flex flex-col widget w-1/2"
+      >
         <div className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-full flex justify-between items-center">
           <p className="truncate">Usuario / Tiempo</p>
           <div className="grid grid-cols-5 items-center gap-1">
@@ -382,7 +541,16 @@ const Home = () => {
           />
         </div>
       </div>
-      <div className="col-span-12 md:col-span-6 lg:col-span-12 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
+      <div
+        onMouseDown={(e) => startResize(e, 5)}
+        onMouseUp={stopResize}
+        onMouseMove={resizeWidget}
+        draggable
+        onDragStart={(e) => handleDragStart(e, 5)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, 5)}
+        className="p-2 px-4 rounded-md flex flex-col widget w-1/2"
+      >
         {/* table with recents inventories */}
         <div className="flex justify-between items-center w-full">
           <p className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-fit h-12 flex items-center">

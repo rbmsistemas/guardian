@@ -17,9 +17,11 @@ export const formatLocalDate = (dateString) => {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
     timeZone: "UTC",
   };
-  return new Intl.DateTimeFormat("es-ES", options)
+  return new Intl.DateTimeFormat("es-Mx", options)
     .format(new Date(dateString))
     .replace(/\//g, "-")
     .replace(",", "");

@@ -215,7 +215,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="inventoryTipe" value="Tipo de inventario" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <BiDevices className="text-blue-500 text-xl" />
               </span>
@@ -226,7 +226,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="inventoryBrand" value="Marca" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <MdNewReleases className="text-blue-500 text-xl" />
               </span>
@@ -237,7 +237,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="inventoryMode" value="Modelo" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <Tb3DCubeSphere className="text-blue-500 text-xl" />
               </span>
@@ -248,7 +248,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="sn" value="Número Serial" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <AiOutlineFieldNumber className="text-blue-500 text-xl" />
               </span>
@@ -259,7 +259,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="activo" value="Activo" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <AiOutlineNumber className="text-blue-500 text-xl" />
               </span>
@@ -270,7 +270,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="activo" value="Creado por" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <FaUser className="text-blue-500 text-xl" />
               </span>
@@ -281,7 +281,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="recepcionDate" value="Fecha de recepción" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <MdCalendarMonth className="text-blue-500 text-xl" />
               </span>
@@ -292,7 +292,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="altaDate" value="Fecha de alta" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <MdCalendarMonth className="text-blue-500 text-xl" />
               </span>
@@ -303,7 +303,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="bajaDate" value="Fecha de baja" />
             </div>
-            <p className="text-gray-500 flex items-start gap-4">
+            <p className="text-neutral-700 flex items-start gap-4">
               <span>
                 <MdCalendarMonth className="text-blue-500 text-xl" />
               </span>
@@ -313,7 +313,7 @@ const ShowInventory = () => {
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="createdAt" value="Fecha de creación" />
-              <p className="text-gray-500 flex items-start gap-4">
+              <p className="text-neutral-700 flex items-start gap-4">
                 <span>
                   <MdCalendarMonth className="text-blue-500 text-xl" />
                 </span>
@@ -324,7 +324,7 @@ const ShowInventory = () => {
           <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
             <div className="w-full">
               <Label htmlFor="updatedAt" value="Ultima modificación" />
-              <p className="text-gray-500 flex items-start gap-4">
+              <p className="text-neutral-700 flex items-start gap-4">
                 <span>
                   <MdCalendarMonth className="text-blue-500 text-xl" />
                 </span>

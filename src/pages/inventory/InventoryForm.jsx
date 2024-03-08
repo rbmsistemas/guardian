@@ -14,7 +14,7 @@ import {
 import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
 import { Base_Inventory, Base_InventoryField } from "../../context/Models";
 import MobileMenu from "../../components/mobileMenu/MobileMenu";
-import TrimObjectsValues from "../../utils/TrimObjectsValue";
+import handleTrimObjectValues from "../../utils/TrimObjectsValue";
 
 const InventoryForm = () => {
   const { id } = useParams();
@@ -98,11 +98,7 @@ const InventoryForm = () => {
 
   const handleValidateSerialNumber = async (serialNumber, currentId = null) => {
     const res = await getValidatedSerialNumber({ serialNumber, currentId });
-    if (res.status === true) {
-      return true;
-    } else {
-      return false;
-    }
+    return res?.status ?? false;
   };
 
   const handleSubmitButton = () => {
@@ -121,7 +117,10 @@ const InventoryForm = () => {
           data.inventoryModelId === ""
         ) {
           notificationError("El campo Modelo es requerido");
-          setErrors({ ...errors, inventoryModelId: true });
+          setErrors({
+            ...errors,
+            inventoryModelId: "La informacion es invalida.",
+          });
           setLoading(false);
           return;
         }
@@ -132,7 +131,10 @@ const InventoryForm = () => {
           data.inventoryBrandId === ""
         ) {
           notificationError("El campo Marca es requerido");
-          setErrors({ ...errors, inventoryBrandId: true });
+          setErrors({
+            ...errors,
+            inventoryBrandId: "La informacion es invalida.",
+          });
           setLoading(false);
           return;
         }
@@ -143,7 +145,10 @@ const InventoryForm = () => {
           data.inventoryTypeId === ""
         ) {
           notificationError("El campo Tipo es requerido");
-          setErrors({ ...errors, inventoryTypeId: true });
+          setErrors({
+            ...errors,
+            inventoryTypeId: "La informacion es invalida.",
+          });
           setLoading(false);
           return;
         }
@@ -167,10 +172,9 @@ const InventoryForm = () => {
         });
 
         let newFilesArray = [];
-        let arrayFiles = [];
         newFilesArray = await Promise.all(
           data.files.map(async (file) => {
-            if (file instanceof File) {
+            if (file?.file instanceof File) {
               const fileUrl = await handleUploadFile(file);
               return fileUrl;
             } else {
@@ -178,12 +182,6 @@ const InventoryForm = () => {
             }
           })
         );
-
-        newFilesArray?.forEach((fileUrl) => {
-          if (fileUrl) {
-            arrayFiles.push(fileUrl);
-          }
-        });
 
         if (data.status === 3) {
           setData({ ...data, bajaDate: getCurrentFormattedDate() });
@@ -195,14 +193,10 @@ const InventoryForm = () => {
           });
         }
 
-        if (
-          data.recepcionDate !== null &&
-          data.recepcionDate !== undefined &&
-          data.recepcionDate !== ""
-        ) {
+        if (data.recepcionDate) {
           setData({
             ...data,
-            recepcionDate: new Date(data.recepcionDate),
+            recepcionDate: new Date(data.recepcionDate).toISOString(),
           });
         }
 
@@ -225,19 +219,20 @@ const InventoryForm = () => {
         });
 
         if (data.serialNumber?.trim() !== inventory.serialNumber?.trim()) {
-          let existSN = true;
+          let existSN = false;
           if (data.serialNumber) {
             existSN = await handleValidateSerialNumber(
               data.serialNumber.trim(),
               data.id
             );
           }
-          if (existSN) {
+          if (existSN === false) {
             const res = await updateInventory(
               id,
-              TrimObjectsValues({
+              handleTrimObjectValues({
                 ...data,
                 images: arrayImages,
+                files: newFilesArray,
                 recepcionDate: data.recepcionDate ?? null,
                 details: newSelectedDetails,
                 serialNumber: data.serialNumber.trim(),
@@ -255,15 +250,20 @@ const InventoryForm = () => {
             }
           } else {
             notificationError(
-              "El Número de Serie ya existe. Verifique los datos."
+              `El campo "Número de Serie" ya existe. Verifique los datos.`
             );
+            setErrors({
+              ...errors,
+              serialNumber: "La informacion es invalida.",
+            });
             setLoading(false);
           }
         } else {
           const res = await updateInventory(
             id,
-            TrimObjectsValues({
+            handleTrimObjectValues({
               ...data,
+              files: newFilesArray,
               images: arrayImages,
               details: newSelectedDetails,
             }),
@@ -292,7 +292,10 @@ const InventoryForm = () => {
           data.inventoryModelId === ""
         ) {
           notificationError("El campo Modelo es requerido");
-          setErrors({ ...errors, inventoryModelId: true });
+          setErrors({
+            ...errors,
+            inventoryModelId: "La informacion es invalida.",
+          });
           setLoading(false);
           return;
         }
@@ -303,7 +306,10 @@ const InventoryForm = () => {
           data.inventoryBrandId === ""
         ) {
           notificationError("El campo Marca es requerido");
-          setErrors({ ...errors, inventoryBrandId: true });
+          setErrors({
+            ...errors,
+            inventoryBrandId: "La informacion es invalida.",
+          });
           setLoading(false);
           return;
         }
@@ -314,7 +320,10 @@ const InventoryForm = () => {
           data.inventoryTypeId === ""
         ) {
           notificationError("El campo Tipo es requerido");
-          setErrors({ ...errors, inventoryTypeId: true });
+          setErrors({
+            ...errors,
+            inventoryTypeId: "La informacion es invalida.",
+          });
           setLoading(false);
           return;
         }
@@ -331,20 +340,11 @@ const InventoryForm = () => {
           altaDate: getCurrentFormattedDate(),
         };
 
-        if (
-          data.recepcionDate !== null &&
-          data.recepcionDate !== undefined &&
-          data.recepcionDate !== ""
-        ) {
-          sendData = {
-            ...sendData,
-            recepcionDate: new Date(data.recepcionDate),
-          };
-        } else {
-          sendData = {
-            ...sendData,
-            recepcionDate: null,
-          };
+        if (data.recepcionDate) {
+          setData({
+            ...data,
+            recepcionDate: new Date(data.recepcionDate).toISOString(),
+          });
         }
 
         if (data.status === 1) {
@@ -372,11 +372,9 @@ const InventoryForm = () => {
           }
         });
 
-        let existSN = true;
+        let existSN = false;
         if (data.serialNumber) {
           existSN = await handleValidateSerialNumber(data.serialNumber.trim());
-        } else {
-          existSN = false;
         }
 
         sendData = {
@@ -385,9 +383,9 @@ const InventoryForm = () => {
           serialNumber: data.serialNumber ? data.serialNumber.trim() : "",
         };
 
-        if (existSN) {
+        if (existSN === false) {
           const res = await createInventory(
-            TrimObjectsValues(sendData),
+            handleTrimObjectValues(sendData),
             user.token
           );
           if (!res.status) {
@@ -420,25 +418,17 @@ const InventoryForm = () => {
                 );
               }
             }
-
             if (data.files.length > 0) {
               let newFiles = await Promise.all(
-                data.files.map(async (file) => {
+                data?.files.map(async (file) => {
                   const fileUrl = await handleUploadFile(file);
                   return fileUrl;
                 })
               );
 
-              let filesArray = [];
-              newFiles.forEach((fileUrl) => {
-                if (fileUrl) {
-                  filesArray.push(fileUrl);
-                }
-              });
-
               const response = await updateInventory(
                 res?.inventory?.id,
-                { files: filesArray, details: newSelectedDetails },
+                { files: newFiles, details: newSelectedDetails },
                 user.token
               );
               if (!response.id) {
@@ -460,8 +450,9 @@ const InventoryForm = () => {
           }
         } else {
           notificationError(
-            "El Número de Serie ya existe. Verifique los datos."
+            `El campo "Número de Serie" ya existe. Verifique los datos.`
           );
+          setErrors({ ...errors, serialNumber: "La informacion es invalida." });
         }
       } catch (error) {
         console.log(error);
@@ -492,14 +483,33 @@ const InventoryForm = () => {
   const handleUploadFile = async (file) => {
     try {
       let formData = new FormData();
-      formData.append("file", file);
+      if (!file || !(file?.file instanceof File)) return;
+
+      formData.append("file", file?.file);
 
       const fileRes = await uploadFileInventory(formData, user.token);
       if (fileRes?.status > 299) {
         setLoading(false);
         notificationError("Error al cargar el archivo");
       }
-      return fileRes.data;
+      return {
+        title: file.title,
+        description: file.description,
+        url: fileRes.data,
+        file: {
+          path: file?.file.path,
+          type: file?.file.type,
+          size: file?.file.size,
+          name: file?.file.name,
+          lastModified: file?.file.lastModified,
+          lastModifiedDate: file?.file.lastModifiedDate,
+          webkitRelativePath: file?.file.webkitRelativePath,
+        },
+        uploadedBy: user.user.id,
+        editedBy: user.user.id,
+        createdAt: getCurrentFormattedDate(),
+        updatedAt: getCurrentFormattedDate(),
+      };
     } catch (error) {
       console.log(error);
       notificationError("Error al cargar el archivo");
@@ -661,6 +671,7 @@ const InventoryForm = () => {
               selectedDetails={selectedDetails}
               errors={errors}
               setErrors={setErrors}
+              handleValidateSerialNumber={handleValidateSerialNumber}
             />
           }
           <div className="hidden md:flex justify-end">

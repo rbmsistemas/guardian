@@ -146,6 +146,13 @@ const Searcher = () => {
             type="text"
             placeholder="Buscar..."
             autoComplete="off"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setShowDropdown(false);
+                // navigate with params
+                navigate(`/inventario`, { state: { search } });
+              }
+            }}
             className="bg-transparent rounded-full py-2 px-4 pl-12 w-full max-w-[70vw] focus:outline-none focus:shadow-outline"
           />
           <div className="absolute top-1/2 transform -translate-y-1/2 left-0 ml-3">
@@ -229,7 +236,11 @@ const Searcher = () => {
           {/* )} */}
         </div>
       </div>
-      <Tooltip content="Búsqueda avanzada" placement="bottom">
+      <Tooltip
+        className="whitespace-nowrap"
+        content="Búsqueda avanzada"
+        placement="bottom"
+      >
         <div
           onClick={() => {
             setAdvancedSearch(!advancedSearch);

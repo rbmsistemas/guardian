@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import classNames from "classnames";
 import { BiDollar } from "react-icons/bi";
 import { MdClose } from "react-icons/md";
@@ -20,9 +20,14 @@ const TextInput = ({
   onBlur,
   onKeyDown,
   max,
+  error,
+  setErrors,
+  name,
 }) => {
+  const inputRef = useRef(null);
   const handleClearInput = () => {
     onChange({ target: { value: "" } });
+    inputRef.current.focus();
   };
 
   const validateValue = (value) => {
@@ -32,7 +37,6 @@ const TextInput = ({
       value = `${value}T00:00:00.000Z`;
       return value?.split("T")[0];
     }
-
     return value;
   };
 
@@ -41,21 +45,29 @@ const TextInput = ({
       <div className="relative flex items-center">
         {Icon && (
           <div
-            className={`absolute text-lg left-3 top-1/2 transform ${
-              !disabled && "text-gray-500"
-            } -translate-y-1/2`}
+            className={classNames(
+              `absolute text-lg left-3 top-1/2 transform ${
+                !disabled && "text-gray-500"
+              } -translate-y-1/2`,
+              { "text-red-500": error }
+            )}
           >
             <Icon />
           </div>
         )}
         <input
           id={id}
-          type={type || "text"}
+          name={name}
+          ref={inputRef}
+          type={type ?? "text"}
           required={required}
           readOnly={readOnly}
+          onFocus={() => error && setErrors({ ...error, [name]: false })}
           max={
             type === "date"
               ? getCurrentFormattedDate().substring(0, 10)
+              : type === "datetime-local"
+              ? getCurrentFormattedDate()
               : type === "number"
               ? max
               : null
@@ -69,6 +81,7 @@ const TextInput = ({
                 ? "bg-white-50 border-0 border-b-2 border-gray-300"
                 : "bg-white border border-gray-100 rounded-md"
             }`,
+            { "ring-2 ring-red-400 text-red-600": error },
             inputClassName
           )}
           placeholder={placeholder}
@@ -78,24 +91,32 @@ const TextInput = ({
           onKeyDown={onKeyDown}
         />
         <div
-          className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
-            !disabled && "cursor-pointer"
-          } flex items-center gap-2`}
+          className={classNames(
+            `absolute right-3 top-1/2 transform -translate-y-1/2 ${
+              !disabled && "cursor-pointer"
+            } flex items-center gap-2`,
+            { "text-gray-400": !value && !disabled },
+            { "text-gray-300": disabled },
+            { "text-gray-400": disabled && !value },
+            { "text-red-500": error }
+          )}
         >
           {isClearable && value && !disabled && (
             <MdClose
               size={18}
               onClick={handleClearInput}
-              className="text-gray-400 hover:text-red-500"
+              className="hover:text-red-500"
             />
           )}
           {formatPrice && (
-            <BiDollar
-              size={20}
-              className="text-neutral-400 absolute top-4 right-3"
-            />
+            <BiDollar size={20} className="absolute top-4 right-3" />
           )}
         </div>
+        {error && (
+          <span className="absolute text-xs text-red-500 -bottom-5 right-3">
+            {error}
+          </span>
+        )}
       </div>
     </div>
   );

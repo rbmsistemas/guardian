@@ -49,7 +49,7 @@ const Inventory = () => {
   const [inventoriesData, setInventoriesData] = useState([]);
   const [totals, setTotals] = useState({ totalEntries: 0, totalPages: 0 });
   const [modal, setModal] = useState(false);
-  const [inventaryToDelete, setinventaryToDelete] = useState({});
+  const [inventoryToDelete, setInventoryToDelete] = useState({});
   const [timer, setTimer] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [resultsToExport, setresultsToExport] = useState([]);
@@ -58,14 +58,19 @@ const Inventory = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const inventoryType = params.get("inventoryType") || "";
-    const brandType = params.get("brandType") || "";
-    const search = filters.search || "";
-    const status = params.get("status") || "";
-    const page = params.get("page") || 1;
-    const quantityResults = params.get("quantityResults") || 10;
-    const orderBy = params.get("orderBy") || "updatedAt";
-    const sort = params.get("sort") || "DESC";
+    const inventoryType = params.get("inventoryType") ?? "";
+    const brandType = params.get("brandType") ?? "";
+    let search = filters.search || "";
+    const status = params.get("status") ?? "";
+    const page = params.get("page") ?? 1;
+    const quantityResults = params.get("quantityResults") ?? 10;
+    const orderBy = params.get("orderBy") ?? "updatedAt";
+    const sort = params.get("sort") ?? "DESC";
+
+    // if (location.state?.search) {
+    //   console.log(location.state.search);
+    //   search = location.state.search;
+    // }
 
     let newFilters = {
       inventoryType,
@@ -135,11 +140,11 @@ const Inventory = () => {
 
   const handleDelete = async (id) => {
     setModal(true);
-    setinventaryToDelete(inventories.find((inventary) => inventary.id === id));
+    setInventoryToDelete(inventories.find((inventory) => inventory.id === id));
   };
 
   const onDelete = async () => {
-    const data = await deleteInventory(inventaryToDelete.id);
+    const data = await deleteInventory(inventoryToDelete.id);
     if (!data) {
       errorNotify("Error al eliminar el inventario");
       setModal(false);
@@ -501,29 +506,36 @@ const Inventory = () => {
             </div>
           </Modal.Header>
           <Modal.Body>
-            <p className="text-gray-500">
-              ¿Está seguro que desea eliminar el inventario{" "}
-              <span className="font-bold">
-                {inventoryTypes.find(
-                  (item) =>
-                    item.id === inventaryToDelete.inventoryModel.inventoryTypeId
-                )?.name +
-                  " " +
-                  inventoryBrands.find(
-                    (item) =>
-                      item.id ===
-                      inventaryToDelete.inventoryModel.inventoryBrandId
-                  )?.name +
-                  " Modelo " +
-                  inventoryModels.find(
-                    (item) => item.id === inventaryToDelete.inventoryModel.id
-                  )?.name +
-                  (inventaryToDelete.serialNumber?.length > 0
-                    ? " SN - " + inventaryToDelete.serialNumber
-                    : "")}
-              </span>
-              ?
+            <p className="text-neutral-700 pb-4 font-medium">
+              ¿Está seguro que desea eliminar el inventario?
             </p>
+            <ul className="list-disc list-inside">
+              <li>
+                <span className="font-semibold">Tipo:</span>{" "}
+                {inventoryToDelete?.tipo}
+              </li>
+
+              <li>
+                {" "}
+                <span className="font-semibold">Marca:</span>{" "}
+                {inventoryToDelete?.marca}
+              </li>
+              <li>
+                {" "}
+                <span className="font-semibold">Modelo:</span>{" "}
+                {inventoryToDelete?.modelo}
+              </li>
+              <li>
+                {" "}
+                <span className="font-semibold">Serie:</span>{" "}
+                {inventoryToDelete?.sn}
+              </li>
+              <li>
+                {" "}
+                <span className="font-semibold">Activo:</span>{" "}
+                {inventoryToDelete?.activo}
+              </li>
+            </ul>
           </Modal.Body>
           <Modal.Footer>
             <div className="flex justify-end gap-2 w-full">

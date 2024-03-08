@@ -3,7 +3,13 @@ import { FaPlusCircle } from "react-icons/fa";
 import { MdClose, MdOutlineKeyboardArrowDown } from "react-icons/md";
 import classNames from "classnames";
 
-export const DropdownList = ({ options, selectedOption, onSelect, count }) => {
+export const DropdownList = ({
+  options,
+  selectedOption,
+  onSelect,
+  count,
+  itemsClassName,
+}) => {
   const [dropdownPosition, setDropdownPosition] = useState({
     left: 0,
   });
@@ -56,7 +62,8 @@ export const DropdownList = ({ options, selectedOption, onSelect, count }) => {
                 selectedOption && selectedOption.value === option.value,
               "hover:bg-purple-800 hover:text-white":
                 selectedOption?.value !== option.value,
-            }
+            },
+            { [itemsClassName]: itemsClassName }
           )}
         >
           <span>
@@ -99,6 +106,8 @@ const AutocompleteInput = ({
   setErrors,
   className,
   count,
+  onBlur,
+  itemsClassName,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [filteredData, setFilteredData] = useState(data || []);
@@ -199,9 +208,13 @@ const AutocompleteInput = ({
       <div className="relative flex items-center group">
         {Icon && (
           <div
-            className={`absolute text-lg left-3 top-1/2 transform ${
-              !disabled && "text-gray-500"
-            } -translate-y-1/2`}
+            className={classNames(
+              `absolute text-lg left-3 top-1/2 transform ${
+                !disabled && "text-gray-500"
+              } -translate-y-1/2`,
+              { "text-gray-400": disabled && !inputValue },
+              { "text-red-500": error }
+            )}
           >
             <Icon />
           </div>
@@ -217,9 +230,9 @@ const AutocompleteInput = ({
             } border border-gray-100 rounded-md focus:outline-none focus:border-blue-500`,
             { "pl-10": Icon },
             {
-              "border-red-500 border-2 shadow-md shadow-red-500/50": error,
+              "ring-2 ring-red-400 text-red-600": error,
             },
-            { className }
+            { [className]: className }
           )}
           autoComplete="off"
           placeholder={placeholder}
@@ -230,11 +243,18 @@ const AutocompleteInput = ({
           required={required}
           disabled={disabled}
           readOnly={cancelWrite}
+          onBlur={onBlur}
         />
         <div
-          className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
-            !disabled && "cursor-pointer"
-          } flex items-center gap-2`}
+          className={classNames(
+            `absolute right-3 top-1/2 transform -translate-y-1/2 ${
+              !disabled && "cursor-pointer"
+            } flex items-center gap-2`,
+            { "text-gray-400": !inputValue && !disabled },
+            { "text-gray-300": disabled },
+            { "text-gray-400": disabled && !inputValue },
+            { "text-red-500": error }
+          )}
           onClick={toggleDropdown}
         >
           {isClearable && inputValue && !disabled && (
@@ -249,6 +269,11 @@ const AutocompleteInput = ({
             className={showDropdown && "rotate-180"}
           />
         </div>
+        {error && (
+          <span className="absolute text-xs text-red-500 -bottom-5 right-3">
+            {error}
+          </span>
+        )}
       </div>
       {showDropdown && (
         <DropdownList
@@ -256,6 +281,7 @@ const AutocompleteInput = ({
           selectedOption={selectedOption}
           onSelect={handleSelectOption}
           count={count}
+          itemsClassName={itemsClassName}
         />
       )}
     </div>

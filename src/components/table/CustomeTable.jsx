@@ -83,8 +83,11 @@ const CustomeTable = ({
 
   return (
     <>
-      <div className="overflow-x-auto">
-        <Table hoverable={true} className="w-full rounded-lg whitespace-nowrap">
+      <div className="overflow-x-auto w-full">
+        <Table
+          hoverable={true}
+          className="w-full h-full rounded-lg whitespace-nowrap"
+        >
           <Table.Head className="uppercase">
             {exportResults && (
               <Table.HeadCell
@@ -181,7 +184,7 @@ const CustomeTable = ({
                 <Table.Row
                   key={item.id.value ?? index}
                   onDoubleClick={() => navigate(onShow + item.id.value)}
-                  className="bg-white font-light dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ease-in-out duration-200 cursor-pointer"
+                  className="bg-white font-light dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ease-in-out duration-200"
                 >
                   {exportResults && (
                     <Table.Cell
@@ -275,7 +278,7 @@ const CustomeTable = ({
                     >
                       {onShare && (
                         <div
-                          className="cursor-pointer text-gap-orange p-2 rounded-lg hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="bg-white cursor-pointer text-gap-orange p-2 rounded-md shadow-sm hover:bg-gap-orange hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           onClick={() => onShare(item.id.value)}
                         >
                           <FaShare className="text-xl" />
@@ -283,7 +286,7 @@ const CustomeTable = ({
                       )}
                       {onShow && (
                         <Link
-                          className="cursor-pointer text-gap-green p-2 rounded-lg hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="bg-white cursor-pointer text-gap-green p-2 rounded-md shadow-sm hover:bg-gap-green hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           to={`${onShow}${item.id.value}`}
                         >
                           <FaEye className="text-xl" />
@@ -291,7 +294,7 @@ const CustomeTable = ({
                       )}
                       {onEdit && (
                         <Link
-                          className="cursor-pointer text-gap-primary p-2 rounded-lg hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                          className="bg-white cursor-pointer text-gap-primary p-2 rounded-md shadow-sm hover:bg-gap-primary hover:text-white transition ease-in-out duration-200 hover:scale-110"
                           to={`${onEdit}${item.id.value}`}
                         >
                           <FaRegEdit className="text-xl" />
@@ -300,7 +303,7 @@ const CustomeTable = ({
                       {onDelete &&
                         item?.id !== "00000000-0000-0000-0000-000000000000" && (
                           <div
-                            className="cursor-pointer text-red-600 p-2 rounded-lg hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
+                            className="bg-white cursor-pointer text-red-600 p-2 rounded-md shadow-sm hover:bg-red-600 hover:text-white transition ease-in-out duration-200 hover:scale-110"
                             onClick={() => onDelete(item.id.value)}
                           >
                             <FaRegTrashAlt className="text-xl" />
