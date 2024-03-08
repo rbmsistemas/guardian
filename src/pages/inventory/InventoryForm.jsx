@@ -196,7 +196,7 @@ const InventoryForm = () => {
         if (data.recepcionDate) {
           setData({
             ...data,
-            recepcionDate: new Date(data.recepcionDate).toISOString(),
+            recepcionDate: new Date(data.recepcionDate),
           });
         }
 
@@ -343,7 +343,7 @@ const InventoryForm = () => {
         if (data.recepcionDate) {
           setData({
             ...data,
-            recepcionDate: new Date(data.recepcionDate).toISOString(),
+            recepcionDate: new Date(data.recepcionDate),
           });
         }
 
