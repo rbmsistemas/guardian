@@ -83,7 +83,6 @@ const Home = () => {
 
   useEffect(() => {
     if (users.length > 1 && inventories.length >= 1) {
-      console.log(users);
       const inventoriesByUser = users.map((item) => {
         if (item?.company?.id === user?.user?.company?.id) {
           return {

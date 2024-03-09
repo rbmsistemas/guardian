@@ -115,7 +115,6 @@ const AppProvider = (props) => {
   const handleLogin = async (data) => {
     try {
       const response = await getLogin(data);
-      // if response is NET::ERR_CERT_AUTHORITY_INVALID then open the server
       if (response?.status === undefined) {
         window.confirm(
           "No se pudo conectar con el servidor, ¿Desea abrirlo?"

@@ -180,18 +180,12 @@ const Side = ({
             onMouseLeave={() => setShowEditProfile(false)}
             className="h-[22vh] p-4 pt-8 relative text-center flex flex-col justify-center items-center"
           >
-            <FaUserEdit
-              onClick={() => navigate("/perfil")}
-              size={24}
-              className={`absolute text-purple-700 top-3 right-3 p-1 bg-neutral-200 rounded-md cursor-pointer transition ease-in-out duration-200 ${
-                showEditProfile ? "scale-100" : "scale-0"
-              } `}
-            />
+            
             <div className="relative w-fit h-fit pb-2">
               {user?.photo ? (
                 <img
                   src={FormatedUrlImage(user.photo)}
-                  className="h-14 w-14 bg cursor-pointer object-cover rounded-full ring-2 p-1 ring-purple-300"
+                  className="h-16 w-16 bg cursor-pointer object-cover rounded-full ring-2 p-1 ring-purple-300"
                   alt={user.userName}
                   onClick={() => {
                     setImageSelected({
@@ -202,7 +196,7 @@ const Side = ({
                   }}
                 />
               ) : (
-                <div className="h-14 w-14 bg cursor-pointer object-cover rounded-full ring-2 p-1 ring-purple-300 flex justify-center items-center">
+                <div className="h-16 w-16 bg cursor-pointer object-cover rounded-full ring-2 p-1 ring-purple-300 flex justify-center items-center">
                   <p className="text-white text-lg whitespace-normal w-full h-full rounded-full bg-gradient-to-tr from-gap-orange to-orange-300 flex justify-center items-center font-bold">
                     {user.firstName[0] + user.lastName[0]}
                   </p>
@@ -210,7 +204,7 @@ const Side = ({
               )}
               <img
                 src={FormatedUrlImage(user.company.logo)}
-                className="absolute bg-white p-1 cursor-pointer bottom-2 -right-2 h-6 w-6 object-cover rounded-full"
+                className="absolute bg-white ring-1 ring-purple-300 cursor-pointer bottom-2.5 -right-1.5 h-6 w-6 object-cover rounded-full"
                 alt={user.company.name}
                 onClick={() => {
                   setImageSelected({
@@ -223,6 +217,15 @@ const Side = ({
             </div>
             <p className="text-white text-sm whitespace-normal">
               {user.firstName + " " + user.lastName}
+              <span>
+              <FaUserEdit
+              onClick={() => navigate("/perfil")}
+              size={24}
+              className={`text-purple-700 inline p-1 ml-3 bg-neutral-200 rounded-md cursor-pointer transition ease-in-out duration-200 ${
+                showEditProfile ? "scale-100" : "scale-0"
+              } `}
+            />
+              </span>
             </p>
             <p className="text-white text-xs whitespace-normal w-full">
               {user.company.name}
@@ -231,7 +234,7 @@ const Side = ({
           <hr className="border-white border-opacity-10 border-2 w-full" />
         </>
       )}
-      <div className="flex flex-col justify-between h-[78vh] pt-4">
+      <div className="flex flex-col justify-between h-[78vh] py-4 md:py-2">
         <div className="h-[50vh] md:h-[63]">
           {itemsSidebar.map((item) => (
             <ItemSidebar
@@ -247,7 +250,7 @@ const Side = ({
             />
           ))}
         </div>
-        <div className="h-[24vh] md:h-[15vh]">
+        <div className="h-auto">
           {auxItemsSidebar.map((item) => (
             <ItemSidebar
               key={item.name}

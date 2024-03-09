@@ -19,7 +19,7 @@ export const formatLocalDate = (dateString) => {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    timeZone: "UTC",
+    timeZone: "-06:00"
   };
   return new Intl.DateTimeFormat("es-Mx", options)
     .format(new Date(dateString))
