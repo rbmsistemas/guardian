@@ -26,6 +26,7 @@ import RecentsTable from "./charts/RecentsTable";
 import { formatedInventoriesForTable } from "../../utils/FormatedInventoriesForTable";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import LinksInventoryStatus from "./charts/LinksInventoryStatus";
+import { Card } from "flowbite-react";
 
 ChartJS.register(
   ArcElement,
@@ -187,6 +188,7 @@ const Home = () => {
       linkTo: "/inventario?status=3",
     },
   ];
+
   return (
     <div className="grid grid-cols-12 content-start min-h-full w-full overflow-y-auto p-4 gap-4">
       <div className="col-span-12 bg-white p-2 px-4 rounded-md">
@@ -215,19 +217,19 @@ const Home = () => {
           />
         ))}
       </div>
-      <div className="col-span-12 md:col-span-6 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
-        <p className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-fit h-12 flex items-center">
+      <Card className="col-span-12 md:col-span-6">
+        <p className="font-bold text-center p-2 bg-purple-400/50 text-sm text-purple-700 rounded-full w-fit">
           <span>Modelos con más stock</span>
         </p>
         <div className="h-80">
           <MostModelsChart token={user?.token} />
         </div>
-      </div>
-      <div className="col-span-12 md:col-span-6 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
-        <p className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-fit h-12 flex items-center">
+      </Card>
+      <Card className="col-span-12 md:col-span-6">
+        <p className="font-bold text-center p-2 bg-purple-400/50 text-sm text-purple-700 rounded-full w-fit">
           <span>Porcentaje de registros</span>
         </p>
-        <div className="h-72 py-4">
+        <div className="h-80">
           <Doughnut
             data={{
               labels: ["Alta", "Propuesta Baja", "Baja"],
@@ -275,12 +277,12 @@ const Home = () => {
             }}
           />
         </div>
-      </div>
-      <div className="col-span-12 md:col-span-6 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
-        <p className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-fit h-12 flex items-center">
+      </Card>
+      <Card className="col-span-12 md:col-span-6">
+        <p className="font-bold text-center p-2 bg-purple-400/50 text-sm text-purple-700 rounded-full w-fit">
           Registros por mes
         </p>
-        <div className="h-72 py-4">
+        <div className="h-80">
           {registersByMonth.months.length > 0 && (
             <Bar
               className="w-full h-full"
@@ -308,9 +310,9 @@ const Home = () => {
             />
           )}
         </div>
-      </div>
-      <div className="col-span-12 md:col-span-6 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
-        <div className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-full flex justify-between items-center">
+      </Card>
+      <Card className="col-span-12 md:col-span-6">
+        <div className="font-bold text-center p-2 bg-purple-400/50 text-purple-700 rounded-full w-full flex justify-between items-center">
           <p className="truncate">Usuario / Tiempo</p>
           <div className="grid grid-cols-5 items-center gap-1">
             <p
@@ -355,7 +357,7 @@ const Home = () => {
             </p>
           </div>
         </div>
-        <div className="h-72 py-4">
+        <div className="h-80">
           <Line
             data={{
               labels: usersInventories.labels,
@@ -380,16 +382,15 @@ const Home = () => {
             }}
           />
         </div>
-      </div>
-      <div className="col-span-12 md:col-span-6 lg:col-span-12 p-2 px-4 rounded-md bg-white flex flex-col w-full h-full">
-        {/* table with recents inventories */}
+      </Card>
+      <Card className="col-span-12 md:col-span-6 lg:col-span-12">
         <div className="flex justify-between items-center w-full">
-          <p className="font-bold text-center p-2 px-4 bg-purple-400/50 text-purple-700 rounded-full w-fit h-12 flex items-center">
+          <p className="font-bold text-center p-2 bg-purple-400/50 text-sm text-purple-700 rounded-full w-fit">
             <span>Últimas movimientos</span>
           </p>
           <Link
             to={"/inventario"}
-            className="bg-purple-400/50 font-bold text-purple-700 px-4 rounded-full hover:text-white hover:bg-purple-700 h-12 hover ease-in-out duration-100 transition flex items-center justify-center"
+            className="bg-purple-400/50 font-bold text-purple-700 p-2 rounded-full hover:text-white hover:bg-purple-700 hover ease-in-out duration-100 transition flex items-center justify-center"
           >
             Ver más
             <span className="ml-2">
@@ -397,7 +398,7 @@ const Home = () => {
             </span>
           </Link>
         </div>
-        <div className="h-full py-4">
+        <div className="h-full">
           <RecentsTable
             inventories={
               inventories?.length > 0
@@ -406,7 +407,7 @@ const Home = () => {
             }
           />
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

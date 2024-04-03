@@ -29,7 +29,6 @@ const Inventory = () => {
   const {
     inventoryTypes,
     inventoryBrands,
-    inventoryModels,
     deleteInventory,
     getInventoriesByParams,
     inventories,
@@ -152,6 +151,12 @@ const Inventory = () => {
     } else if (data) {
       const res = await getInventoriesByParams(filters);
       if (res) {
+        const inventoryUpdated = inventories.filter(
+          (inventory) => inventory.id !== inventoryToDelete.id
+        );
+        setInventoriesData(
+          formatedInventoriesForTable(inventoryUpdated, location)
+        );
         setTotals({
           totalEntries: res.totalEntries,
           totalPages: res.totalPages,

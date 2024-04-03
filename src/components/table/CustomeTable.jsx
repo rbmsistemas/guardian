@@ -1,5 +1,5 @@
 import { Table } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaCheckSquare,
   FaEye,
@@ -16,6 +16,37 @@ import { MdPlaylistRemove } from "react-icons/md";
 import getFormatedStatus from "../../utils/getFormatedStatus";
 import { Link, useNavigate } from "react-router-dom";
 import TextInput from "../inputs/TextInput";
+
+const LazyLoadImage = ({ src, alt, onClick }) => {
+  const [thumbnailUrl, setThumbnailUrl] = useState(null);
+
+  useEffect(() => {
+    const loadImage = async () => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const thumbnailSize = 100; // Tamaño deseado para la miniatura
+        canvas.width = thumbnailSize;
+        canvas.height = thumbnailSize;
+        ctx.drawImage(img, 0, 0, thumbnailSize, thumbnailSize);
+        const thumbnail = canvas.toDataURL();
+        setThumbnailUrl(thumbnail);
+      };
+      img.src = src;
+    };
+    loadImage();
+  }, [src]);
+
+  return (
+    <img
+      src={thumbnailUrl}
+      alt={alt}
+      onClick={onClick}
+      className="w-10 h-10 object-cover rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
+    />
+  );
+};
 
 const CustomeTable = ({
   data = [],
@@ -38,6 +69,7 @@ const CustomeTable = ({
   exportResults,
   resultsToExport = [],
   setResultsToExport = () => {},
+  centerContentColumnKey = [],
 }) => {
   const navigate = useNavigate();
   const [itemSelected, setItemSelected] = useState({});
@@ -85,6 +117,7 @@ const CustomeTable = ({
     <>
       <div className="overflow-x-auto w-full">
         <Table
+          striped
           hoverable={true}
           className="w-full h-full rounded-lg whitespace-nowrap"
         >
@@ -184,7 +217,7 @@ const CustomeTable = ({
                 <Table.Row
                   key={item.id.value ?? index}
                   onDoubleClick={() => navigate(onShow + item.id.value)}
-                  className="bg-white font-light dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ease-in-out duration-200"
+                  className="bg-white font-semibold dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ease-in-out duration-200"
                 >
                   {exportResults && (
                     <Table.Cell
@@ -216,25 +249,26 @@ const CustomeTable = ({
                       key === "imagen" ? (
                       <Table.Cell
                         className={`${
-                          resultsToExport.includes(item.id.value) &&
-                          "bg-purple-500 text-white"
+                          (resultsToExport.includes(item.id.value) &&
+                            "bg-purple-500 text-white",
+                          centerContentColumnKey.includes(key) && "text-center")
                         }
                       `}
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
                         key={key}
                       >
-                        <img
-                          src={FormatedUrlImage(item[key].value)}
-                          alt={item[key].value}
-                          className="w-10 h-10 object-cover rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
+                        <LazyLoadImage
+                          src={FormatedUrlImage(item.imagen.value)}
+                          alt={item.imagen.value}
                           onClick={() => handleShowItem(item)}
                         />
                       </Table.Cell>
                     ) : key === "status" ? (
                       <Table.Cell
                         className={`${
-                          resultsToExport.includes(item.id.value) &&
-                          "bg-purple-500 text-white"
+                          (resultsToExport.includes(item.id.value) &&
+                            "bg-purple-500 text-white",
+                          centerContentColumnKey.includes(key) && "text-center")
                         }
                     `}
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
@@ -258,8 +292,9 @@ const CustomeTable = ({
                       <Table.Cell
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
                         className={`text-neutral-600 ${
-                          resultsToExport.includes(item.id.value) &&
-                          "bg-purple-500 text-white"
+                          (resultsToExport.includes(item.id.value) &&
+                            "bg-purple-500 text-white",
+                          centerContentColumnKey.includes(key) && "text-center")
                         }
                     `}
                         key={key}
@@ -272,8 +307,10 @@ const CustomeTable = ({
                     <Table.Cell
                       style={{ paddingTop: "10px", paddingBottom: "10px" }}
                       className={`flex gap-2 justify-center ${
-                        resultsToExport.includes(item.id.value) &&
-                        "bg-purple-500 text-white"
+                        (resultsToExport.includes(item.id.value) &&
+                          "bg-purple-500 text-white",
+                        centerContentColumnKey.includes("actions") &&
+                          "text-center")
                       }`}
                     >
                       {onShare && (

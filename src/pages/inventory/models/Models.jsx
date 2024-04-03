@@ -71,12 +71,14 @@ const Models = () => {
 
   const memorizedData = useMemo(() => {
     let data = [];
+
     inventoryModels.forEach((model) => {
-      // const totalEntries = inventories.filter(
-      //   (inventory) => inventory.inventoryModelId === model.id
-      // ).length;
       data.push({
         id: { key: "id", value: model.id },
+        imagen: {
+          key: "image",
+          value: model?.images?.length > 0 ? model?.images[0] : "",
+        },
         modelo: { key: "name", value: model.name },
         marca: {
           key: "inventoryBrandId",
@@ -86,7 +88,10 @@ const Models = () => {
           key: "inventoryTypeId",
           value: model?.inventoryType?.name ?? "",
         },
-        // ["Equipos registrados"]: { key: "total", value: totalEntries ?? 0 },
+        ["Cantidad"]: {
+          key: "inventoriesCount",
+          value: model.inventoriesCount ?? 0,
+        },
       });
     });
     return data;
@@ -290,8 +295,8 @@ const Models = () => {
       <CustomeTable
         showImagen={true}
         data={modelsData}
-        onShow={(id) => navigate(`/inventario/modelos/ver/${id}`)}
-        onEdit={(id) => navigate(`/inventario/modelos/editar/${id}`)}
+        onShow={"/inventario/modelos/ver/"}
+        onEdit={"/inventario/modelos/editar/"}
         // onDelete={(id) => handleDelete(id)}
         quantityResults={filters.quantityResults}
         sortByHeader
@@ -304,6 +309,7 @@ const Models = () => {
         totalPages={totals.totalPages}
         onSortFilters={(sort) => handleFilterByParams(sort, "orderBy")}
         order={{ orderBy: filters.orderBy, sort: filters.sort }}
+        centerContentColumnKey={["Cantidad"]}
       />
     </div>
   );

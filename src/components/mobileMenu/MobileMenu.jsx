@@ -10,7 +10,7 @@ const MobileMenu = ({
           key={action.id}
           type="button"
           className={`flex flex-col justify-center w-full items-center gap-1 border-r border-r-gray-300 last:border-none ${
-            action?.color || "text-gray-500"
+            action?.color ?? "text-gray-500"
           } `}
           onClick={action.onClick}
         >

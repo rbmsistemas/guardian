@@ -1,4 +1,4 @@
-export const Base_Inventory = (inventory = {}, models = []) => {
+export const Base_Inventory = (inventory = {}) => {
   if (Object.keys(inventory).length === 0) {
     return {
       userId: "",
@@ -21,18 +21,14 @@ export const Base_Inventory = (inventory = {}, models = []) => {
       createdBy: "",
     };
   } else {
-    const model = models?.find(
-      (item) => item.id === inventory.inventoryModelId
-    );
-
     return {
       id: inventory.id || "",
       userId: inventory.userId || "",
       inventoryModelId: inventory.inventoryModelId || "",
       otherModel: inventory.otherModel || "",
-      inventoryBrandId: model.inventoryBrandId || "",
+      inventoryBrandId: inventory?.inventoryModel?.inventoryBrandId || "",
       otherBrand: inventory.otherBrand || "",
-      inventoryTypeId: model.inventoryTypeId || "",
+      inventoryTypeId: inventory?.inventoryModel?.inventoryTypeId || "",
       otherType: inventory.otherType || "",
       serialNumber: inventory.serialNumber || "",
       activo: inventory.activo || "",
@@ -51,16 +47,6 @@ export const Base_Inventory = (inventory = {}, models = []) => {
   }
 };
 
-export const Base_InventoryModel = {
-  id: "",
-  name: "",
-  image: "",
-  inventoryTypeId: "",
-  inventoryBrandId: "",
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
-};
-
 export const Base_InventoryBrand = {
   id: "",
   name: "",
@@ -71,6 +57,18 @@ export const Base_InventoryBrand = {
 export const Base_InventoryType = {
   id: "",
   name: "",
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+};
+
+export const Base_InventoryModel = {
+  id: "",
+  name: "",
+  images: [],
+  inventoryTypeId: "",
+  inventoryBrandId: "",
+  inventoryBrand: Base_InventoryBrand,
+  inventoryType: Base_InventoryType,
   createdAt: Date.now(),
   updatedAt: Date.now(),
 };

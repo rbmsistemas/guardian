@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Context from "../../../context/Context";
 import AutocompleteInput from "../../../components/inputs/AutocompleteInput";
+import classNames from "classnames";
 import {
   FaCheckSquare,
   FaHome,
@@ -18,10 +19,11 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Masonry from "react-masonry-css";
 import { FiChevronRight } from "react-icons/fi";
-import { TbTableFilled, TbTrash } from "react-icons/tb";
 import { RiLayoutMasonryFill } from "react-icons/ri";
 import CustomeTable from "../../../components/table/CustomeTable";
 import { formatLocalDate } from "../../../utils/getFormatedDate";
+import { TbTrash } from "react-icons/tb";
+
 import { AppUrl } from "../../../api/inventory.api";
 import toast from "react-hot-toast";
 import ImageDownloader from "../../../exports/ImageDownloader";
@@ -381,7 +383,12 @@ const Groups = () => {
                       {image.images.map((image, index) => (
                         <div
                           key={index}
-                          className="relative w-full hover:shadow-md hover:shadow-indigo-500/50 p-2 rounded overflow-hidden transition-all ease-in-out duration-100"
+                          className={`relative w-full hover:shadow-md hover:shadow-indigo-500/50 p-2 rounded overflow-hidden transition-all ease-in-out duration-100 
+                          ${
+                            selectImagesGroup.includes(image)
+                              ? "bg-neutral-100 p-4"
+                              : ""
+                          }`}
                         >
                           <div
                             className={
@@ -468,7 +475,16 @@ const Groups = () => {
                 images.map((image, index) => (
                   <div
                     key={index}
-                    className="relative w-full hover:shadow-md hover:shadow-indigo-500/50 p-2 rounded overflow-hidden transition-all ease-in-out duration-100"
+                    className={
+                      classNames(
+                        "relative w-full hover:shadow-md hover:shadow-indigo-500/50 p-2 rounded overflow-hidden transition-all ease-in-out duration-100",
+                        {
+                          "bg-neutral-100 p-4": selectImagesGroup.includes(
+                            image?.image
+                          ),
+                        }
+                      ) + " aspect-square"
+                    }
                   >
                     <div
                       className={

@@ -25,7 +25,6 @@ const ModalImageViewer = ({
   const [index, setIndex] = useState(currentIndex);
   const [rotate, setRotate] = useState("rotate-0");
   const [rotateCounter, setRotateCounter] = useState(0);
-  const [scale, setScale] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const thumbnailsRef = useRef(null);
 
@@ -150,55 +149,36 @@ const ModalImageViewer = ({
             <p className="text-xl font-bold text-blue-500">Ver imagen</p>
           </div>
         </Modal.Header>
-        <div
-          className={`${scale ? "h-[70vh]" : "h-[50vh]"} w-full md:h-[80vh]`}
-        >
+        <Modal.Body className="w-full md:h-[80vh] p-0 relative">
           <div className="w-full h-full flex flex-col items-center justify-center relative">
             <TransformWrapper>
               <TransformComponent>
-                <div
-                  className={`flex justify-center items-center overflow-auto w-full ${
-                    scale ? " h-full" : " h-[60vh]"
-                  }`}
-                >
-                  <img
-                    loading="lazy"
-                    onClick={() => setScale(!scale)}
-                    src={FormatedUrlImage(image)}
-                    alt={title}
-                    className={`transform ${
-                      scale
-                        ? "cursor-zoom-out object-center object-cover"
-                        : "cursor-zoom-in object-contain w-full h-full"
-                    } transition ease-in-out duration-200 ${rotate}`}
-                  />
-                </div>
+                <img
+                  loading="lazy"
+                  src={FormatedUrlImage(image)}
+                  alt={title}
+                  className={`transform h-full w-fit max-w-full md:max-w-72 max-h-full object-contain cursor-zoom-in transition ease-in-out duration-200 ${rotate}`}
+                />
               </TransformComponent>
             </TransformWrapper>
-            <div
-              className={`${
-                scale
-                  ? "fixed bottom-32 left-1/2 transform -translate-x-1/2"
-                  : "fixed bottom-[28vh] md:bottom-[32vh] w-full"
-              } flex justify-center whitespace-nowrap gap-2`}
-            >
+            <div className="w-full h-fit absolute bottom-5 flex justify-center gap-2">
               <button
                 type="button"
-                className="px-4 py-2 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                className="h-8 w-8 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
                 onClick={handlePrev}
               >
                 <FaChevronLeft />
               </button>
               <button
                 type="button"
-                className="px-4 py-2 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                className="h-8 w-8 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
                 onClick={handleRotateLeft}
               >
                 <TbRotate2 />
               </button>
               <button
                 type="button"
-                className="px-4 py-2 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                className="h-8 w-8 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
                 onClick={handleRotateRight}
               >
                 <TbRotateClockwise2 />
@@ -206,7 +186,7 @@ const ModalImageViewer = ({
               {isDownloadImage && (
                 <button
                   type="button"
-                  className="px-4 py-2 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                  className="h-8 w-8 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
                   onClick={handleDownload}
                 >
                   <FaDownload />
@@ -214,15 +194,15 @@ const ModalImageViewer = ({
               )}
               <button
                 type="button"
-                className="px-4 py-2 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
+                className="h-8 w-8 bg-white/50 rounded-md text-gray-700 text-sm border border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out flex items-center justify-center"
                 onClick={handleNext}
               >
                 <FaChevronRight />
               </button>
             </div>
           </div>
-        </div>
-        {!scale && (
+        </Modal.Body>
+        {images.length > 1 && (
           <Modal.Footer
             style={{
               padding: "10px",

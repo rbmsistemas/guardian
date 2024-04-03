@@ -180,7 +180,6 @@ const Side = ({
             onMouseLeave={() => setShowEditProfile(false)}
             className="h-[22vh] p-4 pt-8 relative text-center flex flex-col justify-center items-center"
           >
-            
             <div className="relative w-fit h-fit pb-2">
               {user?.photo ? (
                 <img
@@ -218,13 +217,13 @@ const Side = ({
             <p className="text-white text-sm whitespace-normal">
               {user.firstName + " " + user.lastName}
               <span>
-              <FaUserEdit
-              onClick={() => navigate("/perfil")}
-              size={24}
-              className={`text-purple-700 inline p-1 ml-3 bg-neutral-200 rounded-md cursor-pointer transition ease-in-out duration-200 ${
-                showEditProfile ? "scale-100" : "scale-0"
-              } `}
-            />
+                <FaUserEdit
+                  onClick={() => navigate("/perfil")}
+                  size={24}
+                  className={`text-purple-700 inline p-1 ml-3 bg-neutral-200 rounded-md cursor-pointer transition ease-in-out duration-200 ${
+                    showEditProfile ? "scale-100" : "scale-0"
+                  } `}
+                />
               </span>
             </p>
             <p className="text-white text-xs whitespace-normal w-full">
@@ -269,8 +268,8 @@ const Side = ({
       </div>
       {modal && (
         <ModalImageViewer
-          images={[imageSelected?.image] || []}
-          title={imageSelected?.name || ""}
+          images={[imageSelected?.image] ?? []}
+          title={imageSelected?.name ?? ""}
           show={modal}
           onClose={() => setModal(false)}
           isDownloadImage={true}

@@ -116,38 +116,41 @@ const ShowInventory = () => {
     inventario.inventoryModelId;
 
   return (
-    <div className="min-h-full w-full p-5 flex flex-col gap-4">
+    <div className="min-h-full w-full p-4 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-        <div className="flex gap-2 items-center">
-          <Link to="/" className="text-gray-500 hover:text-gray-700">
+        <div className="flex flex-wrap justify-center md:justify-start items-center space-x-2 p-2">
+          <Link to="/" className="text-neutral-500 hover:text-neutral-700">
             <FaHome className="text-xl" />
           </Link>
-          <span className="text-gray-500 text-xl">
+          <span className="text-neutral-500 text-xl">
             <FiChevronRight />
           </span>
-          <Link to="/inventario" className="text-gray-500 hover:text-gray-700">
+          <Link
+            to="/inventario"
+            className="text-neutral-500 hover:text-neutral-700"
+          >
             Inventario
           </Link>
-          <span className="text-gray-500 text-xl">
+          <span className="text-neutral-500 text-xl">
             <FiChevronRight />
           </span>
           <Link
             to="#"
-            className="text-gray-500 hover:text-gray-700 truncate whitespace-pre-wrap"
+            className="text-neutral-500 hover:text-neutral-700 truncate whitespace-pre-wrap"
           >
             {inventario.inventoryTypeId + " " + inventario.inventoryBrandId}
           </Link>
         </div>
         <div className="flex gap-2 items-center justify-center md:justify-end">
-          <div
-            onClick={() => navigate("/inventario")}
+          <Link
+            to="/inventario"
             className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
           >
             <span>
               <FaList className="text-white text-lg" />
             </span>
             Listado
-          </div>
+          </Link>
 
           <Link
             to={`/inventario/editar/${id}`}

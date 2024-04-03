@@ -57,7 +57,7 @@ const Searcher = () => {
   }, [search]);
 
   const handleGetInventory = async () => {
-    const data = await getInventoriesBySearch({
+    await getInventoriesBySearch({
       inventoryType: "",
       brandType: "",
       search: search,

@@ -76,7 +76,7 @@ const ShowCompany = () => {
     setLoading(false);
   };
   return (
-    <div className="min-h-full w-full p-5 flex flex-col gap-4">
+    <div className="min-h-full w-full p-4 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-3">
         <div className="flex gap-2 items-center">
           <Link to="/" className="text-gray-500 hover:text-gray-700">

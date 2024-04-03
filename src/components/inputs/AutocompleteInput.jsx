@@ -55,7 +55,7 @@ export const DropdownList = ({
           key={i}
           onClick={() => onSelect(option)}
           className={classNames(
-            "py-2 text-sm pl-4 w-full cursor-pointer flex justify-between text-neutral-500 items-center border-b border-gray-100 transition ease-in-out duration-100",
+            "py-2 text-sm pl-4 w-full cursor-pointer flex justify-between text-neutral-700 items-center border-b border-neutral-200 transition ease-in-out duration-100",
             {
               "text-green-500": "0" == option.value,
               "bg-blue-500 text-white":
@@ -76,7 +76,8 @@ export const DropdownList = ({
           </span>
           {option.value == "0" && (
             <FaPlusCircle
-              className={`${
+              size={18}
+              className={`bg-white rounded-full text-xl mr-4 ${
                 selectedOption?.value == option.value
                   ? "text-white"
                   : "text-green-500"
@@ -110,7 +111,7 @@ const AutocompleteInput = ({
   itemsClassName,
 }) => {
   const [inputValue, setInputValue] = useState("");
-  const [filteredData, setFilteredData] = useState(data || []);
+  const [filteredData, setFilteredData] = useState(data ?? []);
   const [selectedOption, setSelectedOption] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef(null);

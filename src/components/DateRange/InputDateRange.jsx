@@ -37,7 +37,7 @@ function InputDateRange({
           name="startDate"
           min={new Date().toISOString().split("T")[0]}
           icon={FaCalendar}
-          value={startDate || ""}
+          value={startDate ?? ""}
           onChange={handleDateChange}
         />
       </div>
@@ -54,7 +54,7 @@ function InputDateRange({
           min={startDate}
           disabled={isDisabled}
           icon={FaCalendar}
-          value={endDate || ""}
+          value={endDate ?? ""}
           onChange={handleDateChange}
         />
       </div>

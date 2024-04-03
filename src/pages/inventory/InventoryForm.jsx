@@ -11,7 +11,10 @@ import {
   uploadFileInventory,
   uploadImagesInventory,
 } from "../../api/inventory.api";
-import { getCurrentFormattedDate } from "../../utils/getFormatedDate";
+import {
+  formatLocalDate,
+  getCurrentFormattedDate,
+} from "../../utils/getFormatedDate";
 import { Base_Inventory, Base_InventoryField } from "../../context/Models";
 import MobileMenu from "../../components/mobileMenu/MobileMenu";
 import handleTrimObjectValues from "../../utils/TrimObjectsValue";
@@ -76,8 +79,8 @@ const InventoryForm = () => {
   }, [id]);
 
   useEffect(() => {
-    if (id && inventory.id) {
-      setData(Base_Inventory(inventory, inventoryModels));
+    if (id && inventory?.id) {
+      setData(Base_Inventory(inventory));
       setImages(inventory?.images || []);
       setSelectedDetails(inventory?.details || Base_InventoryField);
     }
@@ -343,7 +346,7 @@ const InventoryForm = () => {
         if (data.recepcionDate) {
           setData({
             ...data,
-            recepcionDate: new Date(data.recepcionDate),
+            recepcionDate: formatLocalDate(data.recepcionDate),
           });
         }
 
@@ -585,7 +588,7 @@ const InventoryForm = () => {
   }
 
   return (
-    <div className="min-h-full w-full p-5">
+    <div className="min-h-full w-full p-4">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between items-center">
         <div className="flex gap-2 items-center">
           <Link to="/" className="text-gray-500 hover:text-gray-700">

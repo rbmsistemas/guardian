@@ -258,8 +258,8 @@ const AppProvider = (props) => {
         type: POST_INVENTORY,
         payload: inventory,
       });
-      const inventoryType = inventory?.inventoryModel?.inventoryType || null;
-      const inventoryBrand = inventory?.inventoryModel?.inventoryBrand || null;
+      const inventoryType = inventory?.inventoryModel?.inventoryType ?? null;
+      const inventoryBrand = inventory?.inventoryModel?.inventoryBrand ?? null;
 
       let inventoryTypesArray = state.inventoryTypes.map((type) => type.id);
       let inventoryBrandsArray = state.inventoryBrands.map((brand) => brand.id);
@@ -314,7 +314,7 @@ const AppProvider = (props) => {
         throw new Error("Error en la respuesta del servidor");
       } else {
         const inventoryUpdated = state.inventories.filter(
-          (inventary) => inventary._id !== id
+          (inventory) => inventory.id !== id
         );
         dispatch({
           type: DELETE_INVENTORY,
@@ -450,20 +450,19 @@ const AppProvider = (props) => {
   const getInvetoryModelById = async (id) => {
     try {
       const response = await handleGetInventoryModelById(id, state.user.token);
-      if (!response.ok) {
+      if (response?.status !== 200) {
         throw new Error("Error en la respuesta del servidor");
       }
+      const { inventoryModel } = await response.data;
 
-      const { inventoryModel, inventories } = await response.data;
       dispatch({
         type: GET_INVENTORY_MODEL_BY_ID,
         payload: inventoryModel,
       });
       dispatch({
         type: GET_INVENTORY,
-        payload: inventories,
+        payload: inventoryModel?.inventoryModel ?? [],
       });
-      return response.data;
     } catch (error) {
       console.log(error);
       return false;
@@ -848,11 +847,21 @@ const AppProvider = (props) => {
     if (state.user?.token) {
       // getUsers();
       // getInventories(state.user.token);
-      getCompanies(state.user.token);
-      getInventoryTypes(state.user.token);
-      getInventoryBrands(state.user.token);
-      getInventoryModels(state.user.token);
-      getInventoryFields(state.user.token);
+      if (state.inventoryTypes?.length <= 1) {
+        getInventoryTypes(state.user.token);
+      }
+      if (state.inventoryBrands?.length <= 1) {
+        getInventoryBrands(state.user.token);
+      }
+      if (state.inventoryModels?.length <= 1) {
+        getInventoryModels(state.user.token);
+      }
+      if (state.companies?.length <= 1) {
+        getCompanies(state.user.token);
+      }
+      if (state.inventoryFields?.length <= 1) {
+        getInventoryFields(state.user.token);
+      }
     }
   }, [state.company, state.inventaryModels, state?.user]);
 
