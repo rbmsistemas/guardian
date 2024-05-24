@@ -10,6 +10,7 @@ import CameraPhoto, {
   IMAGE_TYPES,
 } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
+import ModalImages from "../components/modals/ModalImages";
 
 const CameraComponent = ({
   capturedImage = [],
@@ -192,7 +193,7 @@ const CameraComponent = ({
             }
           />
         </div>
-        {capturedImage.length > 0 &&
+        {/* {capturedImage.length > 0 &&
           capturedImage.map((item, index) => {
             return (
               <div
@@ -213,17 +214,9 @@ const CameraComponent = ({
                 />
               </div>
             );
-          })}
+          })} */}
       </div>
-      {showModal && (
-        <ModalImageViewer
-          images={capturedImage}
-          title="Imagenes"
-          show={showModal}
-          onClose={onClose}
-          currentIndex={image}
-        />
-      )}
+      <ModalImages images={capturedImage} title="Imagenes" />
     </div>
   );
 };
