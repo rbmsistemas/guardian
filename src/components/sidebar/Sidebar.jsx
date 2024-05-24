@@ -16,7 +16,7 @@ import Context from "../../context/Context";
 import ItemSidebar from "./ItemSidebar";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import { Base_Company } from "../../context/Models";
-import ModalImageViewer from "../../components/modals/ModalImageViewer";
+import ModalSingleImage from "../modals/ModalSingleImage";
 
 const Side = ({
   user = {
@@ -188,7 +188,7 @@ const Side = ({
                   alt={user.userName}
                   onClick={() => {
                     setImageSelected({
-                      image: user.photo,
+                      image: FormatedUrlImage(user.photo),
                       name: user.userName,
                     });
                     setModal(true);
@@ -201,18 +201,14 @@ const Side = ({
                   </p>
                 </div>
               )}
-              <img
-                src={FormatedUrlImage(user.company.logo)}
-                className="absolute bg-white ring-1 ring-purple-300 cursor-pointer bottom-2.5 -right-1.5 h-6 w-6 object-cover rounded-full"
-                alt={user.company.name}
-                onClick={() => {
-                  setImageSelected({
-                    image: user.company.logo,
-                    name: user.company.name,
-                  });
-                  setModal(true);
-                }}
-              />
+              {user.company.logo && (
+                <ModalSingleImage
+                  image={FormatedUrlImage(user.company.logo)}
+                  title={user.company.name}
+                  elementClassNames="absolute bg-white cursor-pointer bottom-2.5 -right-1.5 rounded-full"
+                  imageClassNames="h-6 w-6 object-cover rounded-full ring-2 ring-purple-300 bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200"
+                />
+              )}
             </div>
             <p className="text-white text-sm whitespace-normal">
               {user.firstName + " " + user.lastName}
@@ -266,15 +262,6 @@ const Side = ({
           ))}
         </div>
       </div>
-      {modal && (
-        <ModalImageViewer
-          images={[imageSelected?.image] ?? []}
-          title={imageSelected?.name ?? ""}
-          show={modal}
-          onClose={() => setModal(false)}
-          isDownloadImage={true}
-        />
-      )}
     </div>
   );
 };

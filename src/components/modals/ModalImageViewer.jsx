@@ -149,15 +149,15 @@ const ModalImageViewer = ({
             <p className="text-xl font-bold text-blue-500">Ver imagen</p>
           </div>
         </Modal.Header>
-        <Modal.Body className="w-full md:h-[80vh] p-0 relative">
-          <div className="w-full h-full flex flex-col items-center justify-center relative">
+        <Modal.Body className="w-full h-full p-0 relative">
+          <div className="w-full h-full min-h-96 flex flex-col items-center justify-center relative">
             <TransformWrapper>
               <TransformComponent>
                 <img
                   loading="lazy"
                   src={FormatedUrlImage(image)}
                   alt={title}
-                  className={`transform h-full w-fit max-w-full md:max-w-72 max-h-full object-contain cursor-zoom-in transition ease-in-out duration-200 ${rotate}`}
+                  className={`h-full w-full max-h[80vh] md:max-w-72 transform object-contain cursor-zoom-in transition ease-in-out duration-200 ${rotate}`}
                 />
               </TransformComponent>
             </TransformWrapper>

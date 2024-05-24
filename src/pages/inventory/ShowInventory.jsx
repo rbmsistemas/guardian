@@ -20,40 +20,98 @@ import {
   MdOutlineInventory2,
 } from "react-icons/md";
 import Loading from "../../utils/Loading";
-import { formatLocalDate } from "../../utils/getFormatedDate";
 import { BiDevices } from "react-icons/bi";
 import { Tb3DCubeSphere } from "react-icons/tb";
 import { AiOutlineFieldNumber, AiOutlineNumber } from "react-icons/ai";
 import "../../Quill.css";
 import { toast } from "react-hot-toast";
-import ModalImageViewer from "../../components/modals/ModalImageViewer";
 import { Base_Inventory } from "../../context/Models";
-import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
-import getFormatedStatus from "../../utils/getFormatedStatus";
 import InventoryDetailsView from "./InventoryDetails";
+import ModalImages from "../../components/modals/ModalImages";
+import InventoryDetail from "../../utils/InventoryDetail";
+
+let inventoryDetailHeaders = [
+  {
+    title: "Status",
+    key: "status",
+    type: "text",
+    icon: MdCheckCircle,
+  },
+  {
+    title: "Tipo de inventario",
+    key: "inventoryTypeId",
+    type: "text",
+    icon: BiDevices,
+  },
+  {
+    title: "Marca",
+    key: "inventoryBrandId",
+    type: "text",
+    icon: MdNewReleases,
+  },
+  {
+    title: "Modelo",
+    key: "inventoryModelId",
+    type: "text",
+    icon: Tb3DCubeSphere,
+  },
+  {
+    title: "Número Serial",
+    key: "serialNumber",
+    type: "text",
+    icon: AiOutlineFieldNumber,
+  },
+  {
+    title: "Activo",
+    key: "activo",
+    type: "text",
+    icon: AiOutlineNumber,
+  },
+  {
+    title: "Creado por",
+    key: "createdBy",
+    type: "text",
+    icon: FaUser,
+  },
+  {
+    title: "Fecha de recepción",
+    key: "recepcionDate",
+    type: "date",
+    icon: MdCalendarMonth,
+  },
+  {
+    title: "Fecha de alta",
+    key: "altaDate",
+    type: "date",
+    icon: MdCalendarMonth,
+  },
+  {
+    title: "Fecha de baja",
+    key: "bajaDate",
+    type: "date",
+    icon: MdCalendarMonth,
+  },
+  {
+    title: "Fecha de creación",
+    key: "createdAt",
+    type: "date",
+    icon: MdCalendarMonth,
+  },
+  {
+    title: "Ultima modificación",
+    key: "updatedAt",
+    type: "date",
+    icon: MdCalendarMonth,
+  },
+];
 
 const ShowInventory = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const {
-    inventory,
-    getInventoryById,
-    inventoryTypes,
-    inventoryBrands,
-    inventoryModels,
-    deleteInventory,
-  } = useContext(Context);
+  const { inventory, getInventoryById, deleteInventory } = useContext(Context);
   const [modal, setModal] = useState(false);
-  const [modal2, setModal2] = useState(false);
   const errorNotify = (message) => toast.error(message);
   const successNotify = (message) => toast.success(message);
-
-  const [imageSelected, setImageSelected] = useState(0);
-
-  const handleShowImages = (index) => {
-    setImageSelected(index);
-    setModal2(true);
-  };
 
   const [inventario, setInventario] = useState(Base_Inventory());
   const [loading, setLoading] = useState(true);
@@ -66,7 +124,6 @@ const ShowInventory = () => {
       setInventario({
         id: inventory.id ?? "",
         inventoryTypeId: inventory?.inventoryModel?.inventoryType?.name ?? "",
-
         inventoryBrandId: inventory?.inventoryModel?.inventoryBrand?.name ?? "",
         inventoryModelId: inventory?.inventoryModel?.name ?? "",
         serialNumber: inventory.serialNumber ?? "",
@@ -183,158 +240,28 @@ const ShowInventory = () => {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
-          <div
-            className={`col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b ${
-              inventario?.status == 1
-                ? " border-green-500"
-                : inventario?.status == 2
-                ? "border-amber-500"
-                : inventario?.status == 3
-                ? "border-red-500"
-                : null
-            }  justify-end`}
-          >
-            <div className="w-full">
-              <Label htmlFor="" value="Status" />
-            </div>
-            <p
-              className={`${
-                inventario?.status == 1
-                  ? "bg-green-200 text-green-500"
+          {inventoryDetailHeaders.map((header, index) => (
+            <div
+              key={index}
+              className={`col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 flex flex-col gap-2 border-b ${
+                header.key == "status" && inventario?.status == 1
+                  ? " border-green-500"
                   : inventario?.status == 2
-                  ? "bg-amber-200 text-amber-500"
+                  ? "border-amber-500"
                   : inventario?.status == 3
-                  ? "bg-red-200 text-red-500"
-                  : null
-              } flex items-center font-bold gap-2 p-2`}
+                  ? "border-red-500"
+                  : "border-gray-300"
+              } justify-end`}
             >
-              <span>
-                <MdCheckCircle className=" text-xl" />
-              </span>
-              {getFormatedStatus(inventario?.status)}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="inventoryTipe" value="Tipo de inventario" />
+              <InventoryDetail
+                id={header.key}
+                title={header.title}
+                value={inventario[header.key]}
+                type={header.type}
+                icon={header.icon}
+              />
             </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <BiDevices className="text-blue-500 text-xl" />
-              </span>
-              {inventario.inventoryTypeId}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="inventoryBrand" value="Marca" />
-            </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <MdNewReleases className="text-blue-500 text-xl" />
-              </span>
-              {inventario.inventoryBrandId}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="inventoryMode" value="Modelo" />
-            </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <Tb3DCubeSphere className="text-blue-500 text-xl" />
-              </span>
-              {inventario.inventoryModelId}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="sn" value="Número Serial" />
-            </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <AiOutlineFieldNumber className="text-blue-500 text-xl" />
-              </span>
-              {inventario.serialNumber}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="activo" value="Activo" />
-            </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <AiOutlineNumber className="text-blue-500 text-xl" />
-              </span>
-              {inventario.activo}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="activo" value="Creado por" />
-            </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <FaUser className="text-blue-500 text-xl" />
-              </span>
-              {inventario.createdBy}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="recepcionDate" value="Fecha de recepción" />
-            </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <MdCalendarMonth className="text-blue-500 text-xl" />
-              </span>
-              {formatLocalDate(inventario.recepcionDate) ?? "N/A"}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="altaDate" value="Fecha de alta" />
-            </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <MdCalendarMonth className="text-blue-500 text-xl" />
-              </span>
-              {formatLocalDate(inventario.altaDate)}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="bajaDate" value="Fecha de baja" />
-            </div>
-            <p className="text-neutral-700 flex items-start gap-4">
-              <span>
-                <MdCalendarMonth className="text-blue-500 text-xl" />
-              </span>
-              {formatLocalDate(inventario.bajaDate) ?? "N/A"}
-            </p>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="createdAt" value="Fecha de creación" />
-              <p className="text-neutral-700 flex items-start gap-4">
-                <span>
-                  <MdCalendarMonth className="text-blue-500 text-xl" />
-                </span>
-                {formatLocalDate(inventario.createdAt)}
-              </p>
-            </div>
-          </div>
-          <div className="col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-2 border-b border-b-gray-300 justify-end pb-1">
-            <div className="w-full">
-              <Label htmlFor="updatedAt" value="Ultima modificación" />
-              <p className="text-neutral-700 flex items-start gap-4">
-                <span>
-                  <MdCalendarMonth className="text-blue-500 text-xl" />
-                </span>
-                {formatLocalDate(inventario.updatedAt)}
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
         <div className="py-2 w-full">
           <Label
@@ -360,7 +287,7 @@ const ShowInventory = () => {
             <div className="w-full">
               <Label htmlFor="images" value="Imagenes" />
             </div>
-            <div className="flex flex-wrap gap-4 w-full overflow-x-auto">
+            {/* <div className="flex flex-wrap gap-4 w-full overflow-x-auto">
               {inventario.images?.map((image, index) => (
                 <div
                   key={index}
@@ -374,7 +301,10 @@ const ShowInventory = () => {
                   />
                 </div>
               ))}
-            </div>
+            </div> */}
+            {inventario.images && (
+              <ModalImages title={inventarioTitle} images={inventario.images} />
+            )}
           </div>
         </div>
       </div>
@@ -439,16 +369,6 @@ const ShowInventory = () => {
             </div>
           </Modal.Footer>
         </Modal>
-      )}
-      {modal2 && (
-        <ModalImageViewer
-          images={inventario.images}
-          title={inventarioTitle}
-          show={modal2}
-          onClose={() => setModal2(false)}
-          currentIndex={imageSelected}
-          isDownloadImage={true}
-        />
       )}
       {loading && <Loading />}
     </div>

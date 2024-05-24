@@ -258,11 +258,22 @@ const AppProvider = (props) => {
         type: POST_INVENTORY,
         payload: inventory,
       });
+
+      const inventoryModel = inventory?.inventoryModel ?? null;
       const inventoryType = inventory?.inventoryModel?.inventoryType ?? null;
       const inventoryBrand = inventory?.inventoryModel?.inventoryBrand ?? null;
 
       let inventoryTypesArray = state.inventoryTypes.map((type) => type.id);
       let inventoryBrandsArray = state.inventoryBrands.map((brand) => brand.id);
+      let inventoryModelArray = state.inventoryModels.map((model) => model.id);
+
+      if (!inventoryModelArray.includes(inventoryModel.id)) {
+        dispatch({
+          type: GET_INVENTORY_MODELS,
+          payload: [...state.inventoryModels, inventoryModel],
+        });
+      }
+
       if (!inventoryTypesArray.includes(inventoryType.id)) {
         dispatch({
           type: GET_INVENTORY_TYPES,
@@ -272,6 +283,7 @@ const AppProvider = (props) => {
           ],
         });
       }
+
       if (!inventoryBrandsArray.includes(inventoryBrand.id)) {
         dispatch({
           type: GET_INVENTORY_BRANDS,
@@ -859,9 +871,7 @@ const AppProvider = (props) => {
       if (state.companies?.length <= 1) {
         getCompanies(state.user.token);
       }
-      if (state.inventoryFields?.length <= 1) {
-        getInventoryFields(state.user.token);
-      }
+      getInventoryFields(state.user.token);
     }
   }, [state.company, state.inventaryModels, state?.user]);
 
