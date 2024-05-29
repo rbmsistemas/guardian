@@ -22,7 +22,7 @@ export function formatedInventoriesForTable(data, location) {
         },
         imagen: {
           key: "imagen",
-          value: item?.imagenes[0] ?? [],
+          value: item?.imagenes?.length > 0 ? item.imagenes[0] : [],
         },
         tipo: {
           key: "inventoryTypeId",
