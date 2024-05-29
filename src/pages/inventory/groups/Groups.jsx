@@ -27,6 +27,7 @@ import { TbTrash } from "react-icons/tb";
 import { AppUrl } from "../../../api/inventory.api";
 import toast from "react-hot-toast";
 import ImageDownloader from "../../../exports/ImageDownloader";
+import ModalImages from "../../../components/modals/ModalImages";
 
 const Groups = () => {
   const { getInventoryGroups, inventoryGroups, allInventoryFields } =
@@ -334,9 +335,9 @@ const Groups = () => {
                 images.length > 0 &&
                 images.map((image) => (
                   <div key={image.id} className="w-full pb-4">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 pb-2">
                       <div
-                        className={`flex items-center gap-2 p-2 rounded-md transition-all ease-in-out duration-100 ${
+                        className={`flex items-center gap-2 p-1 rounded-md transition-all ease-in-out duration-100 ${
                           image?.images?.every((item) =>
                             selectImagesGroup?.includes(item)
                           )
@@ -369,30 +370,20 @@ const Groups = () => {
                         {image.name}
                       </Link>
                     </div>
-                    <Masonry
-                      breakpointCols={{
-                        default: 6,
-                        1300: 6,
-                        1100: 4,
-                        700: 3,
-                        500: 2,
-                      }}
-                      className="my-masonry-grid relative"
-                      columnClassName="my-masonry-grid_column"
-                    >
+                    <div className="flex flex-wrap gap-4">
                       {image.images.map((image, index) => (
                         <div
                           key={index}
-                          className={`relative w-full hover:shadow-md hover:shadow-indigo-500/50 p-2 rounded overflow-hidden transition-all ease-in-out duration-100 
+                          className={`relative hover:shadow-md hover:shadow-indigo-500/50 p-2 rounded overflow-hidden transition-all ease-in-out duration-100 
                           ${
                             selectImagesGroup.includes(image)
-                              ? "bg-neutral-100 p-4"
+                              ? "bg-neutral-100 p-2"
                               : ""
                           }`}
                         >
                           <div
                             className={
-                              "absolute top-0 right-0 z-10 flex items-center gap-2 p-2 rounded-md transition-all ease-in-out duration-100 " +
+                              "absolute top-0 right-0 z-10 flex items-center gap-2 p-1 rounded-md transition-all ease-in-out duration-100 " +
                               (selectImagesGroup.includes(image)
                                 ? "bg-blue-500"
                                 : "bg-white")
@@ -410,16 +401,14 @@ const Groups = () => {
                               />
                             )}
                           </div>
-                          <LazyLoadImage
-                            effect="blur"
-                            onClick={() => handleShowImages(index)}
-                            src={FormatedUrlImage(image)}
-                            alt="imagen"
-                            className="w-full h-auto object-cover rounded-md cursor-pointer aspect-square"
+                          <ModalImages
+                            containerClassName="rounded-md aspect-square"
+                            images={[image]}
+                            key={index}
                           />
                         </div>
                       ))}
-                    </Masonry>
+                    </div>
                   </div>
                 ))}
             </div>
@@ -460,16 +449,7 @@ const Groups = () => {
                   "Grupo"}
               </p>
             </div>
-            <Masonry
-              breakpointCols={{
-                default: 5,
-                1100: 4,
-                700: 3,
-                500: 2,
-              }}
-              className="my-masonry-grid relative"
-              columnClassName="my-masonry-grid_column"
-            >
+            <div className="flex flex-wrap gap-4">
               {images &&
                 images.length > 0 &&
                 images.map((image, index) => (
@@ -477,7 +457,7 @@ const Groups = () => {
                     key={index}
                     className={
                       classNames(
-                        "relative w-full hover:shadow-md hover:shadow-indigo-500/50 p-2 rounded overflow-hidden transition-all ease-in-out duration-100",
+                        "relative w-fit hover:shadow-md hover:shadow-indigo-500/50 p-2 rounded overflow-hidden transition-all ease-in-out duration-100",
                         {
                           "bg-neutral-100 p-4": selectImagesGroup.includes(
                             image?.image
@@ -506,16 +486,14 @@ const Groups = () => {
                         />
                       )}
                     </div>
-                    <LazyLoadImage
-                      effect="blur"
-                      onClick={() => handleShowImages(index)}
-                      src={FormatedUrlImage(image?.image)}
-                      alt="imagen"
-                      className="w-full h-auto object-cover rounded-md cursor-pointer aspect-square"
+                    <ModalImages
+                      containerClassName="rounded-md aspect-square"
+                      images={[image?.image]}
+                      key={index}
                     />
                   </div>
                 ))}
-            </Masonry>
+            </div>
           </div>
         )}
         {inventoryGroups && viewMod == 2 && (

@@ -5,6 +5,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "react-photo-view/dist/react-photo-view.css";
+import NoImageFound from "../../assets/img/NoImageFound.jpg";
 
 const ModalImages = ({
   images = [],
@@ -18,52 +19,103 @@ const ModalImages = ({
 
   return (
     <PhotoProvider
-      speed={() => 500}
+      brokenElement={
+        <img
+          className="w-80 h-auto rounded-lg object-cover"
+          src={NoImageFound}
+          alt="NoImageFound"
+        />
+      }
+      maskOpacity={0.8}
+      loop={true}
+      speed={() => 200}
       toolbarRender={({ onScale, scale, rotate, onRotate }) => {
         return (
           <>
             <svg
-              onClick={() => onScale(scale + 1)}
-              className="PhotoView-Slider__toolbarIcon"
-              width="50px"
-              height="50px"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-            >
-              <path
-                fill="#ffffff"
-                fill-rule="evenodd"
-                d="M4 9a5 5 0 1110 0A5 5 0 014 9zm5-7a7 7 0 104.2 12.6.999.999 0 00.093.107l3 3a1 1 0 001.414-1.414l-3-3a.999.999 0 00-.107-.093A7 7 0 009 2zM8 6.5a1 1 0 112 0V8h1.5a1 1 0 110 2H10v1.5a1 1 0 11-2 0V10H6.5a1 1 0 010-2H8V6.5z"
-              />
-            </svg>
-            <svg
               onClick={() => onScale(scale - 1)}
               className="PhotoView-Slider__toolbarIcon"
-              width="50px"
-              height="50px"
-              viewBox="0 0 20 20"
+              width="40px"
+              height="40px"
+              fill="#ffffff"
+              viewBox="0 0 32 32"
+              version="1.1"
               xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                {" "}
+                <title>minus-round</title>{" "}
+                <path d="M0 16q0 3.264 1.28 6.208t3.392 5.12 5.12 3.424 6.208 1.248 6.208-1.248 5.12-3.424 3.392-5.12 1.28-6.208-1.28-6.208-3.392-5.12-5.088-3.392-6.24-1.28q-3.264 0-6.208 1.28t-5.12 3.392-3.392 5.12-1.28 6.208zM4 16q0-3.264 1.6-6.016t4.384-4.352 6.016-1.632 6.016 1.632 4.384 4.352 1.6 6.016-1.6 6.048-4.384 4.352-6.016 1.6-6.016-1.6-4.384-4.352-1.6-6.048zM8 16q0 0.832 0.576 1.44t1.44 0.576h12q0.8 0 1.408-0.576t0.576-1.44-0.576-1.408-1.408-0.576h-12q-0.832 0-1.44 0.576t-0.576 1.408z"></path>{" "}
+              </g>
+            </svg>
+            <svg
+              onClick={() => onScale(scale + 1)}
+              className="PhotoView-Slider__toolbarIcon"
+              width="40px"
+              height="40px"
+              viewBox="0 0 24 24"
               fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="#ffffff"
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                {" "}
+                <path
+                  d="M11 8C11 7.44772 11.4477 7 12 7C12.5523 7 13 7.44772 13 8V11H16C16.5523 11 17 11.4477 17 12C17 12.5523 16.5523 13 16 13H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16V13H8C7.44771 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11H11V8Z"
+                  fill="#ffffff"
+                ></path>{" "}
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12ZM3.00683 12C3.00683 16.9668 7.03321 20.9932 12 20.9932C16.9668 20.9932 20.9932 16.9668 20.9932 12C20.9932 7.03321 16.9668 3.00683 12 3.00683C7.03321 3.00683 3.00683 7.03321 3.00683 12Z"
+                  fill="#ffffff"
+                ></path>{" "}
+              </g>
+            </svg>
+            <svg
+              onClick={() => onRotate(rotate - 90)}
+              className="PhotoView-Slider__toolbarIcon scale-x-[-1]"
+              fill="#ffffff"
+              width="40px"
+              height="40px"
+              version="1.1"
+              id="Capa_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 214.367 214.367"
+              xmlSpace="preserve"
             >
               <path
-                fill="#ffffff"
-                fill-rule="evenodd"
-                d="M9 4a5 5 0 100 10A5 5 0 009 4zM2 9a7 7 0 1112.6 4.2.999.999 0 01.107.093l3 3a1 1 0 01-1.414 1.414l-3-3a.999.999 0 01-.093-.107A7 7 0 012 9zm10.5 0a1 1 0 00-1-1h-5a1 1 0 100 2h5a1 1 0 001-1z"
+                d="M202.403,95.22c0,46.312-33.237,85.002-77.109,93.484v25.663l-69.76-40l69.76-40v23.494
+	c27.176-7.87,47.109-32.964,47.109-62.642c0-35.962-29.258-65.22-65.22-65.22s-65.22,29.258-65.22,65.22
+	c0,9.686,2.068,19.001,6.148,27.688l-27.154,12.754c-5.968-12.707-8.994-26.313-8.994-40.441C11.964,42.716,54.68,0,107.184,0
+	S202.403,42.716,202.403,95.22z"
               />
             </svg>
             <svg
               onClick={() => onRotate(rotate + 90)}
               className="PhotoView-Slider__toolbarIcon"
               fill="#ffffff"
-              width="45px"
-              height="45px"
+              width="40px"
+              height="40px"
               version="1.1"
               id="Capa_1"
               xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
               viewBox="0 0 214.367 214.367"
-              xml:space="preserve"
+              xmlSpace="preserve"
             >
               <path
                 d="M202.403,95.22c0,46.312-33.237,85.002-77.109,93.484v25.663l-69.76-40l69.76-40v23.494
@@ -87,7 +139,7 @@ const ModalImages = ({
             <LazyLoadImage
               effect="blur"
               className={classNames(
-                "w-full h-full object-cover max-w-[6rem] max-h-[6rem] cursor-pointer rounded-md ring-2 ring-purple-300 bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200",
+                "w-full h-full object-cover max-w-[6rem] max-h-[6rem] cursor-pointer bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200",
                 imageClassname
               )}
               src={FormatedUrlImage(image)}

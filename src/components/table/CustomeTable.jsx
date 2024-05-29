@@ -16,37 +16,38 @@ import { MdPlaylistRemove } from "react-icons/md";
 import getFormatedStatus from "../../utils/getFormatedStatus";
 import { Link, useNavigate } from "react-router-dom";
 import TextInput from "../inputs/TextInput";
+import ModalImages from "../modals/ModalImages";
 
-const LazyLoadImage = ({ src, alt, onClick }) => {
-  const [thumbnailUrl, setThumbnailUrl] = useState(null);
+// const LazyLoadImage = ({ src, alt, onClick }) => {
+//   const [thumbnailUrl, setThumbnailUrl] = useState(null);
 
-  useEffect(() => {
-    const loadImage = async () => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const thumbnailSize = 100; // Tamaño deseado para la miniatura
-        canvas.width = thumbnailSize;
-        canvas.height = thumbnailSize;
-        ctx.drawImage(img, 0, 0, thumbnailSize, thumbnailSize);
-        const thumbnail = canvas.toDataURL();
-        setThumbnailUrl(thumbnail);
-      };
-      img.src = src;
-    };
-    loadImage();
-  }, [src]);
+//   useEffect(() => {
+//     const loadImage = async () => {
+//       const img = new Image();
+//       img.onload = () => {
+//         const canvas = document.createElement("canvas");
+//         const ctx = canvas.getContext("2d");
+//         const thumbnailSize = 100; // Tamaño deseado para la miniatura
+//         canvas.width = thumbnailSize;
+//         canvas.height = thumbnailSize;
+//         ctx.drawImage(img, 0, 0, thumbnailSize, thumbnailSize);
+//         const thumbnail = canvas.toDataURL();
+//         setThumbnailUrl(thumbnail);
+//       };
+//       img.src = src;
+//     };
+//     loadImage();
+//   }, [src]);
 
-  return (
-    <img
-      src={thumbnailUrl}
-      alt={alt}
-      onClick={onClick}
-      className="w-10 h-10 object-cover rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
-    />
-  );
-};
+//   return (
+//     <img
+//       src={thumbnailUrl}
+//       alt={alt}
+//       onClick={onClick}
+//       className="w-10 h-10 object-cover rounded-lg cursor-pointer hover:scale-110 transition ease-in-out duration-200"
+//     />
+//   );
+// };
 
 const CustomeTable = ({
   data = [],
@@ -77,6 +78,7 @@ const CustomeTable = ({
   const [itemName, setItemName] = useState("");
   const [selectAll, setSelectAll] = useState(false);
   const [customPage, setCustomPage] = useState(page);
+  const [lastSelectedIndex, setLastSelectedIndex] = useState(null);
 
   const handleShowItem = (item) => {
     setItemSelected(item);
@@ -110,6 +112,35 @@ const CustomeTable = ({
       setResultsToExport(data.map((item) => item.id.value));
     } else {
       setResultsToExport([]);
+    }
+  };
+
+  const handleRowClick = (e, item) => {
+    if (e.ctrlKey) {
+      window.open(onShow + item.id.value, "_blank");
+    }
+  };
+
+  const handleCheckboxClick = (e, index) => {
+    const currentItemId = data[index].id.value;
+
+    if (e.shiftKey && lastSelectedIndex !== null) {
+      const start = Math.min(lastSelectedIndex, index);
+      const end = Math.max(lastSelectedIndex, index);
+      const newSelectedElements = data
+        .slice(start, end + 1)
+        .map((item) => item.id.value);
+
+      setResultsToExport((prevSelected) => {
+        const combinedSelection = new Set([
+          ...prevSelected,
+          ...newSelectedElements,
+        ]);
+        return Array.from(combinedSelection);
+      });
+    } else {
+      setLastSelectedIndex(index);
+      handleSelectElement(currentItemId);
     }
   };
 
@@ -216,8 +247,9 @@ const CustomeTable = ({
               data.map((item, index) => (
                 <Table.Row
                   key={item.id.value ?? index}
+                  onClick={(e) => handleRowClick(e, item, index)}
                   onDoubleClick={() => navigate(onShow + item.id.value)}
-                  className="bg-white font-semibold dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ease-in-out duration-200"
+                  className="font-sans font-medium dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ease-in-out duration-200"
                 >
                   {exportResults && (
                     <Table.Cell
@@ -234,7 +266,10 @@ const CustomeTable = ({
                             ? "text-white border-white border-2"
                             : "text-neutral-500 border"
                         } hover:scale-110 transition ease-in-out duration-200 flex items-center justify-center `}
-                        onClick={() => handleSelectElement(item.id.value)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCheckboxClick(e, index);
+                        }}
                       >
                         {resultsToExport.includes(item.id.value) ? (
                           <FaCheckSquare className="text-xl" />
@@ -251,24 +286,32 @@ const CustomeTable = ({
                         className={`${
                           (resultsToExport.includes(item.id.value) &&
                             "bg-purple-500 text-white",
-                          centerContentColumnKey.includes(key) && "text-center")
+                          centerContentColumnKey?.includes(key) &&
+                            "text-center")
                         }
                       `}
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
                         key={key}
                       >
-                        <LazyLoadImage
+                        {/* <LazyLoadImage
                           src={FormatedUrlImage(item.imagen.value)}
                           alt={item.imagen.value}
                           onClick={() => handleShowItem(item)}
+                        /> */}
+                        <ModalImages
+                          images={[item.imagen.value]}
+                          title={item?.modelo?.value}
+                          key={item.id.value}
+                          containerClassName="h-10 w-10"
                         />
                       </Table.Cell>
                     ) : key === "status" ? (
                       <Table.Cell
                         className={`${
-                          (resultsToExport.includes(item.id.value) &&
-                            "bg-purple-500 text-white",
-                          centerContentColumnKey.includes(key) && "text-center")
+                          resultsToExport.includes(item.id.value) &&
+                          "bg-purple-500 text-white"
+                        } ${
+                          centerContentColumnKey?.includes(key) && "text-center"
                         }
                     `}
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
@@ -292,9 +335,10 @@ const CustomeTable = ({
                       <Table.Cell
                         style={{ paddingTop: "10px", paddingBottom: "10px" }}
                         className={`text-neutral-600 ${
-                          (resultsToExport.includes(item.id.value) &&
-                            "bg-purple-500 text-white",
-                          centerContentColumnKey.includes(key) && "text-center")
+                          resultsToExport.includes(item.id.value) &&
+                          "bg-purple-500 text-white"
+                        } ${
+                          centerContentColumnKey?.includes(key) && "text-center"
                         }
                     `}
                         key={key}
@@ -307,11 +351,13 @@ const CustomeTable = ({
                     <Table.Cell
                       style={{ paddingTop: "10px", paddingBottom: "10px" }}
                       className={`flex gap-2 justify-center ${
-                        (resultsToExport.includes(item.id.value) &&
-                          "bg-purple-500 text-white",
-                        centerContentColumnKey.includes("actions") &&
-                          "text-center")
-                      }`}
+                        resultsToExport.includes(item.id.value) &&
+                        "bg-purple-500 text-white"
+                      } ${
+                        centerContentColumnKey?.includes("actions") &&
+                        "text-center"
+                      }
+                      `}
                     >
                       {onShare && (
                         <div
@@ -362,9 +408,10 @@ const CustomeTable = ({
                 type="text"
                 value={totalEntries}
                 readOnly={true}
+                min={1}
               />
             </div>
-            <p className="text-neutral-600 text-base inline-block">
+            <p className="text-neutral-600 md:text-sm inline-block">
               Resultados totales
             </p>
           </div>
@@ -403,7 +450,7 @@ const CustomeTable = ({
                 inputClassName={"text-center font-semibold"}
               />
             </div>
-            <p className="text-neutral-600 text-base inline-block">
+            <p className="text-neutral-600 md:text-sm inline-block">
               De {totalPages} páginas
             </p>
           </div>
@@ -419,9 +466,10 @@ const CustomeTable = ({
               <option value="30">30 </option>
               <option value="40">40 </option>
               <option value="50">50 </option>
-              <option value={totalEntries}>Todos los resultados</option>
+              <option value="50">100 </option>
+              <option value={totalEntries}>Todos</option>
             </select>
-            <p className="text-neutral-600 text-base inline-block">
+            <p className="text-neutral-600 md:text-sm inline-block">
               Resultados por página
             </p>
           </div>

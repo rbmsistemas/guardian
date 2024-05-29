@@ -71,6 +71,7 @@ const InventoryFields = ({
     title: "",
     description: "",
   });
+  const [newDetailKeyName, setNewDetailKeyName] = useState("");
 
   const handleOtherField = (e) => {
     if (e) {
@@ -393,7 +394,6 @@ const InventoryFields = ({
             }
           }}
           onBlur={(e) => {
-            console.log(e.target.value);
             let values = ["Alta", "Propuesta de baja", "Baja"];
             if (!values.includes(e.target.value)) {
               setErrors({ ...errors, status: true });
@@ -717,64 +717,109 @@ const InventoryFields = ({
       />
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 py-4">
         {selectedDetails.map((item, index) => (
-          <div key={item.key} className="flex items-center gap-2 uppercase">
-            <div className="w-[90%] h-full">
-              <FloatingLabel
-                key={item.key}
-                id={item.key}
-                label={item.key}
-                variant="outlined"
-                value={item.value}
-                onChange={(e) => {
-                  let newSelectedDetails = [...selectedDetails];
-                  newSelectedDetails[index].value = e.target.value;
-                  setSelectedDetails(newSelectedDetails);
-                }}
-              />
+          <div
+            key={item.key}
+            className="w-full flex flex-col lg:flex-row gap-2 items-center uppercase"
+          >
+            <div className="w-full flex gap-2">
+              {item.id == "0" && (
+                <div className="w-full h-full">
+                  <FloatingLabel
+                    key={item.key}
+                    type="text"
+                    id={item.key}
+                    label={item.key}
+                    variant="outlined"
+                    placeholder="Nombre nuevo campo"
+                    value={newDetailKeyName}
+                    onChange={(e) => setNewDetailKeyName(e.target.value)}
+                    onBlur={(e) => {
+                      let newSelectedDetails = [...selectedDetails];
+                      newSelectedDetails[index].key = newDetailKeyName;
+                      setSelectedDetails(newSelectedDetails);
+                    }}
+                  />
+                </div>
+              )}
+              <div className="w-full h-full">
+                <FloatingLabel
+                  key={item.key}
+                  id={item.key}
+                  label={item.key}
+                  placeholder={item.id == "0" ? "Valor del campo" : item.key}
+                  variant="outlined"
+                  value={item.value}
+                  onChange={(e) => {
+                    let newSelectedDetails = [...selectedDetails];
+                    newSelectedDetails[index].value = e.target.value;
+                    setSelectedDetails(newSelectedDetails);
+                  }}
+                />
+              </div>
             </div>
-            <div className="w-[10%]">
+            <div className="w-full lg:w-24 grid grid-cols-2 gap-2 justify-items-center items-center">
               {!Base_InventoryField.some(
                 (element) => element.key === item.key
               ) && (
-                <Tooltip
-                  className="z-20"
-                  placement="top"
-                  content="Remover campo"
+                <button
+                  type="button"
+                  className="w-full h-10 flex items-center justify-center text-red-500 border border-red-500 bordere-blue-500 rounded-md hover:border-red-500 hover:bg-red-500 hover:text-white transition ease-in-out duration-100"
+                  onClick={() => {
+                    setSelectedDetails(
+                      selectedDetails.filter((x) => x.id !== item.id)
+                    );
+                  }}
                 >
-                  <button
-                    type="button"
-                    className="text-red-500 p-2 rounded-md text-sm md:text-base hover:border-red-500 hover:bg-red-500 hover:text-white transition ease-in-out duration-100"
-                    onClick={() => {
-                      setSelectedDetails(
-                        selectedDetails.filter((x) => x.id !== item.id)
-                      );
-                    }}
-                    style={{ transition: "background-color 0.5s ease" }}
+                  <Tooltip
+                    className="z-20"
+                    placement="top"
+                    content="Remover campo"
                   >
                     <span>
-                      <FaTrashAlt className="w-4 h-4" />
+                      <MdClose className="w-6 h-6 " />
                     </span>
-                  </button>
-                </Tooltip>
+                  </Tooltip>
+                </button>
+              )}
+              {item.id == "0" && (
+                <button
+                  type="button"
+                  className="w-full h-10 flex items-center justify-center text-blue-500 border border-blue-500 bordere-blue-500 rounded-md hover:border-blue-500 hover:bg-blue-500 hover:text-white transition ease-in-out duration-100"
+                  onClick={() => {
+                    // validate if the field is empty
+                    if (newDetailKeyName == "") {
+                      toast.error("El campo no puede estar vacío");
+                      return;
+                    }
+
+                    let newInventoryFields = [...inventoryFields];
+                    newInventoryFields.push({
+                      id: selectedDetails.length + 1,
+                      key: item.key,
+                    });
+                    setSelectedDetails([
+                      ...selectedDetails.filter((x) => x.id != "0"),
+                      {
+                        id: selectedDetails.length,
+                        key: item.key,
+                        value: item.value,
+                      },
+                    ]);
+                  }}
+                >
+                  <Tooltip
+                    className="z-20"
+                    placement="top"
+                    content="Agregar campo"
+                  >
+                    <span>
+                      <MdAdd className="w-6 h-6 " />
+                    </span>
+                  </Tooltip>
+                </button>
               )}
             </div>
           </div>
-          // <TextInput
-          //   id={item.key}
-          //   type="text"
-          //   placeholder={item.key}
-          //   value={
-          //     item?.key == "Mac"
-          //       ? getMACFormat(item.value.toUpperCase())
-          //       : item.value
-          //   }
-          //   onChange={(e) => {
-          //     let newSelectedDetails = [...selectedDetails];
-          //     newSelectedDetails[index].value = e.target.value;
-          //     setSelectedDetails(newSelectedDetails);
-          //   }}
-          //   isClearable
-          // />
         ))}
       </div>
     </div>

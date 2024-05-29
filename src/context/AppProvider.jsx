@@ -112,9 +112,9 @@ const AppProvider = (props) => {
   const [state, dispatch] = useReducer(Reducer, initialState);
 
   // auth actions
-  const handleLogin = async (data) => {
+  const handleLogin = async (data, remember = false) => {
     try {
-      const response = await getLogin(data);
+      const response = await getLogin(data, remember);
       if (response?.status === undefined) {
         window.confirm(
           "No se pudo conectar con el servidor, ¿Desea abrirlo?"

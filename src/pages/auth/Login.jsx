@@ -15,6 +15,7 @@ const Login = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const notifyError = (text) => toast.error(text);
   const notifySuccess = (text) => toast.success(text);
@@ -28,7 +29,7 @@ const Login = () => {
         setIsLoading(false);
         return;
       }
-      const res = await handleLogin(user);
+      const res = await handleLogin(user, remember);
       if (!res.status) {
         setIsLoading(false);
         return notifyError(res.error);
@@ -121,6 +122,7 @@ const Login = () => {
           <div className="w-full flex flex-col md:flex-row gap-4 justify-between">
             <div className="flex items-center">
               <input
+                onClick={() => setRemember(!remember)}
                 id="remember_me"
                 name="remember_me"
                 type="checkbox"

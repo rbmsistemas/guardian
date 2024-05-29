@@ -17,9 +17,10 @@ export const handleShareInventory = async (inventory) => {
           : inventory?.status === 2
           ? "Propuesta de Baja"
           : "Baja"
-      }\nCreado: ${inventory?.createdAt}\n
-      \nActualizado: ${inventory?.updatedAt || "N/A"}\n 
-    }\n\n${AppUrl}/inventario/ver/${inventory?.id}`;
+      }\nCreado: ${inventory?.createdAt}\nActualizado: ${
+        inventory?.updatedAt || "N/A"
+      }
+    \n\n${AppUrl}/inventario/ver/${inventory?.id}`;
 
       navigator.clipboard.writeText(stringToCopy);
       successNotify("Inventario copiado al portapapeles");

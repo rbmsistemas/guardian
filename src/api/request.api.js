@@ -9,8 +9,10 @@ const config = {
   },
 };
 
-export const getLogin = async (data) => {
+export const getLogin = async (data, remember = false) => {
   try {
+    // appebd remember to data
+    data.remember = remember;
     const response = await axios.post(`${urlEnv}/api/auth/login`, data, config);
     return response;
   } catch (error) {

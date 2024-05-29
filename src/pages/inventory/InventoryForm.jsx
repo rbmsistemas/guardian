@@ -622,33 +622,38 @@ const InventoryForm = () => {
           <button
             type="button"
             onClick={() => navigate("/inventario")}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200"
           >
             <span>
               <IoArrowBack className="text-white text-lg" />
             </span>
-            {volver && compareChanges(data, inventory) ? "Cancelar" : "Volver"}
+            <span className="hidden lg:block">
+              {volver && compareChanges(data, inventory)
+                ? "Cancelar"
+                : "Volver"}
+            </span>
           </button>
           <button
             type="submit"
             onClick={handleSubmitButton}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200"
           >
             <span>
               <FaSave className="text-white text-lg" />
             </span>
-
-            {id ? "Actualizar" : "Guardar"}
+            <span className="hidden lg:block">
+              {id ? "Actualizar" : "Guardar"}
+            </span>
           </button>
           {id && (
             <Link
               to={`/inventario/ver/${id}`}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded flex gap-2 items-center transition ease-in-out duration-200"
             >
               <span>
                 <FaEye className="text-white text-lg" />
               </span>
-              Ver
+              <span className="hidden lg:block">Ver</span>
             </Link>
           )}
         </div>

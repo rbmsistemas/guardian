@@ -20,6 +20,10 @@ export function formatedInventoriesForTable(data, location) {
           key: "no",
           value: rowNumber,
         },
+        imagen: {
+          key: "imagen",
+          value: item.imagenes[0],
+        },
         tipo: {
           key: "inventoryTypeId",
           value: item?.tipo ?? item?.inventoryModel?.inventoryType?.name,

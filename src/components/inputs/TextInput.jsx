@@ -20,6 +20,7 @@ const TextInput = ({
   onBlur,
   onKeyDown,
   max,
+  min,
   error,
   setErrors,
   name,
@@ -72,6 +73,7 @@ const TextInput = ({
               ? max
               : null
           }
+          min={min}
           disabled={disabled}
           className={classNames(
             "w-full py-2 pr-3 font-light placeholder:capitalize focus:outline-none focus:border-blue-500",

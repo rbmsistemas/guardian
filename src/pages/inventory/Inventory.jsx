@@ -66,11 +66,6 @@ const Inventory = () => {
     const orderBy = params.get("orderBy") ?? "updatedAt";
     const sort = params.get("sort") ?? "DESC";
 
-    // if (location.state?.search) {
-    //   console.log(location.state.search);
-    //   search = location.state.search;
-    // }
-
     let newFilters = {
       inventoryType,
       brandType,
@@ -257,7 +252,7 @@ const Inventory = () => {
     const status = inventory?.status;
     const createdAt = formatLocalDate(inventory["fecha creacion"]);
     const updatedAt = formatLocalDate(inventory["fecha actualizacion"]);
-    const imgage = inventory?.imagenes[0];
+    const image = inventory?.imagenes[0];
 
     const stringToCopy = `Tipo: ${inventoryType}\nMarca: ${inventoryBrand}\nModelo: ${inventoryModel}\nSN: ${serialNumber}\nActivo: ${activo}\nStatus: ${
       status === 1 ? "Alta" : status === 2 ? "Propuesta de Baja" : "Baja"
@@ -316,7 +311,7 @@ const Inventory = () => {
         <div className="grid grid-cols-3 gap-2 items-center w-full md:w-auto">
           <Link
             to="/inventario/crear"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded flex gap-2 items-center justify-center transition ease-in-out duration-200 hover:scale-105"
+            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded flex gap-2 items-center justify-center transition ease-in-out duration-200"
           >
             <span>
               <MdOutlineAdd className="text-white text-lg" />
@@ -327,7 +322,7 @@ const Inventory = () => {
           </Link>
           <button
             onClick={handleClearFilters}
-            className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded flex justify-center items-center"
+            className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-4 rounded flex gap-2 items-center justify-center transition ease-in-out duration-200"
           >
             <span>
               <AiOutlineClear className="text-lg" />
@@ -470,6 +465,7 @@ const Inventory = () => {
 
       {!isLoading && totals.totalEntries >= 1 && (
         <CustomeTable
+          showImagen={true}
           data={inventoriesData}
           onShare={(id) => handleCopyToClipboard(id)}
           onShow={"/inventario/ver/"}
@@ -489,6 +485,7 @@ const Inventory = () => {
           exportResults
           resultsToExport={resultsToExport}
           setResultsToExport={setresultsToExport}
+          centerContentColumnKey={["imagen"]}
         />
       )}
       {modal && (

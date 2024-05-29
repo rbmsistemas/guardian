@@ -16,7 +16,6 @@ import Context from "../../context/Context";
 import ItemSidebar from "./ItemSidebar";
 import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import { Base_Company } from "../../context/Models";
-import ModalSingleImage from "../modals/ModalSingleImage";
 import ModalImages from "../modals/ModalImages";
 
 const Side = ({
@@ -206,8 +205,8 @@ const Side = ({
                 <ModalImages
                   images={[user.company.logo]}
                   title={user.company.name}
-                  containerClassName="absolute bg-white cursor-pointer bottom-2.5 -right-1.5 h-6 w-6 rounded-full"
-                  imageClassname="h-6 w-6 object-cover rounded-full"
+                  containerClassName="absolute cursor-pointer bottom-2.5 -right-1.5 h-6 w-6 rounded-full"
+                  imageClassname="h-6 w-6 object-cover rounded-full p-1 bg-white ring-2 ring-purple-300"
                 />
               )}
             </div>

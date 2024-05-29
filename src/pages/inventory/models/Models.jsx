@@ -47,6 +47,10 @@ const Models = () => {
     setLoading(false);
   }, [filters]);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const page = params.get("page");

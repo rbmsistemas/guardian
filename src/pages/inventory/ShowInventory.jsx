@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Label, Modal } from "flowbite-react";
+import { Label, Modal, Tooltip } from "flowbite-react";
 import {
   MdCalendarMonth,
   MdCheckCircle,
@@ -29,6 +29,8 @@ import { Base_Inventory } from "../../context/Models";
 import InventoryDetailsView from "./InventoryDetails";
 import ModalImages from "../../components/modals/ModalImages";
 import InventoryDetail from "../../utils/InventoryDetail";
+import { IoCopyOutline } from "react-icons/io5";
+import { handleShareInventory } from "../../utils/ShareInventory";
 
 let inventoryDetailHeaders = [
   {
@@ -143,6 +145,14 @@ const ShowInventory = () => {
     setLoading(false);
   }, [inventory]);
 
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (inventario?.id === "" || !inventario?.id) {
+    return;
+  }
+
   const onDelete = async () => {
     setLoading(true);
     const data = await deleteInventory(inventario.id);
@@ -171,6 +181,15 @@ const ShowInventory = () => {
     inventario.inventoryBrandId +
     " Modelo " +
     inventario.inventoryModelId;
+
+  function hasValue(details) {
+    return details.some(
+      (detail) =>
+        detail.value !== null &&
+        detail.value !== undefined &&
+        detail.value !== ""
+    );
+  }
 
   return (
     <div className="min-h-full w-full p-4 flex flex-col gap-4">
@@ -201,42 +220,54 @@ const ShowInventory = () => {
         <div className="flex gap-2 items-center justify-center md:justify-end">
           <Link
             to="/inventario"
-            className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200"
           >
             <span>
               <FaList className="text-white text-lg" />
             </span>
-            Listado
+            <span className="hidden lg:block">Listado</span>
           </Link>
 
           <Link
             to={`/inventario/editar/${id}`}
-            className="bg-yellow-300 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            className="bg-yellow-300 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200"
           >
             <span>
               <FaRegEdit className="text-white text-lg" />
             </span>
-            Editar
+            <span className="hidden lg:block">Editar</span>
           </Link>
           <button
             onClick={() => {
               setModal(true);
             }}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200"
           >
             <span>
               <FaRegTrashAlt className="text-white text-lg" />
             </span>
-            Eliminar
+            <span className="hidden lg:block">Eliminar</span>
           </button>
         </div>
       </div>
       <div className="flex flex-col gap-4 p-5 rounded-lg bg-white">
         <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-          <div className="flex flex-col gap-2">
+          <div className="w-full flex justify-between gap-2">
             <h3 className="text-2xl font-semibold text-gray-700">
               Detalles del inventario
             </h3>
+            <Tooltip content="Compartir detalles del inventario">
+              <button
+                onClick={() => {
+                  handleShareInventory(inventory);
+                }}
+                className="bg-neutral-200 hover:bg-neutral-400 hover:text-white font-bold py-2 px-4 rounded flex gap-2 items-center transition ease-in-out duration-200 hover:scale-105"
+              >
+                <span>
+                  <IoCopyOutline className="text-lg" />
+                </span>
+              </button>
+            </Tooltip>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
@@ -244,13 +275,13 @@ const ShowInventory = () => {
             <div
               key={index}
               className={`col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-1 flex flex-col gap-2 border-b ${
-                header.key == "status" && inventario?.status == 1
+                header.key === "status" && inventario?.status === 1
                   ? " border-green-500"
-                  : inventario?.status == 2
+                  : header.key === "status" && inventario?.status === 2
                   ? "border-amber-500"
-                  : inventario?.status == 3
+                  : header.key === "status" && inventario?.status === 3
                   ? "border-red-500"
-                  : "border-gray-300"
+                  : "border-blue-500"
               } justify-end`}
             >
               <InventoryDetail
@@ -263,14 +294,16 @@ const ShowInventory = () => {
             </div>
           ))}
         </div>
-        <div className="py-2 w-full">
-          <Label
-            className="text-xl uppercase"
-            htmlFor="details"
-            value="Detalles y Grupos"
-          />
-          <InventoryDetailsView data={inventario.details} />
-        </div>
+        {hasValue(inventario.details) && (
+          <div className="py-2 w-full">
+            <Label
+              className="text-xl uppercase"
+              htmlFor="details"
+              value="Detalles y Grupos"
+            />
+            <InventoryDetailsView data={inventario.details} />
+          </div>
+        )}
         <div className="grid grid-cols-4 gap-2 md:gap-5 pb-2">
           <div className="col-span-4 flex flex-col gap-2 border-b border-b-gray-300">
             <div className="w-full">
