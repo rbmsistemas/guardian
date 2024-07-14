@@ -136,15 +136,17 @@ const ModalImages = ({
       >
         {images?.map((image, index) => (
           <PhotoView key={index} src={FormatedUrlImage(image)}>
-            <LazyLoadImage
-              effect="blur"
-              className={classNames(
-                "w-full h-full object-cover max-w-[6rem] max-h-[6rem] cursor-pointer bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200",
-                imageClassname
-              )}
-              src={FormatedUrlImage(image)}
-              alt={title || "Imagen"}
-            />
+            <div className="">
+              <LazyLoadImage
+                effect="blur"
+                className={classNames(
+                  "h-10 w-10 overflow-hidden object-cover cursor-pointer bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200",
+                  imageClassname
+                )}
+                src={FormatedUrlImage(image)}
+                alt={title || "Imagen"}
+              />
+            </div>
           </PhotoView>
         ))}
       </div>

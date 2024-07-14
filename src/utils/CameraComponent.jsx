@@ -216,9 +216,26 @@ const CameraComponent = ({
             );
           })} */}
       </div>
-      <ModalImages images={capturedImage} title="Imagenes" />
+      <div className="grid grid-cols-12 gap-4">
+        {capturedImage?.length > 0 && (
+          <RenderImages images={capturedImage} title="Imagenes" />
+        )}
+      </div>
     </div>
   );
+};
+
+const RenderImages = ({ images = [], title }) => {
+  return images?.map((image, index) => (
+    <div key={index} className="col-span-4 md:col-span-2">
+      <ModalImages
+        imageClassname="w-auto h-full"
+        containerClassName="col-span-4"
+        title={title}
+        images={[image]}
+      />
+    </div>
+  ));
 };
 
 export default CameraComponent;
