@@ -283,14 +283,14 @@ const CustomeTable = ({
                     key === "id" && !showId ? null : showImagen &&
                       key === "imagen" ? (
                       <Table.Cell
-                        className={`${
+                        className={`p-0 flex items-center justify-center w-full ${
                           (resultsToExport.includes(item.id.value) &&
                             "bg-purple-500 text-white",
                           centerContentColumnKey?.includes(key) &&
                             "text-center")
                         }
                       `}
-                        style={{ paddingTop: "10px", paddingBottom: "10px" }}
+                        // style={{ paddingTop: "10px", paddingBottom: "10px" }}
                         key={key}
                       >
                         {/* <LazyLoadImage
@@ -302,8 +302,11 @@ const CustomeTable = ({
                           images={[item.imagen.value]}
                           title={item?.modelo?.value}
                           key={item.id.value}
+<<<<<<< HEAD
                           containerClassName="h-6 w-6 md:h-8 md:w-8"
                           imageClassname="h-6 w-6 md:h-8 md:w-8"
+=======
+>>>>>>> 6b470bf92548b394b702a8c66f064c7fb2e75ed0
                         />
                       </Table.Cell>
                     ) : key === "status" ? (

@@ -192,7 +192,7 @@ const ShowInventory = () => {
   }
 
   return (
-    <div className="min-h-full w-full p-4 flex flex-col gap-4">
+    <div className="h-full w-full p-4 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-3">
         <div className="flex flex-wrap justify-center md:justify-start items-center space-x-2 p-2">
           <Link to="/" className="text-neutral-500 hover:text-neutral-700">
@@ -335,9 +335,14 @@ const ShowInventory = () => {
                 </div>
               ))}
             </div> */}
-            {inventario.images && (
-              <ModalImages title={inventarioTitle} images={inventario.images} />
-            )}
+            <div className="grid grid-cols-12 gap-4">
+              {inventario?.images?.length > 0 && (
+                <RenderImages
+                  images={inventario.images}
+                  title={"Imagenes del inventario"}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -407,4 +412,18 @@ const ShowInventory = () => {
     </div>
   );
 };
+
+const RenderImages = ({ images = [], title }) => {
+  return images?.map((image, index) => (
+    <div key={index} className="col-span-4 md:col-span-2">
+      <ModalImages
+        imageClassname="w-auto h-full"
+        containerClassName="col-span-4"
+        title={title}
+        images={[image]}
+      />
+    </div>
+  ));
+};
+
 export default ShowInventory;

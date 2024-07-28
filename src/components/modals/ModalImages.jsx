@@ -139,6 +139,7 @@ const ModalImages = ({
       >
         {images?.map((image, index) => (
           <PhotoView key={index} src={FormatedUrlImage(image)}>
+<<<<<<< HEAD
             <div className="relative w-fit h-fit">
               {enableDeleteImage && (
                 <span
@@ -152,6 +153,13 @@ const ModalImages = ({
                 effect="blur"
                 className={classNames(
                   "object-cover w-[4rem] h-[4ren] md:w-[6rem] md:h-[6rem] max-w-[8rem] max-h-[8rem] cursor-pointer bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200",
+=======
+            <div className="">
+              <LazyLoadImage
+                effect="blur"
+                className={classNames(
+                  "h-10 w-10 overflow-hidden object-cover cursor-pointer bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200",
+>>>>>>> 6b470bf92548b394b702a8c66f064c7fb2e75ed0
                   imageClassname
                 )}
                 src={FormatedUrlImage(image)}

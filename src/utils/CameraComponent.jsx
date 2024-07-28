@@ -94,14 +94,35 @@ const CameraComponent = ({
             );
           })} */}
       </div>
+<<<<<<< HEAD
       <ModalImages
         enableDeleteImage={true}
         onDeleteImage={removeCapturedImage}
         images={capturedImage}
         title="Imagenes"
       />
+=======
+      <div className="grid grid-cols-12 gap-4">
+        {capturedImage?.length > 0 && (
+          <RenderImages images={capturedImage} title="Imagenes" />
+        )}
+      </div>
+>>>>>>> 6b470bf92548b394b702a8c66f064c7fb2e75ed0
     </div>
   );
+};
+
+const RenderImages = ({ images = [], title }) => {
+  return images?.map((image, index) => (
+    <div key={index} className="col-span-4 md:col-span-2">
+      <ModalImages
+        imageClassname="w-auto h-full"
+        containerClassName="col-span-4"
+        title={title}
+        images={[image]}
+      />
+    </div>
+  ));
 };
 
 export default CameraComponent;

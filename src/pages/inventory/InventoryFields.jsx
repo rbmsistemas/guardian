@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { FloatingLabel, Label, Modal, Tooltip } from "flowbite-react";
+import {
+  FloatingLabel,
+  Label,
+  Modal,
+  ToggleSwitch,
+  Tooltip,
+} from "flowbite-react";
 import {
   MdAdd,
   MdClose,
@@ -369,62 +375,59 @@ const InventoryFields = ({
         />
       </div>
       <div className="col-span-12 sm:col-span-6">
-        <div className="w-full flex gap-1">
-          <span className="text-red-500">*</span>
-          <Label htmlFor="status" value="¿Status del quipo?" />
-        </div>
-        <AutocompleteInput
-          key={body.status}
-          id="status"
-          name="status"
-          data={[
-            { value: 1, label: "Alta" },
-            { value: 2, label: "Propuesta de baja" },
-            { value: 3, label: "Baja" },
-          ]}
-          value={body.status}
-          onChange={(e) => {
-            let values = [1, 2, 3];
+        <div className="mb-1 w-full flex flex-col gap-1">
+          <div className="w-full flex gap-1">
+            <span className="text-red-500">*</span>
+            <Label htmlFor="status" value="¿Status del quipo?" />
+          </div>
+          <div className="w-full grid grid-cols-2 place-items-start items-center">
+            <AutocompleteInput
+              className={"w-full"}
+              key={body.status}
+              id="status"
+              name="status"
+              data={[
+                { value: 1, label: "Alta" },
+                { value: 2, label: "Propuesta de baja" },
+                { value: 3, label: "Baja" },
+              ]}
+              value={body.status}
+              onChange={(e) => {
+                let values = [1, 2, 3];
 
-            if (!values.includes(e.value)) {
-              setErrors({ ...errors, status: true });
-            } else {
-              setErrors({ ...errors, status: false });
-              setBody({ ...body, status: e.value });
-            }
-          }}
-          onBlur={(e) => {
-            let values = ["Alta", "Propuesta de baja", "Baja"];
-            if (!values.includes(e.target.value)) {
-              setErrors({ ...errors, status: true });
-            } else {
-              setErrors({ ...errors, status: false });
-            }
-          }}
-          icon={MdOutlineCategory}
-          isClearable
-          required
-          error={errors.status}
-          setErrors={setErrors}
-        />
-        {/* <Select
-          value={body.status}
-          onChange={(e) => setBody({ ...body, status: e.target.value })}
-          id="status"
-          icon={MdOutlineCategory}
-          color={"bg-white"}
-          style={{
-            borderColor: "#ccc",
-            borderWidth: "0",
-            borderStyle: "solid",
-          }}
-          required={true}
-        >
-          <option value="">-- Selecciona una opción --</option>
-          <option value={1}>Alta</option>
-          <option value={2}>Propuesta de baja</option>
-          <option value={3}>Baja</option>
-        </Select> */}
+                if (!values.includes(e.value)) {
+                  setErrors({ ...errors, status: true });
+                } else {
+                  setErrors({ ...errors, status: false });
+                  setBody({ ...body, status: e.value });
+                }
+              }}
+              onBlur={(e) => {
+                let values = ["Alta", "Propuesta de baja", "Baja"];
+                if (!values.includes(e.target.value)) {
+                  setErrors({ ...errors, status: true });
+                } else {
+                  setErrors({ ...errors, status: false });
+                }
+              }}
+              icon={MdOutlineCategory}
+              isClearable
+              required
+              error={errors.status}
+              setErrors={setErrors}
+            />
+            <div>
+              <ToggleSwitch
+                color="purple"
+                checked={body.isInstalled}
+                label={body.isInstalled ? "Instalado" : "No instalado"}
+                onChange={(e) =>
+                  setBody({ ...body, isInstalled: !body.isInstalled })
+                }
+              />
+            </div>
+          </div>
+        </div>
       </div>
       <div className="col-span-12 sm:col-span-6">
         <div className="mb-1 w-full flex gap-1">

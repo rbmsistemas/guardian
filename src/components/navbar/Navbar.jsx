@@ -144,17 +144,17 @@ const Nav = ({ children }) => {
           </div>
           <img
             src={LogoGuardian}
-            className="h-10 object-contain hidden md:block"
+            className="h-10 object-contain hidden md:block pr-4"
             alt="Logo Guardian"
           />
         </div>
         <div
           id="contenido"
-          className="flex pt-[70px] w-full h-[100dvh] overflow-hidden bg-stone-100"
+          className="flex pt-[70px] w-full min-h-[100dvh] overflow-hidden bg-stone-100"
         >
           <div
             id="children"
-            className="w-full h-full overflow-y-auto gap-5 flex flex-col justify-start items-start"
+            className="w-full h-full overflow-hidden gap-5 flex flex-col justify-start items-start"
           >
             {children}
           </div>
