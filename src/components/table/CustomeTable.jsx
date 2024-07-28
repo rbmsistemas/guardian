@@ -302,7 +302,8 @@ const CustomeTable = ({
                           images={[item.imagen.value]}
                           title={item?.modelo?.value}
                           key={item.id.value}
-                          containerClassName="h-10 w-10"
+                          containerClassName="h-6 w-6 md:h-8 md:w-8"
+                          imageClassname="h-6 w-6 md:h-8 md:w-8"
                         />
                       </Table.Cell>
                     ) : key === "status" ? (

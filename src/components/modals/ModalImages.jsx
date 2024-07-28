@@ -6,8 +6,11 @@ import { FormatedUrlImage } from "../../utils/FormatedUrlImage";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "react-photo-view/dist/react-photo-view.css";
 import NoImageFound from "../../assets/img/NoImageFound.jpg";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const ModalImages = ({
+  enableDeleteImage = false,
+  onDeleteImage = () => {},
   images = [],
   title = "",
   imageClassname = "",
@@ -130,21 +133,31 @@ const ModalImages = ({
     >
       <div
         className={classNames(
-          `flex flex-wrap justify-start gap-2 lg:gap-4`,
+          `relative flex flex-wrap justify-start gap-2 lg:gap-4`,
           containerClassName
         )}
       >
         {images?.map((image, index) => (
           <PhotoView key={index} src={FormatedUrlImage(image)}>
-            <LazyLoadImage
-              effect="blur"
-              className={classNames(
-                "w-full h-full object-cover max-w-[6rem] max-h-[6rem] cursor-pointer bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200",
-                imageClassname
+            <div className="relative w-fit h-fit">
+              {enableDeleteImage && (
+                <span
+                  onClick={() => onDeleteImage(index)}
+                  className="absolute z-20 top-1 right-1 bg-red-500 rounded-full text-white hover:bg-red-600 hover:text-white text-xl cursor-pointer p-2 transition ease-in-out hover:scale-110 duration-150"
+                >
+                  <FaRegTrashAlt size={16} />
+                </span>
               )}
-              src={FormatedUrlImage(image)}
-              alt={title || "Imagen"}
-            />
+              <LazyLoadImage
+                effect="blur"
+                className={classNames(
+                  "object-cover w-[4rem] h-[4ren] md:w-[6rem] md:h-[6rem] max-w-[8rem] max-h-[8rem] cursor-pointer bg-gray-200 hover:ring-4 hover:ring-purple-500 transition ease-in-out duration-200",
+                  imageClassname
+                )}
+                src={FormatedUrlImage(image)}
+                alt={title || "Imagen"}
+              />
+            </div>
           </PhotoView>
         ))}
       </div>

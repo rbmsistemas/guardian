@@ -1,0 +1,11 @@
+{
+  "appId": "net.sytes.sinabe",
+  "appName": "sinabe",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}

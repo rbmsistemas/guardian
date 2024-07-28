@@ -1,114 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
-import { toast } from "react-hot-toast";
+import React from "react";
 import { AiOutlineCamera } from "react-icons/ai";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { MdCameraswitch, MdFlashOff, MdFlashOn } from "react-icons/md";
-import { FormatedUrlImage } from "./FormatedUrlImage";
-import ModalImageViewer from "../components/modals/ModalImageViewer";
-import CameraPhoto, {
-  FACING_MODES,
-  IMAGE_TYPES,
-} from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import ModalImages from "../components/modals/ModalImages";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 const CameraComponent = ({
   capturedImage = [],
   setCapturedImage,
   enableCamera,
 }) => {
-  const mediaStreamRef = useRef(null);
-  const [currentFacingMode, setCurrentFacingMode] = useState("environment");
-
-  const [image, setImage] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [isFlash, setisFlash] = useState(false);
-  const cordova = window.cordova;
-  const diagnostic = cordova?.plugins?.diagnostic;
-
-  const notifyError = (error) => toast.error(error);
-
-  const videoConstraints = {
-    facingMode: currentFacingMode,
-  };
-
-  useEffect(() => {
-    const checkCameraPermission = async () => {
-      if (cordova) {
-        diagnostic.getPermissionAuthorizationStatus(
-          function (status) {
-            switch (status) {
-              case diagnostic.permissionStatus.GRANTED:
-                // Permiso otorgado, puedes usar la cámara
-                break;
-              case diagnostic.permissionStatus.NOT_REQUESTED:
-              case diagnostic.permissionStatus.DENIED:
-              case diagnostic.permissionStatus.DENIED_ALWAYS:
-                // Permiso no otorgado, solicita permiso al usuario
-                diagnostic.requestRuntimePermission(
-                  diagnostic.permission.CAMERA,
-                  function (status) {
-                    if (status === diagnostic.permissionStatus.GRANTED) {
-                      // Permiso otorgado, puedes usar la cámara
-                    } else {
-                      // Permiso no otorgado, maneja el escenario correspondiente
-                    }
-                  },
-                  function (error) {
-                    // Maneja cualquier error al solicitar permiso
-                  }
-                );
-                break;
-            }
-          },
-          function (error) {
-            // Maneja cualquier error al verificar el estado del permiso
-          }
-        );
-      }
-    };
-
-    checkCameraPermission(); // Verifica el permiso al cargar el componente
-  }, []);
-
-  const captureImage = async (image) => {
+  const captureImage = async (e) => {
+    e.preventDefault();
     try {
-      if (cordova) {
-        navigator.camera.getPicture(onSuccess, onFail, {
-          quality: 50,
-          destinationType: Camera.DestinationType.FILE_URI,
-          correctOrientation: true,
-        });
+      const photo = await Camera.getPhoto({
+        quality: 50,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera,
+        correctOrientation: true,
+        allowEditing: true,
+        saveToGallery: true,
+        webUseInput: true,
+      });
 
-        function onSuccess(imageData) {
-          const image = document.getElementById("image");
-          image.src = imageData;
-          setCapturedImage([...capturedImage, imageData]);
-        }
-
-        function onFail(message) {
-          alert("Failed because: " + message);
-        }
-      } else {
-        const imageSrc = image;
-
-        const response = await fetch(imageSrc);
-        const blob = await response.blob();
-        const file = new File([blob], "captured_image.jpeg", {
-          type: "image/jpeg",
-        });
-
-        setCapturedImage([...capturedImage, file]);
-      }
+      const imageUrl = photo.webPath;
+      setCapturedImage([...capturedImage, imageUrl]);
     } catch (error) {
       console.error("Error capturing image:", error);
     }
-  };
-
-  const switchCamera = () => {
-    setCurrentFacingMode((prevMode) =>
-      prevMode === "user" ? "environment" : "user"
-    );
   };
 
   const removeCapturedImage = (index) => {
@@ -116,57 +34,17 @@ const CameraComponent = ({
     setCapturedImage(newCapturedImage);
   };
 
-  const selectImage = (index) => {
-    setImage(index);
-    setShowModal(true);
-  };
-
-  const onClose = () => setShowModal(false);
-
-  const toggleFlash = async () => {
-    const track = mediaStreamRef?.current?.getVideoTracks()[0];
-    if (track) {
-      try {
-        await track.applyConstraints({
-          advanced: [{ torch: !track.getSettings().torch }],
-        });
-        setisFlash(!isFlash);
-      } catch (error) {
-        notifyError("El dispositivo no soporta flash");
-        console.error("Flash control not supported:", error);
-      }
-    } else {
-      notifyError("El dispositivo no soporta flash");
-    }
-  };
-
   return (
     <div className="w-full h-full grid grid-cols-1 gap-4">
       {enableCamera && (
-        <div className="relative flex flex-col gap-4">
-          <p
-            className="text-2xl text-white absolute top-5 right-5 bg-black/20 p-2 rounded-full cursor-pointer z-10"
-            onClick={switchCamera}
+        <div className="relative flex flex-col gap-4 md:hidden">
+          <button
+            type="button"
+            onClick={captureImage}
+            className="flex items-center justify-center gap-2 p-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all ease-in-out duration-200"
           >
-            <MdCameraswitch color="#ffffff" />
-          </p>
-          {/* <p
-          className="text-2xl text-white absolute top-5 left-5 bg-black/20 p-2 rounded-full cursor-pointer z-10"
-          onClick={toggleFlash}
-        >
-          {isFlash ? (
-            <MdFlashOn color="#ff0" />
-          ) : (
-            <MdFlashOff color="#ffffff" />
-          )}
-        </p> */}
-          <CameraPhoto
-            onTakePhoto={(dataUri) => captureImage(dataUri)}
-            idealFacingMode={currentFacingMode}
-            idealResolution={{ width: 1920, height: 1080 }}
-            isSilentMode={true}
-            imageType={IMAGE_TYPES.JPG}
-          />
+            Capturar Imagen
+          </button>
         </div>
       )}
       <div className="w-full h-full max-h-full flex flex-wrap gap-4 mt-2 md:mt-0">
@@ -209,14 +87,19 @@ const CameraComponent = ({
                 <img
                   className="object-contain p-1 h-full w-full rounded-lg cursor-pointer"
                   onClick={() => selectImage(index)}
-                  src={FormatedUrlImage(item)}
+                  src={item}
                   alt="image-captured"
                 />
               </div>
             );
           })} */}
       </div>
-      <ModalImages images={capturedImage} title="Imagenes" />
+      <ModalImages
+        enableDeleteImage={true}
+        onDeleteImage={removeCapturedImage}
+        images={capturedImage}
+        title="Imagenes"
+      />
     </div>
   );
 };
